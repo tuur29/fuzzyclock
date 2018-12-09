@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Fuzzy Clock Screensaver</string>
+    <string name="title_activity_dream_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_title_maxTranslationDisplacement">Percentual shift against burn-in (0.0 – 1.0)</string>
+    <string name="pref_title_updateSeconds">Update clock every x seconds</string>
+    <string name="pref_title_language">Language</string>
+
+    <string-array name="pref_list_languages_titles">
+        <item>Dependent on device setting</item>
+        <item>English</item>
+        <item>Dutch</item>
+    </string-array>
+
+
+</resources>

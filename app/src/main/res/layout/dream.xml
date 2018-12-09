@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"
+                >
+
+    <RelativeLayout android:id="@+id/clockparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    >
+
+        <TextView android:id="@+id/clocktext"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="36sp"
+                  android:textColor="#cccccc"
+                  android:ellipsize="none"
+                  android:maxLines="4"
+                  android:scrollHorizontally="false"
+                  />
+
+    </RelativeLayout>
+
+</RelativeLayout>
