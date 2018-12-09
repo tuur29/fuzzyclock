@@ -18,6 +18,7 @@
     <string name="pref_title_backgroundColor">Achtergrondkleur</string>
     <string name="pref_title_removeLineBreak">Uur op 1 lijn</string>
     <string name="pref_title_brightScreen">Helderder scherm</string>
+    <string name="pref_title_notifState">Toon notificaties</string>
 
     <string-array name="pref_list_language_titles">
         <item>Afhankelijk van apparaatinstellingen</item>
@@ -54,6 +55,12 @@
         <item>Bruin</item>
         <item>Donkergrijs</item>
         <item>Grijsblauw</item>
+    </string-array>
+
+    <string-array name="pref_list_notifState_titles">
+        <item>Zichtbaar</item>
+        <item>Enkel aantal</item>
+        <item>Verborgen</item>
     </string-array>
 
 </resources>

@@ -18,6 +18,7 @@
     <string name="pref_title_backgroundColor">Background color</string>
     <string name="pref_title_removeLineBreak">Show hour on 1 line</string>
     <string name="pref_title_brightScreen">Brighter screen</string>
+    <string name="pref_title_notifState">Show notifications</string>
 
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>
@@ -54,6 +55,12 @@
         <item>Brown</item>
         <item>Dark Gray</item>
         <item>Blue Gray</item>
+    </string-array>
+
+    <string-array name="pref_list_notifState_titles">
+        <item>Visible</item>
+        <item>Only Count</item>
+        <item>Hidden</item>
     </string-array>
 
 </resources>

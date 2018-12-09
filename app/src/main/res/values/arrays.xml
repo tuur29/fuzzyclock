@@ -38,4 +38,10 @@
         <item>#455A64</item>
     </string-array>
 
+    <string-array name="pref_list_notifState_values">
+        <item>visible</item>
+        <item>count</item>
+        <item>hidden</item>
+    </string-array>
+
 </resources>

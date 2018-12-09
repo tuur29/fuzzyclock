@@ -1,16 +1,14 @@
 package net.tuurlievens.fuzzyclockscreensaver
 
-import android.annotation.SuppressLint
 import android.service.notification.NotificationListenerService
 import android.content.IntentFilter
 import android.content.Intent
 import android.service.notification.StatusBarNotification
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.os.Build
 
-// Source: https://github.com/kpbird/NotificationListenerService-Example
 
-@SuppressLint("OverrideAbstract")
 class NotificationListener : NotificationListenerService() {
 
     private val myPackageName = "net.tuurlievens.fuzzyclockscreensaver"
@@ -30,32 +28,31 @@ class NotificationListener : NotificationListenerService() {
         unregisterReceiver(receiver)
     }
 
-    // TODO: add conditional android api level -> under: only show notif count, else show notif
-//    @RequiresApi(Build.VERSION_CODES.M)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        val data = arrayOf("derp"
-//            sbn.notification.extras.getInt(Notification.EXTRA_LARGE_ICON_BIG).toString()
-        )
-        sendBroadcast("onNotificationPosted", sbn.packageName + ";" + data.joinToString(","))
+        val data = NotificationData(sbn.packageName, "onNotificationPosted")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            data.icon = sbn.notification.smallIcon
+        }
+        sendParcelBroadcast(data)
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        sendBroadcast("onNotificationRemoved", sbn.packageName)
+        val data = NotificationData(sbn.packageName, "onNotificationRemoved")
+        sendParcelBroadcast(data)
     }
 
     // HELPERS
 
-    private fun sendBroadcast(type: String, data: String) {
+    private fun sendParcelBroadcast(data: NotificationData) {
         val i = Intent("$myPackageName.NOTIFICATION_LISTENER")
-        i.putExtra("notification_event", "$type : $data")
+        i.putExtra("notification_event", data)
         sendBroadcast(i)
     }
 
     // RECEIVERS
 
     internal inner class NLServiceReceiver : BroadcastReceiver() {
-//        @RequiresApi(Build.VERSION_CODES.M)
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.getStringExtra("command") == "list") {
                 for (sbn in activeNotifications) {

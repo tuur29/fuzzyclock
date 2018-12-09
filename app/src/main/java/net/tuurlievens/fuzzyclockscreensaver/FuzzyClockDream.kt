@@ -16,6 +16,9 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.content.res.ColorStateList
+import android.view.Gravity
+import android.widget.ImageView
 
 
 class FuzzyClockDream : DreamService() {
@@ -25,7 +28,7 @@ class FuzzyClockDream : DreamService() {
     private lateinit var task: TimerTask
     private val handler =  Handler()
     private lateinit var nReceiver: NotificationReceiver
-    private val notifications = HashMap<String, ArrayList<String>>()
+    private val notifications = HashMap<String, NotificationData>()
 
     private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0
@@ -37,6 +40,7 @@ class FuzzyClockDream : DreamService() {
     private var removeLineBreak = false
     private var showDate = true
     private var brightScreen = false
+    private var notifState = "visible"
 
     // LIFECYCLE
 
@@ -69,16 +73,18 @@ class FuzzyClockDream : DreamService() {
         // Update clock every minute
         timer.scheduleAtFixedRate(task, 0, (updateSeconds*1000).toLong())
 
-        // Register notification receiver
-        nReceiver = NotificationReceiver()
-        val filter = IntentFilter()
-        filter.addAction("$myPackageName.NOTIFICATION_LISTENER")
-        registerReceiver(nReceiver, filter)
+        if (notifState != "hidden") {
+            // Register notification receiver
+            nReceiver = NotificationReceiver()
+            val filter = IntentFilter()
+            filter.addAction("$myPackageName.NOTIFICATION_LISTENER")
+            registerReceiver(nReceiver, filter)
 
-        // ask for all current notifications
-        val intent = Intent("$myPackageName.NOTIFICATION_LISTENER_SERVICE")
-        intent.putExtra("command", "list")
-        sendBroadcast(intent)
+            // ask for all current notifications
+            val intent = Intent("$myPackageName.NOTIFICATION_LISTENER_SERVICE")
+            intent.putExtra("command", "list")
+            sendBroadcast(intent)
+        }
     }
 
     override fun onDreamingStopped() {
@@ -103,6 +109,7 @@ class FuzzyClockDream : DreamService() {
         removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
         showDate = prefs.getBoolean("showDate", showDate)
         brightScreen = prefs.getBoolean("brightScreen", brightScreen)
+        notifState = prefs.getString("notifState", notifState)
     }
 
     private fun applySettings() {
@@ -114,6 +121,7 @@ class FuzzyClockDream : DreamService() {
 
         findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
         findViewById<TextView>(R.id.datetext).setTextColor(Color.parseColor(foregroundColor))
+        findViewById<TextView>(R.id.notificationcount).setTextColor(Color.parseColor(foregroundColor))
 
         val alignment = when(textAlignment) {
             "center" -> TextView.TEXT_ALIGNMENT_CENTER
@@ -122,6 +130,12 @@ class FuzzyClockDream : DreamService() {
         }
         findViewById<TextView>(R.id.clocktext).textAlignment = alignment
         findViewById<TextView>(R.id.datetext).textAlignment = alignment
+        findViewById<TextView>(R.id.notificationcount).textAlignment = alignment
+        findViewById<LinearLayout>(R.id.notifications).gravity = when(textAlignment) {
+            "left" -> Gravity.START
+            "right" -> Gravity.END
+            else -> Gravity.CENTER
+        }
     }
 
     private fun createTask() {
@@ -152,7 +166,37 @@ class FuzzyClockDream : DreamService() {
                     }
 
                     // Show notifications
-                    findViewById<TextView>(R.id.datetext).text = findViewById<TextView>(R.id.datetext).text.toString() + " (" + notifications.size.toString() + ")"
+                    if (notifState != "hidden") {
+                        // show notificationcount if textview still exists (only in < M SDL or manually forced)
+                        if (notifState != "visible" || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                            if (notifications.size < 1)
+                                findViewById<TextView>(R.id.notificationcount).text = ""
+                            else
+                                findViewById<TextView>(R.id.notificationcount).text = "(${notifications.size})"
+                        }
+
+                        if (notifState == "visible" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val container = findViewById<LinearLayout>(R.id.notifications)
+                            container.removeAllViews()
+
+                            // TODO: load notification icons
+                            for (notif in notifications) {
+                                if (notif.value.icon != null) {
+                                    val img = ImageView(this@FuzzyClockDream)
+                                    img.setImageDrawable(notif.value.icon!!.loadDrawable(this@FuzzyClockDream))
+                                    img.alpha = 0.65F
+                                    img.imageTintList = ColorStateList.valueOf(Color.parseColor(foregroundColor))
+                                    container.addView(img)
+
+                                    val params = img.layoutParams as LinearLayout.LayoutParams
+                                    params.setMargins(10,10,10,10)
+                                    params.width = 80
+                                    params.height= 80
+                                    img.layoutParams = params
+                                }
+                            }
+                        }
+                    }
 
                     // move clock around (randomly max 10% of total) against burn in
                     if (maxTranslationDisplacement != 0.0) {
@@ -183,31 +227,30 @@ class FuzzyClockDream : DreamService() {
             // notification_event contains: EVENTTYPE : PACKAGENAME;data
             // EVENTTYPE is one of these: onNotificationPosted, onNotificationRemoved
             // DATA is: NOTIFICATIONICONID,...
-            val event = intent.getStringExtra("notification_event").split(" : ").toTypedArray()
 
-            if (event[0] == "onNotificationPosted") {
-                val data = event[1].split(";")
+            val parcel = intent.getParcelableExtra<NotificationData>("notification_event")
+
+            if (parcel.type == "onNotificationPosted") {
 
                 // add to notif count of specific package
-                val item = notifications[ data[0] ]
+                val item = notifications[parcel.packageName]
                 if (item != null) {
-                    item[0] = (item[0].toInt() + 1).toString()
-                    notifications[data[0]] = item
+                    item.count++
+                    notifications[parcel.packageName] = item
                 } else {
-                    notifications[ data[0] ] = arrayListOf("0", *data[1].split(",").toTypedArray())
+                    notifications[parcel.packageName] = parcel
                 }
 
-            } else if (event[0] == "onNotificationRemoved") {
-                val data = event[1].split(";")
+            } else if (parcel.type == "onNotificationRemoved") {
 
                 // decrease notif count or remove
-                val item = notifications[ data[0] ]
+                val item = notifications[parcel.packageName]
                 if (item != null) {
-                    if (item[0].toInt() < 2)
-                        notifications.remove(data[0])
+                    if (item.count < 2)
+                        notifications.remove(parcel.packageName)
                     else {
-                        item[0] = (item[0].toInt() - 1).toString()
-                        notifications[data[0]] = item
+                        item.count--
+                        notifications[parcel.packageName] = item
                     }
                 }
 

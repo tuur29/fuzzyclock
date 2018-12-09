@@ -39,6 +39,13 @@ class DreamSettingsActivity : PreferenceActivity() {
             bindPreferenceSummaryToValue(findPreference("updateSeconds"))
             bindPreferenceSummaryToValue(findPreference("language"))
             bindPreferenceSummaryToValue(findPreference("fontSize"))
+            bindPreferenceSummaryToValue(findPreference("textAlignment"))
+            bindPreferenceSummaryToValue(findPreference("foregroundColor"))
+            bindPreferenceSummaryToValue(findPreference("backgroundColor"))
+//            bindPreferenceSummaryToValue(findPreference("removeLineBreak"))
+//            bindPreferenceSummaryToValue(findPreference("showDate"))
+//            bindPreferenceSummaryToValue(findPreference("brightScreen"))
+            bindPreferenceSummaryToValue(findPreference("notifState"))
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
