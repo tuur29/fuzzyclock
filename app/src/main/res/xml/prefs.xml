@@ -52,7 +52,7 @@
         <ListPreference
                 android:key="notifState"
                 android:title="@string/pref_title_notifState"
-                android:defaultValue="visible"
+                android:defaultValue="hidden"
                 android:entries="@array/pref_list_notifState_titles"
                 android:entryValues="@array/pref_list_notifState_values"
                 android:negativeButtonText="@null"

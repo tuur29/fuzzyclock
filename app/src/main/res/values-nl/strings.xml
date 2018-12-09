@@ -20,6 +20,8 @@
     <string name="pref_title_brightScreen">Helderder scherm</string>
     <string name="pref_title_notifState">Toon notificaties</string>
 
+    <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
+
     <string-array name="pref_list_language_titles">
         <item>Afhankelijk van apparaatinstellingen</item>
         <item>Engels</item>

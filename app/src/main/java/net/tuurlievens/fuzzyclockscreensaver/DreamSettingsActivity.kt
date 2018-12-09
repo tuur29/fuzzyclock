@@ -1,5 +1,6 @@
 package net.tuurlievens.fuzzyclockscreensaver
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,11 +9,16 @@ import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
-import android.view.MenuItem
+import android.provider.Settings
 import android.view.WindowManager
+import android.widget.Toast
 
 
 class DreamSettingsActivity : PreferenceActivity() {
+
+    init {
+        instance = this
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,20 +54,31 @@ class DreamSettingsActivity : PreferenceActivity() {
             bindPreferenceSummaryToValue(findPreference("notifState"))
         }
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            val id = item.itemId
-            if (id == android.R.id.home) {
-                startActivity(Intent(activity, DreamSettingsActivity::class.java))
-                return true
-            }
-            return super.onOptionsItemSelected(item)
-        }
     }
 
     companion object {
 
+        // TODO: fix memory leak
+        private var instance: Activity? = null
+
         private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->
-            val stringValue = value.toString()
+
+            var stringValue = value.toString()
+
+            // check notification access permissions and request them
+            if (preference.key == "notifState" && value != "hidden") {
+                if (!Settings.Secure.getString(instance?.contentResolver, "enabled_notification_listeners")
+                        .contains(instance?.applicationContext?.packageName!!)) {
+
+                    instance!!.applicationContext.startActivity(
+                        Intent(
+                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+                        )
+                    )
+                    Toast.makeText(instance, instance!!.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
+                    stringValue = "false"
+                }
+            }
 
             if (preference is ListPreference) {
                 // For list preferences, look up the correct display value in

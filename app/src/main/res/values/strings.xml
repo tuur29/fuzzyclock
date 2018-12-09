@@ -20,6 +20,8 @@
     <string name="pref_title_brightScreen">Brighter screen</string>
     <string name="pref_title_notifState">Show notifications</string>
 
+    <string name="msg_notificationaccess">You have to enable Notification Access for this feature to work</string>
+
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>
         <item>English</item>

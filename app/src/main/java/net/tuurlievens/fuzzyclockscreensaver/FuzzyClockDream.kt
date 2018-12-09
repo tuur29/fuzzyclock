@@ -27,7 +27,7 @@ class FuzzyClockDream : DreamService() {
     private val timer = Timer("FuzzyClockTimer", true)
     private lateinit var task: TimerTask
     private val handler =  Handler()
-    private lateinit var nReceiver: NotificationReceiver
+    private var nReceiver: NotificationReceiver? = null
     private val notifications = HashMap<String, NotificationData>()
 
     private var maxTranslationDisplacement = 0.0
@@ -40,7 +40,7 @@ class FuzzyClockDream : DreamService() {
     private var removeLineBreak = false
     private var showDate = true
     private var brightScreen = false
-    private var notifState = "visible"
+    private var notifState = "hidden"
 
     // LIFECYCLE
 
@@ -89,7 +89,7 @@ class FuzzyClockDream : DreamService() {
 
     override fun onDreamingStopped() {
         timer.cancel()
-        unregisterReceiver(nReceiver)
+        if (nReceiver != null) unregisterReceiver(nReceiver)
     }
 
     override fun onDetachedFromWindow() {}
