@@ -6,16 +6,17 @@
                 android:background="@android:color/black"
                 >
 
-    <RelativeLayout android:id="@+id/clockparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:textAlignment="center"
-                    >
+    <LinearLayout android:id="@+id/parent"
+                  android:orientation="vertical"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerHorizontal="true"
+                  android:layout_centerVertical="true"
+                  android:textAlignment="center"
+                  >
 
         <TextView android:id="@+id/clocktext"
-                  android:layout_width="wrap_content"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textSize="36sp"
                   android:textColor="#cccccc"
@@ -24,6 +25,17 @@
                   android:scrollHorizontally="false"
                   />
 
-    </RelativeLayout>
+        <TextView android:id="@+id/datetext"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textSize="24sp"
+                  android:textColor="#999999"
+                  android:ellipsize="none"
+                  android:maxLines="4"
+                  android:alpha="0.65"
+                  android:scrollHorizontally="false"
+                  />
+
+    </LinearLayout>
 
 </RelativeLayout>

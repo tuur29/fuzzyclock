@@ -10,7 +10,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import java.util.*
 import android.util.DisplayMetrics
-import android.util.Log
+import android.widget.LinearLayout
+import java.text.SimpleDateFormat
 
 
 class FuzzyClockDream : DreamService() {
@@ -27,6 +28,8 @@ class FuzzyClockDream : DreamService() {
     private var foregroundColor = "#cccccc"
     private var backgroundColor = "#000000"
     private var removeLineBreak = false
+    private var showDate = true
+    private var brightScreen = false
 
     // LIFECYCLE
 
@@ -49,7 +52,7 @@ class FuzzyClockDream : DreamService() {
         // Exit dream upon user touch
         isInteractive = false
         // Dim screen
-        isScreenBright = false
+        isScreenBright = brightScreen
         // Set the dream layout
         setContentView(R.layout.dream)
         applySettings()
@@ -81,18 +84,27 @@ class FuzzyClockDream : DreamService() {
         foregroundColor = prefs.getString("foregroundColor", foregroundColor)
         backgroundColor = prefs.getString("backgroundColor", backgroundColor)
         removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
+        showDate = prefs.getBoolean("showDate", showDate)
+        brightScreen = prefs.getBoolean("brightScreen", brightScreen)
     }
 
     private fun applySettings() {
         // apply settings to ui
         findViewById<RelativeLayout>(R.id.root).setBackgroundColor(Color.parseColor(backgroundColor))
+
         findViewById<TextView>(R.id.clocktext).textSize = fontSize.toFloat()
+        findViewById<TextView>(R.id.datetext).textSize = (fontSize * 0.65).toFloat()
+
         findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
-        findViewById<TextView>(R.id.clocktext).textAlignment = when(textAlignment) {
+        findViewById<TextView>(R.id.datetext).setTextColor(Color.parseColor(foregroundColor))
+
+        val alignment = when(textAlignment) {
             "center" -> TextView.TEXT_ALIGNMENT_CENTER
             "right" -> TextView.TEXT_ALIGNMENT_TEXT_END
             else -> TextView.TEXT_ALIGNMENT_TEXT_START
         }
+        findViewById<TextView>(R.id.clocktext).textAlignment = alignment
+        findViewById<TextView>(R.id.datetext).textAlignment = alignment
     }
 
     private fun createTask() {
@@ -108,15 +120,23 @@ class FuzzyClockDream : DreamService() {
 
                     // update clock
                     val pickedLanguage = if (language == "default") Locale.getDefault().language else language
-                    var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
+                    var time = FuzzyTextGenerator.create(hour, min, pickedLanguage)
                     if (removeLineBreak) {
-                        text = text.replace("\n"," ")
+                        time = time.replace("\n"," ")
                     }
-                    findViewById<TextView>(R.id.clocktext).text = text
+                    findViewById<TextView>(R.id.clocktext).text = time
+
+                    // update date
+                    if (showDate) {
+                        val format = SimpleDateFormat("E, d MMM") // TODO: add more options for date?
+                        findViewById<TextView>(R.id.datetext).text = format.format(calendar.time)
+                    } else {
+                        findViewById<TextView>(R.id.datetext).text = ""
+                    }
 
                     // move clock around (randomly max 10% of total) against burn in
                     if (maxTranslationDisplacement != 0.0) {
-                        val parent = findViewById<RelativeLayout>(R.id.clockparent)
+                        val parent = findViewById<LinearLayout>(R.id.parent)
                         val display = DisplayMetrics()
                         windowManager.defaultDisplay.getMetrics(display)
 
