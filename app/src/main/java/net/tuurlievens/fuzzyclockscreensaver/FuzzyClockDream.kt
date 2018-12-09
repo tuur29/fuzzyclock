@@ -12,13 +12,20 @@ import java.util.*
 import android.util.DisplayMetrics
 import android.widget.LinearLayout
 import java.text.SimpleDateFormat
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
 
 
 class FuzzyClockDream : DreamService() {
 
-    private var timer = Timer("FuzzyClockTimer", true)
+    private val myPackageName = "net.tuurlievens.fuzzyclockscreensaver"
+    private val timer = Timer("FuzzyClockTimer", true)
     private lateinit var task: TimerTask
-    private var handler =  Handler()
+    private val handler =  Handler()
+    private lateinit var nReceiver: NotificationReceiver
+    private val notifications = HashMap<String, ArrayList<String>>()
 
     private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0
@@ -49,11 +56,9 @@ class FuzzyClockDream : DreamService() {
             }
         }
 
-        // Exit dream upon user touch
+        // Configure dream
         isInteractive = false
-        // Dim screen
         isScreenBright = brightScreen
-        // Set the dream layout
         setContentView(R.layout.dream)
         applySettings()
     }
@@ -63,13 +68,25 @@ class FuzzyClockDream : DreamService() {
         task.run()
         // Update clock every minute
         timer.scheduleAtFixedRate(task, 0, (updateSeconds*1000).toLong())
+
+        // Register notification receiver
+        nReceiver = NotificationReceiver()
+        val filter = IntentFilter()
+        filter.addAction("$myPackageName.NOTIFICATION_LISTENER")
+        registerReceiver(nReceiver, filter)
+
+        // ask for all current notifications
+        val intent = Intent("$myPackageName.NOTIFICATION_LISTENER_SERVICE")
+        intent.putExtra("command", "list")
+        sendBroadcast(intent)
     }
 
-    override fun onDreamingStopped() {}
-
-    override fun onDetachedFromWindow() {
+    override fun onDreamingStopped() {
         timer.cancel()
+        unregisterReceiver(nReceiver)
     }
+
+    override fun onDetachedFromWindow() {}
 
     // HELPERS
 
@@ -134,6 +151,9 @@ class FuzzyClockDream : DreamService() {
                         findViewById<TextView>(R.id.datetext).text = ""
                     }
 
+                    // Show notifications
+                    findViewById<TextView>(R.id.datetext).text = findViewById<TextView>(R.id.datetext).text.toString() + " (" + notifications.size.toString() + ")"
+
                     // move clock around (randomly max 10% of total) against burn in
                     if (maxTranslationDisplacement != 0.0) {
                         val parent = findViewById<LinearLayout>(R.id.parent)
@@ -152,6 +172,49 @@ class FuzzyClockDream : DreamService() {
     private fun calcRandomTranslation(max: Double) : Float {
         val random = Random().nextFloat()
         return Math.round( random*max*2 - max ).toFloat()
+    }
+
+    // RECEIVERS
+
+    internal inner class NotificationReceiver : BroadcastReceiver() {
+        // On notification added / removed
+        override fun onReceive(context: Context, intent: Intent) {
+
+            // notification_event contains: EVENTTYPE : PACKAGENAME;data
+            // EVENTTYPE is one of these: onNotificationPosted, onNotificationRemoved
+            // DATA is: NOTIFICATIONICONID,...
+            val event = intent.getStringExtra("notification_event").split(" : ").toTypedArray()
+
+            if (event[0] == "onNotificationPosted") {
+                val data = event[1].split(";")
+
+                // add to notif count of specific package
+                val item = notifications[ data[0] ]
+                if (item != null) {
+                    item[0] = (item[0].toInt() + 1).toString()
+                    notifications[data[0]] = item
+                } else {
+                    notifications[ data[0] ] = arrayListOf("0", *data[1].split(",").toTypedArray())
+                }
+
+            } else if (event[0] == "onNotificationRemoved") {
+                val data = event[1].split(";")
+
+                // decrease notif count or remove
+                val item = notifications[ data[0] ]
+                if (item != null) {
+                    if (item[0].toInt() < 2)
+                        notifications.remove(data[0])
+                    else {
+                        item[0] = (item[0].toInt() - 1).toString()
+                        notifications[data[0]] = item
+                    }
+                }
+
+            }
+
+            task.run()
+        }
     }
 
 }

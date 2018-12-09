@@ -11,6 +11,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- Dream service -->
         <service
                 android:name=".FuzzyClockDream"
                 android:exported="true"
@@ -19,19 +21,28 @@
                 android:permission="android.permission.BIND_DREAM_SERVICE">
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-
             <meta-data
                     android:name="android.service.dream"
                     android:resource="@xml/dream"/>
         </service>
 
+        <!-- Notifciation listener service -->
+        <service android:name=".NotificationListener"
+                 android:label="@string/app_name"
+                 android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- Settings Activity -->
         <activity
                 android:name=".DreamSettingsActivity"
                 android:label="@string/title_activity_dream_settings">
         </activity>
+
     </application>
 
 </manifest>

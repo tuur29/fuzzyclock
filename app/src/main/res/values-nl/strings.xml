@@ -3,6 +3,7 @@
 
     <string name="app_name">Fuzzy Clock Screensaver</string>
     <string name="title_activity_dream_settings">Instellingen</string>
+    <string name="notif_service_name">Notification Listener</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_category_display">Weergave</string>
