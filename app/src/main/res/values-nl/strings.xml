@@ -34,6 +34,25 @@
         <item>Zwart</item>
         <item>Grijs</item>
         <item>Wit</item>
+        <item>Rood</item>
+        <item>Roze</item>
+        <item>Paars</item>
+        <item>Donkerpaars</item>
+        <item>Indigo</item>
+        <item>Blauw</item>
+        <item>Lichtblauw</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Groen</item>
+        <item>Lichtgroen</item>
+        <item>Limoen</item>
+        <item>Geel</item>
+        <item>Amber</item>
+        <item>Oranje</item>
+        <item>Donker oranje</item>
+        <item>Bruin</item>
+        <item>Donkergrijs</item>
+        <item>Grijsblauw</item>
     </string-array>
 
 </resources>
