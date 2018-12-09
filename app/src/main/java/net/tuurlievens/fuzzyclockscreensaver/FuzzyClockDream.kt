@@ -17,7 +17,7 @@ class FuzzyClockDream : DreamService() {
     private lateinit var task: TimerTask
     private var handler =  Handler()
 
-    private var maxTranslationDisplacement = 0.1
+    private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0
     private var language = "default"
     private var fontSize = 36
@@ -68,10 +68,10 @@ class FuzzyClockDream : DreamService() {
 
     private fun loadSettings() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement", "").toDouble()
-        updateSeconds = prefs.getString("updateSeconds", "").toDouble()
-        language = prefs.getString("language", "")
-        fontSize = prefs.getInt("fontSize", 36)
+        maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble()
+        updateSeconds = prefs.getString("updateSeconds", updateSeconds.toString()).toDouble()
+        language = prefs.getString("language", language)
+        fontSize = prefs.getInt("fontSize", fontSize)
     }
 
     private fun createTask() {
@@ -90,12 +90,14 @@ class FuzzyClockDream : DreamService() {
                     findViewById<TextView>(R.id.clocktext).text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
 
                     // move clock around (randomly max 10% of total) against burn in
-                    val parent = findViewById<RelativeLayout>(R.id.clockparent)
-                    val display = DisplayMetrics()
-                    windowManager.defaultDisplay.getMetrics(display)
+                    if (maxTranslationDisplacement != 0.0) {
+                        val parent = findViewById<RelativeLayout>(R.id.clockparent)
+                        val display = DisplayMetrics()
+                        windowManager.defaultDisplay.getMetrics(display)
 
-                    parent.translationX = calcRandomTranslation(display.widthPixels * maxTranslationDisplacement)
-                    parent.translationY = calcRandomTranslation(display.heightPixels * maxTranslationDisplacement)
+                        parent.translationX = calcRandomTranslation(display.widthPixels * maxTranslationDisplacement)
+                        parent.translationY = calcRandomTranslation(display.heightPixels * maxTranslationDisplacement)
+                    }
                 }
             }
         }
