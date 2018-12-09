@@ -20,6 +20,7 @@ class FuzzyClockDream : DreamService() {
     private var maxTranslationDisplacement = 0.1
     private var updateSeconds = 60.0
     private var language = "default"
+    private var fontSize = 36
 
     // LIFECYCLE
 
@@ -45,6 +46,9 @@ class FuzzyClockDream : DreamService() {
         isScreenBright = false
         // Set the dream layout
         setContentView(R.layout.dream)
+
+        // change fontSize
+        findViewById<TextView>(R.id.clocktext).textSize = fontSize.toFloat()
     }
 
     override fun onDreamingStarted() {
@@ -64,9 +68,10 @@ class FuzzyClockDream : DreamService() {
 
     private fun loadSettings() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement","").toDouble()
-        updateSeconds = prefs.getString("updateSeconds","").toDouble()
-        language = prefs.getString("language","")
+        maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement", "").toDouble()
+        updateSeconds = prefs.getString("updateSeconds", "").toDouble()
+        language = prefs.getString("language", "")
+        fontSize = prefs.getInt("fontSize", 36)
     }
 
     private fun createTask() {

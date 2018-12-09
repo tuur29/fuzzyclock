@@ -38,6 +38,7 @@ class DreamSettingsActivity : PreferenceActivity() {
             bindPreferenceSummaryToValue(findPreference("maxTranslationDisplacement"))
             bindPreferenceSummaryToValue(findPreference("updateSeconds"))
             bindPreferenceSummaryToValue(findPreference("language"))
+            bindPreferenceSummaryToValue(findPreference("fontSize"))
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
