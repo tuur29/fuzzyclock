@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="pref_list_languages_values">
+    <string-array name="pref_list_language_values">
         <item>default</item>
         <item>en</item>
         <item>nl</item>
+    </string-array>
+
+    <string-array name="pref_list_textAlignment_values">
+        <item>left</item>
+        <item>center</item>
+        <item>right</item>
+    </string-array>
+
+    <string-array name="pref_list_color_values">
+        <item>#000000</item>
+        <item>#888888</item>
+        <item>#cccccc</item>
     </string-array>
 
 </resources>

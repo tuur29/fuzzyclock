@@ -64,7 +64,7 @@ class FuzzyTextGenerator {
                 }
             }
 
-            return "$mintext $hourtext"
+            return "$mintext\n$hourtext"
         }
 
         private fun createDutch(hour: Int, min: Int): String {
@@ -118,7 +118,7 @@ class FuzzyTextGenerator {
                 }
             }
 
-            return "$mintext $hourtext"
+            return "$mintext\n$hourtext"
         }
 
     }

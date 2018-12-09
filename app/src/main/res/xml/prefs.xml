@@ -1,44 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-            android:key="fontSize"
-            android:title="@string/pref_title_fontSize"
-            android:defaultValue="36"
-            android:maxLength="2"
-            android:selectAllOnFocus="true"
-            android:inputType="number"
-            android:singleLine="true"
-            android:maxLines="1"/>
+    <PreferenceCategory android:title="@string/pref_category_display">
 
-    <EditTextPreference
-            android:key="maxTranslationDisplacement"
-            android:title="@string/pref_title_maxTranslationDisplacement"
-            android:defaultValue="0.0"
-            android:maxLength="3"
-            android:selectAllOnFocus="true"
-            android:inputType="numberDecimal"
-            android:singleLine="true"
-            android:maxLines="1"/>
+        <EditTextPreference
+                android:key="fontSize"
+                android:title="@string/pref_title_fontSize"
+                android:defaultValue="36"
+                android:maxLength="2"
+                android:selectAllOnFocus="true"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLines="1"/>
 
-    <EditTextPreference
-            android:key="updateSeconds"
-            android:title="@string/pref_title_updateSeconds"
-            android:defaultValue="60"
-            android:maxLength="4"
-            android:selectAllOnFocus="true"
-            android:inputType="numberDecimal"
-            android:singleLine="true"
-            android:theme="@style/AppTheme"
-            android:maxLines="1"/>
+        <ListPreference
+                android:key="textAlignment"
+                android:title="@string/pref_title_textAlignment"
+                android:defaultValue="center"
+                android:entries="@array/pref_list_textAlignment_titles"
+                android:entryValues="@array/pref_list_textAlignment_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"/>
 
-    <ListPreference
-            android:key="language"
-            android:title="@string/pref_title_language"
-            android:defaultValue="0"
-            android:entries="@array/pref_list_languages_titles"
-            android:entryValues="@array/pref_list_languages_values"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"/>
+        <ListPreference
+                android:key="foregroundColor"
+                android:title="@string/pref_title_foregroundColor"
+                android:defaultValue="#cccccc"
+                android:entries="@array/pref_list_color_titles"
+                android:entryValues="@array/pref_list_color_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"/>
+
+        <ListPreference
+                android:key="backgroundColor"
+                android:title="@string/pref_title_backgroundColor"
+                android:defaultValue="#000000"
+                android:entries="@array/pref_list_color_titles"
+                android:entryValues="@array/pref_list_color_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"/>
+
+        <SwitchPreference
+                android:key="removeLineBreak"
+                android:title="@string/pref_title_removeLineBreak"
+                android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_working">
+
+        <ListPreference
+                android:key="language"
+                android:title="@string/pref_title_language"
+                android:defaultValue="default"
+                android:entries="@array/pref_list_language_titles"
+                android:entryValues="@array/pref_list_language_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"/>
+
+        <EditTextPreference
+                android:key="maxTranslationDisplacement"
+                android:title="@string/pref_title_maxTranslationDisplacement"
+                android:defaultValue="0.0"
+                android:maxLength="3"
+                android:selectAllOnFocus="true"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:maxLines="1"/>
+
+        <EditTextPreference
+                android:key="updateSeconds"
+                android:title="@string/pref_title_updateSeconds"
+                android:defaultValue="60"
+                android:maxLength="4"
+                android:selectAllOnFocus="true"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:theme="@style/AppTheme"
+                android:maxLines="1"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

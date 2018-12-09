@@ -1,5 +1,6 @@
 package net.tuurlievens.fuzzyclockscreensaver
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.preference.PreferenceManager
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import java.util.*
 import android.util.DisplayMetrics
+import android.util.Log
 
 
 class FuzzyClockDream : DreamService() {
@@ -21,6 +23,10 @@ class FuzzyClockDream : DreamService() {
     private var updateSeconds = 60.0
     private var language = "default"
     private var fontSize = 36
+    private var textAlignment = "center"
+    private var foregroundColor = "#cccccc"
+    private var backgroundColor = "#000000"
+    private var removeLineBreak = false
 
     // LIFECYCLE
 
@@ -46,9 +52,7 @@ class FuzzyClockDream : DreamService() {
         isScreenBright = false
         // Set the dream layout
         setContentView(R.layout.dream)
-
-        // change fontSize
-        findViewById<TextView>(R.id.clocktext).textSize = fontSize.toFloat()
+        applySettings()
     }
 
     override fun onDreamingStarted() {
@@ -68,10 +72,27 @@ class FuzzyClockDream : DreamService() {
 
     private fun loadSettings() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
         maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble()
         updateSeconds = prefs.getString("updateSeconds", updateSeconds.toString()).toDouble()
         language = prefs.getString("language", language)
-        fontSize = prefs.getInt("fontSize", fontSize)
+        fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
+        textAlignment = prefs.getString("textAlignment", textAlignment)
+        foregroundColor = prefs.getString("foregroundColor", foregroundColor)
+        backgroundColor = prefs.getString("backgroundColor", backgroundColor)
+        removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
+    }
+
+    private fun applySettings() {
+        // apply settings to ui
+        findViewById<RelativeLayout>(R.id.root).setBackgroundColor(Color.parseColor(backgroundColor))
+        findViewById<TextView>(R.id.clocktext).textSize = fontSize.toFloat()
+        findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
+        findViewById<TextView>(R.id.clocktext).textAlignment = when(textAlignment) {
+            "center" -> TextView.TEXT_ALIGNMENT_CENTER
+            "right" -> TextView.TEXT_ALIGNMENT_TEXT_END
+            else -> TextView.TEXT_ALIGNMENT_TEXT_START
+        }
     }
 
     private fun createTask() {
@@ -87,7 +108,11 @@ class FuzzyClockDream : DreamService() {
 
                     // update clock
                     val pickedLanguage = if (language == "default") Locale.getDefault().language else language
-                    findViewById<TextView>(R.id.clocktext).text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
+                    var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
+                    if (removeLineBreak) {
+                        text = text.replace("\n"," ")
+                    }
+                    findViewById<TextView>(R.id.clocktext).text = text
 
                     // move clock around (randomly max 10% of total) against burn in
                     if (maxTranslationDisplacement != 0.0) {
