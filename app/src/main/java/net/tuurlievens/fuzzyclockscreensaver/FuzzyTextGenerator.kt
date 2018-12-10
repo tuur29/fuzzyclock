@@ -26,7 +26,7 @@ class FuzzyTextGenerator {
             }
 
             // change the displayed hour to the next one (instead of the current one) because english uses "Quarter to <hour+1>"
-            var hourtext = if (hour < 40) {
+            var hourtext = if (min < 40) {
                 when {
 			        hour % 12 == 1 -> "one"
 			        hour % 12 == 2 -> "two"
@@ -80,7 +80,7 @@ class FuzzyTextGenerator {
             }
 
             // change the displayed hour to the next one (instead of the current one) because dutch uses "half <hour+1>"
-            var hourtext = if (hour < 20) {
+            var hourtext = if (min < 20) {
                 when {
                     hour % 12 == 1 -> "een"
                     hour % 12 == 2 -> "twee"
