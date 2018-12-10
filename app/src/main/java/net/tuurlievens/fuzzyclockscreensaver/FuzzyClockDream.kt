@@ -35,7 +35,7 @@ class FuzzyClockDream : DreamService() {
     private var language = "default"
     private var fontSize = 36
     private var textAlignment = "center"
-    private var foregroundColor = "#cccccc"
+    private var foregroundColor = "#ffffff"
     private var backgroundColor = "#000000"
     private var removeLineBreak = false
     private var showDate = true

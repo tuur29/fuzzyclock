@@ -16,7 +16,7 @@
     <string-array name="pref_list_color_values">
         <item>#000000</item>
         <item>#888888</item>
-        <item>#cccccc</item>
+        <item>#ffffff</item>
         <item>#D32F2F</item>
         <item>#C2185B</item>
         <item>#7B1FA2</item>

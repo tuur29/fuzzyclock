@@ -25,7 +25,7 @@
         <ListPreference
                 android:key="foregroundColor"
                 android:title="@string/pref_title_foregroundColor"
-                android:defaultValue="#cccccc"
+                android:defaultValue="#ffffff"
                 android:entries="@array/pref_list_color_titles"
                 android:entryValues="@array/pref_list_color_values"
                 android:negativeButtonText="@null"
