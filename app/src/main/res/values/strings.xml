@@ -16,7 +16,7 @@
     <string name="pref_title_textAlignment">Text alignment</string>
     <string name="pref_title_foregroundColor">Text color</string>
     <string name="pref_title_backgroundColor">Background color</string>
-    <string name="pref_title_removeLineBreak">Show hour on 1 line</string>
+    <string name="pref_title_removeLineBreak">Show hour on 1 line by default</string>
     <string name="pref_title_brightScreen">Brighter screen</string>
     <string name="pref_title_notifState">Show notifications</string>
 

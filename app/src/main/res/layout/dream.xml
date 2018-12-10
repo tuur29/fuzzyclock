@@ -25,12 +25,12 @@
                   />
 
         <TextView android:id="@+id/datetext"
-                  android:layout_width="match_parent"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textSize="24sp"
                   android:textColor="#a6a6a6"
                   android:ellipsize="none"
-                  android:maxLines="4"
+                  android:singleLine="true"
                   android:alpha="0.65"
                   android:scrollHorizontally="false"
                   />

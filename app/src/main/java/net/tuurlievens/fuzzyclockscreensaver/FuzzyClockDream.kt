@@ -138,6 +138,11 @@ class FuzzyClockDream : DreamService() {
             "right" -> Gravity.END
             else -> Gravity.CENTER
         }
+        findViewById<LinearLayout>(R.id.parent).gravity = when(textAlignment) {
+            "left" -> Gravity.START
+            "right" -> Gravity.END
+            else -> Gravity.CENTER
+        }
     }
 
     private fun createTask() {
