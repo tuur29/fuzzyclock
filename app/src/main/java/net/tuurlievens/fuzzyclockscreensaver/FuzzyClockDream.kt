@@ -17,6 +17,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.Gravity
 import android.widget.ImageView
 
@@ -29,6 +30,7 @@ class FuzzyClockDream : DreamService() {
     private val handler =  Handler()
     private var nReceiver: NotificationReceiver? = null
     private val notifications = HashMap<String, NotificationData>()
+    private val ignoredPackageNames = arrayOf("android")
 
     private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0
@@ -224,11 +226,10 @@ class FuzzyClockDream : DreamService() {
         // On notification added / removed
         override fun onReceive(context: Context, intent: Intent) {
 
-            // notification_event contains: EVENTTYPE : PACKAGENAME;data
-            // EVENTTYPE is one of these: onNotificationPosted, onNotificationRemoved
-            // DATA is: NOTIFICATIONICONID,...
-
             val parcel = intent.getParcelableExtra<NotificationData>("notification_event")
+            Log.i("updatenotif packagename", parcel.packageName)
+            if (ignoredPackageNames.contains(parcel.packageName))
+                return
 
             if (parcel.type == "onNotificationPosted") {
 
