@@ -45,6 +45,11 @@
                 android:title="@string/pref_title_removeLineBreak"
                 android:defaultValue="false"/>
 
+        <SwitchPreference
+                android:key="showBattery"
+                android:title="@string/pref_title_showBattery"
+                android:defaultValue="true"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_working">

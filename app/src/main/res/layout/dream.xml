@@ -56,4 +56,14 @@
 
     </LinearLayout>
 
+    <View android:id="@+id/battery"
+          android:layout_width="fill_parent"
+          android:layout_height="5dp"
+          android:layout_centerHorizontal="true"
+          android:layout_alignParentBottom="true"
+          android:layout_margin="20dp"
+          android:background="@drawable/round_corner_box"
+          android:alpha="0.35"
+    />
+
 </RelativeLayout>

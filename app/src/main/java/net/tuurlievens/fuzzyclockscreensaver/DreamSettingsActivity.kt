@@ -52,6 +52,7 @@ class DreamSettingsActivity : PreferenceActivity() {
 //            bindPreferenceSummaryToValue(findPreference("showDate"))
 //            bindPreferenceSummaryToValue(findPreference("brightScreen"))
             bindPreferenceSummaryToValue(findPreference("notifState"))
+//            bindPreferenceSummaryToValue(findPreference("showBattery"))
         }
 
     }

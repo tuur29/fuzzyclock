@@ -19,6 +19,7 @@
     <string name="pref_title_removeLineBreak">Uur standaard op 1 lijn</string>
     <string name="pref_title_brightScreen">Helderder scherm</string>
     <string name="pref_title_notifState">Toon notificaties</string>
+    <string name="pref_title_showBattery">Toon batterijindicator</string>
 
     <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
 

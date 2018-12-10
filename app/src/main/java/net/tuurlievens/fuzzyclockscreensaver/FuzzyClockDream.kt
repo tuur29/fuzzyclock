@@ -20,6 +20,8 @@ import android.content.res.ColorStateList
 import android.util.Log
 import android.view.Gravity
 import android.widget.ImageView
+import android.graphics.drawable.GradientDrawable
+import android.os.BatteryManager
 
 
 class FuzzyClockDream : DreamService() {
@@ -43,6 +45,7 @@ class FuzzyClockDream : DreamService() {
     private var showDate = true
     private var brightScreen = false
     private var notifState = "hidden"
+    private var showBattery = true
 
     // LIFECYCLE
 
@@ -112,6 +115,7 @@ class FuzzyClockDream : DreamService() {
         showDate = prefs.getBoolean("showDate", showDate)
         brightScreen = prefs.getBoolean("brightScreen", brightScreen)
         notifState = prefs.getString("notifState", notifState)
+        showBattery = prefs.getBoolean("showBattery", showBattery)
     }
 
     private fun applySettings() {
@@ -124,6 +128,10 @@ class FuzzyClockDream : DreamService() {
         findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
         findViewById<TextView>(R.id.datetext).setTextColor(Color.parseColor(foregroundColor))
         findViewById<TextView>(R.id.notificationcount).setTextColor(Color.parseColor(foregroundColor))
+
+        val batt = findViewById<View>(R.id.battery);
+        val gd = batt.background.current as GradientDrawable
+        gd.setColor(Color.parseColor(foregroundColor))
 
         val alignment = when(textAlignment) {
             "center" -> TextView.TEXT_ALIGNMENT_CENTER
@@ -142,6 +150,10 @@ class FuzzyClockDream : DreamService() {
             "left" -> Gravity.START
             "right" -> Gravity.END
             else -> Gravity.CENTER
+        }
+
+        if (!showBattery) {
+            findViewById<RelativeLayout>(R.id.root).removeView(findViewById<View>(R.id.battery))
         }
     }
 
@@ -205,12 +217,20 @@ class FuzzyClockDream : DreamService() {
                         }
                     }
 
+                    if (showBattery) {
+                        val display = getDisplayParams()
+                        val batteryStatus = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { filter ->
+                            this@FuzzyClockDream.registerReceiver(null, filter)
+                        }
+                        val level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1).toDouble() / 100
+                        val width = (display.widthPixels - 40) * level // 40 = 2* 20dp margin
+                        findViewById<View>(R.id.battery).layoutParams.width = Math.ceil(width).toInt()
+                    }
+
                     // move clock around (randomly max 10% of total) against burn in
                     if (maxTranslationDisplacement != 0.0) {
                         val parent = findViewById<LinearLayout>(R.id.parent)
-                        val display = DisplayMetrics()
-                        windowManager.defaultDisplay.getMetrics(display)
-
+                        val display = getDisplayParams()
                         parent.translationX = calcRandomTranslation(display.widthPixels * maxTranslationDisplacement)
                         parent.translationY = calcRandomTranslation(display.heightPixels * maxTranslationDisplacement)
                     }
@@ -218,6 +238,12 @@ class FuzzyClockDream : DreamService() {
             }
         }
 
+    }
+
+    private fun getDisplayParams() : DisplayMetrics {
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+        return display
     }
 
     private fun calcRandomTranslation(max: Double) : Float {
