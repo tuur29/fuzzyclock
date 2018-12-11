@@ -1,4 +1,4 @@
-package net.tuurlievens.fuzzyclockscreensaver
+package net.tuurlievens.fuzzyclockwatchface
 
 class FuzzyTextGenerator {
     companion object {

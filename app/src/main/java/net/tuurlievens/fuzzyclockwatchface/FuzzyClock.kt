@@ -23,11 +23,9 @@ import android.view.Gravity
 import android.view.SurfaceHolder
 import android.view.WindowInsets
 import android.widget.Toast
-import net.tuurlievens.fuzzyclockscreensaver.FuzzyTextGenerator
 
 import java.lang.ref.WeakReference
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 
 /**
  * Digital watch face with seconds. In ambient mode, the seconds aren't displayed. On devices with
@@ -198,11 +196,8 @@ class FuzzyClock : CanvasWatchFaceService() {
                 )
             }
 
-            // TODO: select correct locale
-            val text = FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), "")
-//            val xPos = (canvas.width / 2).toFloat()
-//            val yPos = ((canvas.height / 2) - ((mTextPaint.descent() + mTextPaint.ascent()) / 2))
-//            canvas.drawText(text, xPos, yPos, mTextPaint)
+            val language = Locale.getDefault().language
+            val text = FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), language)
 
             val layout = DynamicLayout(text, mTextPaint, bounds.width(), Layout.Alignment.ALIGN_CENTER, 1F, 1F, true)
 
