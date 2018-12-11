@@ -5,6 +5,10 @@
     <string name="watchface_name">Fuzzy Clock</string>
     <string name="settings_name">Instellingen</string>
 
+    <!-- General -->
+    <string name="visible">Zichtbaar</string>
+    <string name="hidden">Verborgen</string>
+
     <!-- Strings related to Settings -->
     <string name="pref_category_elements">Elementen</string>
     <string name="pref_category_textformat">Tekst weergave</string>
