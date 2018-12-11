@@ -20,6 +20,8 @@ import android.support.wearable.watchface.WatchFaceStyle
 import android.text.DynamicLayout
 import android.text.Layout
 import android.text.TextPaint
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
 import android.view.WindowInsets
@@ -67,47 +69,38 @@ class FuzzyClock : CanvasWatchFaceService() {
 
         private val myPackageName = "net.tuurlievens.fuzzyclockwatchface"
         private lateinit var mCalendar: Calendar
-        private var mRegisteredTimeZoneReceiver = false
+        private var mLowBitAmbient: Boolean = false
+        private var mBurnInProtection: Boolean = false
+        private var mAmbient: Boolean = false
+        private val mUpdateTimeHandler: Handler = EngineHandler(this)
 
         private lateinit var mBackgroundPaint: Paint
         private lateinit var mClockTextPaint: TextPaint
         private lateinit var mDateTextPaint: TextPaint
 
-        private val settingsUpdateReceiver = object : BroadcastReceiver() {
+        private var settingsUpdateReceiver : BroadcastReceiver? = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 invalidate()
             }
         }
+
+        private val dateFormat = SimpleDateFormat("E, d MMM")
 
         // settings
-        private var showDate = true
-
-        /**
-         * Whether the display supports fewer bits for each color in ambient mode. When true, we
-         * disable anti-aliasing in ambient mode.
-         */
-        private var mLowBitAmbient: Boolean = false
-        private var mBurnInProtection: Boolean = false
-        private var mAmbient: Boolean = false
-
-        private val mUpdateTimeHandler: Handler = EngineHandler(this)
-
-        private val mTimeZoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                mCalendar.timeZone = TimeZone.getDefault()
-                invalidate()
-            }
-        }
+        private var language = "default"
+        private var fontSize = 26
+        private var textAlignment = "center"
+        private var foregroundColor = "#ffffff"
+        private var backgroundColor = "#000000"
+        private var showDate = "always"
+        private var notifState = "hidden"
+        private var showStatusbar = true
+        private var showDigitalClock = "never"
 
         override fun onCreate(holder: SurfaceHolder) {
             super.onCreate(holder)
 
             loadSettings()
-
-            // register receiver
-            val filter = IntentFilter()
-            filter.addAction("$myPackageName.REFRESH")
-            registerReceiver(settingsUpdateReceiver, filter)
 
             setWatchFaceStyle(
                 WatchFaceStyle.Builder(this@FuzzyClock)
@@ -119,12 +112,10 @@ class FuzzyClock : CanvasWatchFaceService() {
 
             mCalendar = Calendar.getInstance()
 
-            // Initializes background.
             mBackgroundPaint = Paint().apply {
                 color = ContextCompat.getColor(applicationContext, R.color.background)
             }
 
-            // Initializes Watch Face.
             mClockTextPaint = TextPaint().apply {
                 typeface = NORMAL_TYPEFACE
                 isAntiAlias = true
@@ -142,62 +133,15 @@ class FuzzyClock : CanvasWatchFaceService() {
         private fun loadSettings() {
             val prefs = PreferenceManager.getDefaultSharedPreferences(this@FuzzyClock)
 
-            showDate = prefs.getBoolean("showDate", showDate)
-        }
-
-        override fun onDestroy() {
-            mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME)
-            unregisterReceiver(settingsUpdateReceiver)
-            super.onDestroy()
-        }
-
-        override fun onPropertiesChanged(properties: Bundle) {
-            super.onPropertiesChanged(properties)
-            mLowBitAmbient = properties.getBoolean(
-                WatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false
-            )
-            mBurnInProtection = properties.getBoolean(
-                WatchFaceService.PROPERTY_BURN_IN_PROTECTION, false
-            )
-        }
-
-        override fun onTimeTick() {
-            super.onTimeTick()
-            invalidate()
-        }
-
-        override fun onAmbientModeChanged(inAmbientMode: Boolean) {
-            super.onAmbientModeChanged(inAmbientMode)
-            mAmbient = inAmbientMode
-
-            if (mLowBitAmbient) {
-                mClockTextPaint.isAntiAlias = !inAmbientMode
-                mDateTextPaint.isAntiAlias = !inAmbientMode
-            }
-
-            // Whether the timer should be running depends on whether we're visible (as well as
-            // whether we're in ambient mode), so we may need to start or stop the timer.
-            updateTimer()
-        }
-
-        /**
-         * Captures tap event (and tap type) and toggles the background color if the user finishes
-         * a tap.
-         */
-        override fun onTapCommand(tapType: Int, x: Int, y: Int, eventTime: Long) {
-            when (tapType) {
-                WatchFaceService.TAP_TYPE_TOUCH -> {
-                    // The user has started touching the screen.
-                }
-                WatchFaceService.TAP_TYPE_TOUCH_CANCEL -> {
-                    // The user has started a different gesture or otherwise cancelled the tap.
-                }
-                WatchFaceService.TAP_TYPE_TAP -> {
-                    // The user has completed the tap gesture.
-                    // TODO: Add code to handle the tap gesture.
-                }
-            }
-            invalidate()
+            language = prefs.getString("language", language)
+            fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
+            textAlignment = prefs.getString("textAlignment", textAlignment)
+            foregroundColor = prefs.getString("foregroundColor", foregroundColor)
+            backgroundColor = prefs.getString("backgroundColor", backgroundColor)
+            showDate = prefs.getString("showDate", showDate)
+            notifState = prefs.getString("notifState", notifState)
+            showStatusbar = prefs.getBoolean("showStatusbar", showStatusbar)
+            showDigitalClock = prefs.getString("showDigitalClock", showDigitalClock)
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect) {
@@ -219,11 +163,10 @@ class FuzzyClock : CanvasWatchFaceService() {
             canvas.save()
             val textXCoordinate = bounds.left.toFloat()
 
-            if (showDate) {
+            if (showDate != "never") {
 
                 // create date
-                val format = SimpleDateFormat("E, d MMM")
-                val date = format.format(mCalendar.time)
+                val date = dateFormat.format(mCalendar.time)
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), Layout.Alignment.ALIGN_CENTER, 1F, 1F, true)
 
                 // draw date
@@ -244,6 +187,51 @@ class FuzzyClock : CanvasWatchFaceService() {
             canvas.restore()
         }
 
+        override fun onTapCommand(tapType: Int, x: Int, y: Int, eventTime: Long) {
+            when (tapType) {
+                WatchFaceService.TAP_TYPE_TOUCH -> {
+                    // The user has started touching the screen.
+                }
+                WatchFaceService.TAP_TYPE_TOUCH_CANCEL -> {
+                    // The user has started a different gesture or otherwise cancelled the tap.
+                }
+                WatchFaceService.TAP_TYPE_TAP -> {
+                    // The user has completed the tap gesture.
+                    // TODO: Add code to handle the tap gesture.
+                }
+            }
+            invalidate()
+        }
+
+        // GENERAL CLOCK SETTINGS
+
+        override fun onTimeTick() {
+            super.onTimeTick()
+            invalidate()
+        }
+
+        override fun onPropertiesChanged(properties: Bundle) {
+            super.onPropertiesChanged(properties)
+            mLowBitAmbient = properties.getBoolean(
+                WatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false
+            )
+            mBurnInProtection = properties.getBoolean(
+                WatchFaceService.PROPERTY_BURN_IN_PROTECTION, false
+            )
+        }
+
+        override fun onAmbientModeChanged(inAmbientMode: Boolean) {
+            super.onAmbientModeChanged(inAmbientMode)
+            mAmbient = inAmbientMode
+
+            if (mLowBitAmbient) {
+                mClockTextPaint.isAntiAlias = !inAmbientMode
+                mDateTextPaint.isAntiAlias = !inAmbientMode
+            }
+
+            updateTimer()
+        }
+
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
 
@@ -254,47 +242,38 @@ class FuzzyClock : CanvasWatchFaceService() {
                 mCalendar.timeZone = TimeZone.getDefault()
                 invalidate()
             } else {
-                unregisterReceiver()
+                unregisterReceivers()
             }
 
-            // Whether the timer should be running depends on whether we're visible (as well as
-            // whether we're in ambient mode), so we may need to start or stop the timer.
             updateTimer()
         }
 
         private fun registerReceiver() {
-            if (mRegisteredTimeZoneReceiver) {
-                return
-            }
-            mRegisteredTimeZoneReceiver = true
-            val filter = IntentFilter(Intent.ACTION_TIMEZONE_CHANGED)
-            this@FuzzyClock.registerReceiver(mTimeZoneReceiver, filter)
+            val filter = IntentFilter()
+            filter.addAction("$myPackageName.REFRESH")
+            registerReceiver(settingsUpdateReceiver, filter)
         }
 
-        private fun unregisterReceiver() {
-            if (!mRegisteredTimeZoneReceiver) {
+        private fun unregisterReceivers() {
+            if (settingsUpdateReceiver != null) {
                 return
             }
-            mRegisteredTimeZoneReceiver = false
-            this@FuzzyClock.unregisterReceiver(mTimeZoneReceiver)
+            settingsUpdateReceiver = null
+            unregisterReceiver(settingsUpdateReceiver)
         }
 
         override fun onApplyWindowInsets(insets: WindowInsets) {
             super.onApplyWindowInsets(insets)
 
-            // Load resources that have alternate values for round watches.
-            val resources = this@FuzzyClock.resources
-            val isRound = insets.isRound
+            val size = dipToPixels(fontSize)
+            mClockTextPaint.textSize = size
+            mDateTextPaint.textSize = Math.round(size * 0.65).toFloat()
+        }
 
-            val textSize = resources.getDimension(
-                if (isRound)
-                    R.dimen.digital_text_size_round
-                else
-                    R.dimen.digital_text_size
-            )
-
-            mClockTextPaint.textSize = textSize
-            mDateTextPaint.textSize = Math.round(textSize * 0.65).toFloat()
+        override fun onDestroy() {
+            mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME)
+            unregisterReceivers()
+            super.onDestroy()
         }
 
         /**
@@ -302,6 +281,8 @@ class FuzzyClock : CanvasWatchFaceService() {
          * or stops it if it shouldn't be running but currently is.
          */
         private fun updateTimer() {
+            // Whether the timer should be running depends on whether we're visible (as well as
+            // whether we're in ambient mode), so we may need to start or stop the timer.
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME)
             if (shouldTimerBeRunning()) {
                 mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME)
@@ -326,6 +307,13 @@ class FuzzyClock : CanvasWatchFaceService() {
                 val delayMs = INTERACTIVE_UPDATE_RATE_MS - timeMs % INTERACTIVE_UPDATE_RATE_MS
                 mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs)
             }
+        }
+
+        // HELPERS
+
+        private fun dipToPixels(value: Int) : Float {
+            val metrics = this@FuzzyClock.resources.displayMetrics
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), metrics)
         }
     }
 }

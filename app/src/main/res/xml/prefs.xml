@@ -2,13 +2,80 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <CheckBoxPreference
-            android:key="showDate"
-            android:title="Show date"
-            android:summaryOn=""
-            android:summaryOff=""
-            app:wear_iconOn="@drawable/ic_check_white_24dp"
-            android:defaultValue="true"
-    />
+    <PreferenceScreen android:title="@string/pref_category_elements">
+
+        <ListPreference
+                android:key="showDate"
+                android:title="@string/pref_title_showDate"
+                android:defaultValue="interactive"
+                android:entries="@array/pref_list_visibility_titles"
+                android:entryValues="@array/pref_list_visibility_values"/>
+
+        <ListPreference
+                android:key="showDigitalClock"
+                android:title="@string/pref_title_showDigitalClock"
+                android:defaultValue="never"
+                android:entries="@array/pref_list_visibility_titles"
+                android:entryValues="@array/pref_list_visibility_values"/>
+
+    </PreferenceScreen>
+
+    <PreferenceScreen android:title="@string/pref_category_textformat">
+
+        <ListPreference
+                android:key="fontSize"
+                android:title="@string/pref_title_fontSize"
+                android:defaultValue="24"
+                android:entries="@array/pref_list_fontSize_values"
+                android:entryValues="@array/pref_list_fontSize_values"/>
+
+        <ListPreference
+                android:key="textAlignment"
+                android:title="@string/pref_title_textAlignment"
+                android:defaultValue="center"
+                android:entries="@array/pref_list_textAlignment_titles"
+                android:entryValues="@array/pref_list_textAlignment_values"/>
+
+        <ListPreference
+                android:key="foregroundColor"
+                android:title="@string/pref_title_foregroundColor"
+                android:defaultValue="#ffffff"
+                android:entries="@array/pref_list_color_titles"
+                android:entryValues="@array/pref_list_color_values"/>
+
+        <ListPreference
+                android:key="backgroundColor"
+                android:title="@string/pref_title_backgroundColor"
+                android:defaultValue="#000000"
+                android:entries="@array/pref_list_color_titles"
+                android:entryValues="@array/pref_list_color_values"/>
+
+    </PreferenceScreen>
+
+    <PreferenceScreen android:title="@string/pref_category_system">
+
+        <CheckBoxPreference
+                android:key="showStatusbar"
+                android:title="@string/pref_title_showStatusbar"
+                android:summaryOn=""
+                android:summaryOff=""
+                app:wear_iconOn="@drawable/ic_check_white_24dp"
+                android:defaultValue="true"/>
+
+        <ListPreference
+                android:key="notifState"
+                android:title="@string/pref_title_notifState"
+                android:defaultValue="visible"
+                android:entries="@array/pref_list_notifState_titles"
+                android:entryValues="@array/pref_list_notifState_values"/>
+
+        <ListPreference
+                android:key="language"
+                android:title="@string/pref_title_language"
+                android:defaultValue="default"
+                android:entries="@array/pref_list_language_titles"
+                android:entryValues="@array/pref_list_language_values"/>
+
+    </PreferenceScreen>
 
 </PreferenceScreen>
