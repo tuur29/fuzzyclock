@@ -3,6 +3,16 @@
 
     <PreferenceCategory android:title="@string/pref_category_display">
 
+        <SwitchPreference
+                android:key="showDate"
+                android:title="@string/pref_title_showDate"
+                android:defaultValue="true"/>
+
+        <SwitchPreference
+                android:key="showBattery"
+                android:title="@string/pref_title_showBattery"
+                android:defaultValue="true"/>
+
         <EditTextPreference
                 android:key="fontSize"
                 android:title="@string/pref_title_fontSize"
@@ -44,11 +54,6 @@
                 android:key="removeLineBreak"
                 android:title="@string/pref_title_removeLineBreak"
                 android:defaultValue="false"/>
-
-        <SwitchPreference
-                android:key="showBattery"
-                android:title="@string/pref_title_showBattery"
-                android:defaultValue="true"/>
 
     </PreferenceCategory>
 
