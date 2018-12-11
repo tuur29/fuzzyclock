@@ -41,7 +41,7 @@
         </service>
 
         <!-- Settings activity -->
-        <activity android:name=".WatchFaceWearableConfigActivity"
+        <activity android:name=".WatchfaceSettingsActivity"
                   android:label="@string/settings_name">
             <intent-filter>
                 <action android:name="com.example.android.wearable.watchface.CONFIG_DIGITAL"/>

@@ -12,6 +12,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
@@ -99,6 +100,7 @@ class FuzzyClock : CanvasWatchFaceService() {
         override fun onCreate(holder: SurfaceHolder) {
             super.onCreate(holder)
 
+            loadSettings()
 
             setWatchFaceStyle(
                 WatchFaceStyle.Builder(this@FuzzyClock)
@@ -131,6 +133,12 @@ class FuzzyClock : CanvasWatchFaceService() {
                 color = ContextCompat.getColor(applicationContext, R.color.digital_text)
                 alpha = Math.round(255 * 0.65).toInt()
             }
+        }
+
+        private fun loadSettings() {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this@FuzzyClock)
+
+            showDate = prefs.getBoolean("showDate", showDate)
         }
 
         override fun onDestroy() {
