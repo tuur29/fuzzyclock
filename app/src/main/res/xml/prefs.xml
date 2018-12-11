@@ -5,8 +5,9 @@
     <CheckBoxPreference
             android:key="showDate"
             android:title="Show date"
-            android:summaryOn="Date is shown"
-            android:summaryOff="Date is hidden"
+            android:summaryOn=""
+            android:summaryOff=""
+            app:wear_iconOn="@drawable/ic_check_white_24dp"
             android:defaultValue="true"
     />
 

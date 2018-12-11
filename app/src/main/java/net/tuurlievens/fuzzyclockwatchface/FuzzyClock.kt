@@ -190,7 +190,6 @@ class FuzzyClock : CanvasWatchFaceService() {
                 WatchFaceService.TAP_TYPE_TAP -> {
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
-                    showDate = !showDate
                 }
             }
             invalidate()
