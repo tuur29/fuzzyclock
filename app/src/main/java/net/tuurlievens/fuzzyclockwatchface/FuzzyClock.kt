@@ -198,25 +198,17 @@ class FuzzyClock : CanvasWatchFaceService() {
 
             val language = Locale.getDefault().language
             val text = FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), language)
-
             val layout = DynamicLayout(text, mTextPaint, bounds.width(), Layout.Alignment.ALIGN_CENTER, 1F, 1F, true)
 
             canvas.save()
 
-            val textHeight = getTextHeight(text, mTextPaint)
-            val numberOfTextLines = layout.lineCount
             val textXCoordinate = bounds.left.toFloat()
-            val textYCoordinate = bounds.exactCenterY() - numberOfTextLines * textHeight / 2
+            val textYCoordinate = bounds.exactCenterY() - layout.height / 2
             canvas.translate(textXCoordinate, textYCoordinate)
 
             layout.draw(canvas)
-            canvas.restore()
-        }
 
-        private fun getTextHeight(text: String, paint: Paint): Float {
-            val rect = Rect()
-            paint.getTextBounds(text, 0, text.length, rect)
-            return rect.height().toFloat()
+            canvas.restore()
         }
 
         override fun onVisibilityChanged(visible: Boolean) {
