@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">Fuzzy Clock Watchface</string>
     <string name="watchface_name">Fuzzy Clock</string>
-    <string name="settings_name">Settings</string>
+    <string name="settings_name">Instellingen</string>
 </resources>
