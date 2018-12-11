@@ -23,7 +23,6 @@ import android.text.TextPaint
 import android.view.Gravity
 import android.view.SurfaceHolder
 import android.view.WindowInsets
-import android.widget.Toast
 
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -66,16 +65,19 @@ class FuzzyClock : CanvasWatchFaceService() {
 
     inner class Engine : CanvasWatchFaceService.Engine() {
 
+        private val myPackageName = "net.tuurlievens.fuzzyclockwatchface"
         private lateinit var mCalendar: Calendar
-
         private var mRegisteredTimeZoneReceiver = false
-
-        private var mXOffset: Float = 0F
-        private var mYOffset: Float = 0F
 
         private lateinit var mBackgroundPaint: Paint
         private lateinit var mClockTextPaint: TextPaint
         private lateinit var mDateTextPaint: TextPaint
+
+        private val settingsUpdateReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                invalidate()
+            }
+        }
 
         // settings
         private var showDate = true
@@ -102,6 +104,11 @@ class FuzzyClock : CanvasWatchFaceService() {
 
             loadSettings()
 
+            // register receiver
+            val filter = IntentFilter()
+            filter.addAction("$myPackageName.REFRESH")
+            registerReceiver(settingsUpdateReceiver, filter)
+
             setWatchFaceStyle(
                 WatchFaceStyle.Builder(this@FuzzyClock)
                     .setAcceptsTapEvents(true)
@@ -111,9 +118,6 @@ class FuzzyClock : CanvasWatchFaceService() {
             )
 
             mCalendar = Calendar.getInstance()
-
-            val resources = this@FuzzyClock.resources
-            mYOffset = resources.getDimension(R.dimen.digital_y_offset)
 
             // Initializes background.
             mBackgroundPaint = Paint().apply {
@@ -143,6 +147,7 @@ class FuzzyClock : CanvasWatchFaceService() {
 
         override fun onDestroy() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME)
+            unregisterReceiver(settingsUpdateReceiver)
             super.onDestroy()
         }
 
@@ -280,12 +285,6 @@ class FuzzyClock : CanvasWatchFaceService() {
             // Load resources that have alternate values for round watches.
             val resources = this@FuzzyClock.resources
             val isRound = insets.isRound
-            mXOffset = resources.getDimension(
-                if (isRound)
-                    R.dimen.digital_x_offset_round
-                else
-                    R.dimen.digital_x_offset
-            )
 
             val textSize = resources.getDimension(
                 if (isRound)
