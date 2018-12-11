@@ -25,20 +25,10 @@ import android.view.WindowInsets
 import android.widget.Toast
 
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Digital watch face with seconds. In ambient mode, the seconds aren't displayed. On devices with
- * low-bit ambient mode, the text is drawn without anti-aliasing in ambient mode.
- *
- *
- * Important Note: Because watch face apps do not have a default Activity in
- * their project, you will need to set your Configurations to
- * "Do not launch Activity" for both the Wear and/or Application modules. If you
- * are unsure how to do this, please review the "Run Starter project" section
- * in the Google Watch Face Code Lab:
- * https://codelabs.developers.google.com/codelabs/watchface/index.html#0
- */
+
 class FuzzyClock : CanvasWatchFaceService() {
 
     companion object {
@@ -83,7 +73,11 @@ class FuzzyClock : CanvasWatchFaceService() {
         private var mYOffset: Float = 0F
 
         private lateinit var mBackgroundPaint: Paint
-        private lateinit var mTextPaint: TextPaint
+        private lateinit var mClockTextPaint: TextPaint
+        private lateinit var mDateTextPaint: TextPaint
+
+        // settings
+        private var showDate = true
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -125,10 +119,17 @@ class FuzzyClock : CanvasWatchFaceService() {
             }
 
             // Initializes Watch Face.
-            mTextPaint = TextPaint().apply {
+            mClockTextPaint = TextPaint().apply {
                 typeface = NORMAL_TYPEFACE
                 isAntiAlias = true
                 color = ContextCompat.getColor(applicationContext, R.color.digital_text)
+            }
+
+            mDateTextPaint = TextPaint().apply {
+                typeface = NORMAL_TYPEFACE
+                isAntiAlias = true
+                color = ContextCompat.getColor(applicationContext, R.color.digital_text)
+                alpha = Math.round(255 * 0.65).toInt()
             }
         }
 
@@ -157,7 +158,8 @@ class FuzzyClock : CanvasWatchFaceService() {
             mAmbient = inAmbientMode
 
             if (mLowBitAmbient) {
-                mTextPaint.isAntiAlias = !inAmbientMode
+                mClockTextPaint.isAntiAlias = !inAmbientMode
+                mDateTextPaint.isAntiAlias = !inAmbientMode
             }
 
             // Whether the timer should be running depends on whether we're visible (as well as
@@ -177,16 +179,17 @@ class FuzzyClock : CanvasWatchFaceService() {
                 WatchFaceService.TAP_TYPE_TOUCH_CANCEL -> {
                     // The user has started a different gesture or otherwise cancelled the tap.
                 }
-                WatchFaceService.TAP_TYPE_TAP ->
+                WatchFaceService.TAP_TYPE_TAP -> {
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
-                    Toast.makeText(applicationContext, R.string.message, Toast.LENGTH_SHORT)
-                        .show()
+                    showDate = !showDate
+                }
             }
             invalidate()
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect) {
+
             // Draw the background.
             if (mAmbient) {
                 canvas.drawColor(Color.BLACK)
@@ -196,18 +199,36 @@ class FuzzyClock : CanvasWatchFaceService() {
                 )
             }
 
+            // create clock
             val language = Locale.getDefault().language
-            val text = FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), language)
-            val layout = DynamicLayout(text, mTextPaint, bounds.width(), Layout.Alignment.ALIGN_CENTER, 1F, 1F, true)
+            val clock = FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), language)
+            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width(), Layout.Alignment.ALIGN_CENTER, 1F, 1F, true)
 
             canvas.save()
-
             val textXCoordinate = bounds.left.toFloat()
-            val textYCoordinate = bounds.exactCenterY() - layout.height / 2
-            canvas.translate(textXCoordinate, textYCoordinate)
 
-            layout.draw(canvas)
+            if (showDate) {
 
+                // create date
+                val format = SimpleDateFormat("E, d MMM")
+                val date = format.format(mCalendar.time)
+                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), Layout.Alignment.ALIGN_CENTER, 1F, 1F, true)
+
+                // draw date
+                val textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
+                val lineHeight = dateLayout.height * 3
+                canvas.translate(textXCoordinate, textYCoordinate + lineHeight)
+                dateLayout.draw(canvas)
+
+                // draw clock
+                canvas.translate(0F, (-lineHeight).toFloat())
+
+            } else {
+                val textYCoordinate = bounds.exactCenterY() - (clockLayout.height / 2 )
+                canvas.translate(textXCoordinate, textYCoordinate)
+            }
+
+            clockLayout.draw(canvas)
             canvas.restore()
         }
 
@@ -266,7 +287,8 @@ class FuzzyClock : CanvasWatchFaceService() {
                     R.dimen.digital_text_size
             )
 
-            mTextPaint.textSize = textSize
+            mClockTextPaint.textSize = textSize
+            mDateTextPaint.textSize = Math.round(textSize * 0.65).toFloat()
         }
 
         /**

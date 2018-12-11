@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Fuzzy Clock Watchface</string>
-    <string name="message">Watch face tapped</string>
     <string name="my_digital_name">Fuzzy Clock</string>
 </resources>
