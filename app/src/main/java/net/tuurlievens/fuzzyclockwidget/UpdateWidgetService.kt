@@ -10,12 +10,18 @@ import android.content.Context
 import android.util.TypedValue
 import android.widget.RemoteViews
 import java.util.*
+import android.app.PendingIntent
 
 
 class UpdateWidgetService : Service() {
 
     override fun onBind(intent: Intent): IBinder? {
         return null
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        Log.i("ALARM","onCreateService")
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -38,6 +44,7 @@ class UpdateWidgetService : Service() {
 
         var pName: String = "net.tuurlievens.fuzzyclockwidget"
 
+
         // UPDATE widget view
 
         internal fun updateWidget(context: Context, manager: AppWidgetManager, id: Int) {
@@ -53,10 +60,16 @@ class UpdateWidgetService : Service() {
             view.setTextViewTextSize(R.id.clocktext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
 
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
-            view.setTextViewText(R.id.clocktext, FuzzyTextGenerator.create(hour, min, pickedLanguage))
+            view.setTextViewText(R.id.clocktext, FuzzyTextGenerator.create(hour, min, pickedLanguage) + "$hour:$min")
 
+            view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag))
             manager.updateAppWidget(id, view)
+        }
 
+        internal fun getPendingSelfIntent(context: Context, action: String): PendingIntent {
+            val intent = Intent(context, FuzzyClockWidget::class.java)
+            intent.action = action
+            return PendingIntent.getBroadcast(context, 0, intent, 0)
         }
     }
 

@@ -17,6 +17,8 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
     private var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     private lateinit var mAppWidgetText: EditText
+
+    // adding the widget
     private var mOnClickListener: View.OnClickListener = View.OnClickListener {
         val context = this@FuzzyClockWidgetConfigureActivity
 
@@ -35,6 +37,8 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
         finish()
     }
 
+
+    // create activity
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
 
@@ -61,12 +65,12 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
             return
         }
 
+        // load default values
         val prefs = loadPrefs(this@FuzzyClockWidgetConfigureActivity, mAppWidgetId)
         mAppWidgetText.setText(prefs.fontSize.toString())
     }
 
-    fun updateWidgets() {
-
+    private fun updateWidgets() {
         val manager = AppWidgetManager.getInstance(application)
         val ids = manager.getAppWidgetIds(ComponentName(application, FuzzyClockWidget::class.java))
 

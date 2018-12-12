@@ -15,62 +15,82 @@ class FuzzyClockWidget : AppWidgetProvider() {
 
     // LIFECYCLE
 
+    // when parent wants to refresh or on app update
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
 
-        // TODO: fix Attempt to invoke virtual method writeToParcel on a null object reference
+        // update widgets
         for (appWidgetId in appWidgetIds) {
              UpdateWidgetService.updateWidget(context, appWidgetManager, appWidgetId)
         }
-
-        // start alarm for updates
-        startAlarm(context, 10)
-
-        Log.i("ALARM","onUpdate")
+        startAlarm(context)
     }
 
-    override fun onEnabled(context: Context) {
-        Log.i("ALARM","onEnabled")
-    }
-
-    fun startAlarm(context: Context, seconds: Int) {
+    fun startAlarm(context: Context) {
+        if (alarmIntent != null) return
 
         val cal = Calendar.getInstance()
+        val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         val intent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent = PendingIntent.getBroadcast(context, 123, intent, 0)
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
-        val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        manager!!.setInexactRepeating(AlarmManager.RTC, cal.timeInMillis, (3 * 60 * 1000).toLong(), alarmIntent)
+//        manager!!.setRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis, (10 * 1000).toLong(), alarmIntent)
 
-        // TODO: change alarm types here and find a way to add flag_cancel_current
-        manager!!.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            cal.timeInMillis,
-            (seconds * 1000).toLong(),
-            alarmIntent
-        )
-
-        Log.i("ALARM","startAlarm")
+        Log.i("ALARM", "alarm started")
     }
 
-    fun stopAlarm(context: Context) {
-
-        val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
-        manager!!.cancel(alarmIntent)
-
-        context.stopService(Intent(context, UpdateWidgetService::class.java))
-
-        Log.i("ALARM","stopAlarm")
+    // when the first widget is made
+    override fun onEnabled(context: Context) {
+        // start alarm for updates
+        Log.i("ALARM", "onEnabled")
+        startAlarm(context)
     }
 
+    // when broadcast received
+    override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
+
+        val extras = intent?.extras
+
+        if (RefreshTag == intent?.action){
+            Log.i("ALARM", "REFRESH")
+            return
+        }
+
+        if (ConfigTag == intent?.action){
+            Log.i("ALARM", "CONFIG")
+            return
+        }
+
+        // launcher updates widget
+        if (extras != null && context != null) {
+            val appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            val manager = AppWidgetManager.getInstance(context)
+            if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+                Log.i("ALARM", "UPDATE " + appWidgetId)
+                UpdateWidgetService.updateWidget(context, manager, appWidgetId)
+            }
+        }
+    }
+
+    // when a widget gets deleted
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        // When the user deletes a widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
             FuzzyClockWidgetConfigureActivity.deletePrefs(context, appWidgetId)
         }
     }
 
+    // when no more widgets active
     override fun onDisabled(context: Context) {
-        stopAlarm(context)
-        Log.i("ALARM","onDisabled")
+        // stop alarm
+        val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        manager!!.cancel(alarmIntent)
+        context.stopService(Intent(context, UpdateWidgetService::class.java))
+    }
+
+    companion object {
+        var RefreshTag = "REFRESH"
+        var ConfigTag = "CONFIG"
     }
 }
 
