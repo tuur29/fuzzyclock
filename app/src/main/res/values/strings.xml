@@ -1,5 +1,56 @@
 <resources>
     <string name="app_name">Fuzzy Clock Widget</string>
-    <string name="fontsize">Font size</string>
-    <string name="save">Save widget</string>
+
+    <!--General-->
+    <string name="save">Save</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_category_display">Display</string>
+    <string name="pref_category_working">Configuration</string>
+
+    <string name="pref_title_language">Language</string>
+    <string name="pref_title_fontSize">Font size</string>
+    <string name="pref_title_textAlignment">Text alignment</string>
+    <string name="pref_title_foregroundColor">Text color</string>
+    <string name="pref_title_removeLineBreak">Show hour on 1 line by default</string>
+    <string name="pref_title_showBattery">Show battery indicator</string>
+    <string name="pref_title_showDate">Show date</string>
+
+    <string-array name="pref_list_language_titles">
+        <item>Dependent on device setting</item>
+        <item>English</item>
+        <item>Dutch</item>
+    </string-array>
+
+    <string-array name="pref_list_textAlignment_titles">
+        <item>Left</item>
+        <item>Center</item>
+        <item>Right</item>
+    </string-array>
+
+    <string-array name="pref_list_color_titles">
+        <item>Black</item>
+        <item>Grey</item>
+        <item>White</item>
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Deep purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Light Blue</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>Light Green</item>
+        <item>Lime</item>
+        <item>Yellow</item>
+        <item>Amber</item>
+        <item>Orange</item>
+        <item>Deep Orange</item>
+        <item>Brown</item>
+        <item>Dark Gray</item>
+        <item>Blue Gray</item>
+    </string-array>
+
 </resources>
