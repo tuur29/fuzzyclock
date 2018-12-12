@@ -19,11 +19,6 @@ class UpdateWidgetService : Service() {
         return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Log.i("ALARM","onCreateService")
-    }
-
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         // generates random number
         Log.i("ALARM","update widgets")
@@ -60,16 +55,17 @@ class UpdateWidgetService : Service() {
             view.setTextViewTextSize(R.id.clocktext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
 
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
-            view.setTextViewText(R.id.clocktext, FuzzyTextGenerator.create(hour, min, pickedLanguage) + "$hour:$min")
+            view.setTextViewText(R.id.clocktext, FuzzyTextGenerator.create(hour, min, pickedLanguage))
 
-            view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag))
+            view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
             manager.updateAppWidget(id, view)
         }
 
-        internal fun getPendingSelfIntent(context: Context, action: String): PendingIntent {
+        private fun getPendingSelfIntent(context: Context, action: String, id: Int? = null): PendingIntent {
             val intent = Intent(context, FuzzyClockWidget::class.java)
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
             intent.action = action
-            return PendingIntent.getBroadcast(context, 0, intent, 0)
+            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
     }
 

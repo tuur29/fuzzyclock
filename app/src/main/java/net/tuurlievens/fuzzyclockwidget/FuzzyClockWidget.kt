@@ -52,13 +52,12 @@ class FuzzyClockWidget : AppWidgetProvider() {
 
         val extras = intent?.extras
 
-        if (RefreshTag == intent?.action){
-            Log.i("ALARM", "REFRESH")
-            return
-        }
-
+        // open config panel again
         if (ConfigTag == intent?.action){
-            Log.i("ALARM", "CONFIG")
+            val appWidgetId = extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            val i = Intent(context, FuzzyClockWidgetConfigureActivity::class.java)
+            i.putExtras(intent)
+            context?.startActivity(i)
             return
         }
 
@@ -67,7 +66,6 @@ class FuzzyClockWidget : AppWidgetProvider() {
             val appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
             val manager = AppWidgetManager.getInstance(context)
             if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                Log.i("ALARM", "UPDATE " + appWidgetId)
                 UpdateWidgetService.updateWidget(context, manager, appWidgetId)
             }
         }
@@ -89,7 +87,6 @@ class FuzzyClockWidget : AppWidgetProvider() {
     }
 
     companion object {
-        var RefreshTag = "REFRESH"
         var ConfigTag = "CONFIG"
     }
 }

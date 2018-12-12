@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Fuzzy Clock Widget</string>
     <string name="fontsize">Font size</string>
-    <string name="add_widget">Add widget</string>
+    <string name="save">Save widget</string>
 </resources>
