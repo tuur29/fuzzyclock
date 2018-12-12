@@ -2,41 +2,18 @@ package net.tuurlievens.fuzzyclockwidget
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.EditText
+import android.view.WindowManager
 
 class FuzzyClockWidgetConfigureActivity : Activity() {
 
-    // TODO: change this activity to a PreferenceActivity
-
-    private var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-
-    private lateinit var mAppWidgetText: EditText
-
-    // adding the widget
-    private var mOnClickListener: View.OnClickListener = View.OnClickListener {
-        val context = this@FuzzyClockWidgetConfigureActivity
-
-        // When the button is clicked, store the string locally
-        val widgetText = mAppWidgetText.text.toString()
-        val data = WidgetData(widgetText.toInt())
-        savePrefs(context, mAppWidgetId, data)
-
-        // It is the responsibility of the configuration activity to update the app widget
-        updateWidgets()
-
-        // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
-        setResult(Activity.RESULT_OK, resultValue)
-        finish()
-    }
-
+    private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private lateinit var settingsFragment: AllPreferencesFragment
+    public lateinit var prefs: WidgetData
 
     // create activity
     public override fun onCreate(icicle: Bundle?) {
@@ -45,45 +22,60 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(Activity.RESULT_CANCELED)
-
         setContentView(R.layout.fuzzy_clock_widget_configure)
-        mAppWidgetText = findViewById<View>(R.id.appwidget_text) as EditText
-        findViewById<View>(R.id.add_button).setOnClickListener(mOnClickListener)
+
+        // set statusbar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(android.R.color.black)
+        }
 
         // Find the widget id from the intent.
         val extras = intent.extras
         if (extras != null) {
-            mAppWidgetId = extras.getInt(
+            widgetId = extras.getInt(
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
             )
         }
 
-        Log.i("ALARM", "config " + mAppWidgetId)
-
         // If this activity was started with an intent without an app widget ID, finish with an error.
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
             return
         }
 
-        // load default values
-        val prefs = loadPrefs(this@FuzzyClockWidgetConfigureActivity, mAppWidgetId)
-        mAppWidgetText.setText(prefs.fontSize.toString())
-    }
+        prefs = loadPrefs(this@FuzzyClockWidgetConfigureActivity, widgetId)
 
-    private fun updateWidgets() {
-        val manager = AppWidgetManager.getInstance(application)
-        val ids = manager.getAppWidgetIds(ComponentName(application, FuzzyClockWidget::class.java))
+        // load preferences fragment
+        settingsFragment = AllPreferencesFragment()
+        fragmentManager.beginTransaction().replace(R.id.fragment, settingsFragment).commit()
 
-        for (id in ids) {
-            UpdateWidgetService.updateWidget(this, manager, id)
+
+        // save button
+        findViewById<View>(R.id.save_button).setOnClickListener{
+            val context = this@FuzzyClockWidgetConfigureActivity
+            savePrefs(context, widgetId, prefs)
+
+            // It is the responsibility of the configuration activity to update the app widget
+            updateWidget(widgetId)
+
+            // Make sure we pass back the original appWidgetId
+            val resultValue = Intent()
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            setResult(Activity.RESULT_OK, resultValue)
+            finish()
         }
     }
 
-    // CRUD widget preferences
+    private fun updateWidget(id: Int) {
+        val manager = AppWidgetManager.getInstance(application)
+        UpdateWidgetService.updateWidget(this, manager, id)
+    }
+
 
     companion object {
 
+        // CRUD widget preferences
         private val PREFS_NAME = "net.tuurlievens.fuzzyclockwidget.FuzzyClockWidget"
         private val PREF_PREFIX_KEY = "fuzzyclockwidget_"
 
@@ -104,6 +96,7 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
             prefs.remove(PREF_PREFIX_KEY + appWidgetId)
             prefs.apply()
         }
+
     }
 }
 

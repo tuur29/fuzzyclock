@@ -82,6 +82,7 @@ class FuzzyClockWidget : AppWidgetProvider() {
     override fun onDisabled(context: Context) {
         // stop alarm
         val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        if (alarmIntent != null)
         manager!!.cancel(alarmIntent)
         context.stopService(Intent(context, UpdateWidgetService::class.java))
     }

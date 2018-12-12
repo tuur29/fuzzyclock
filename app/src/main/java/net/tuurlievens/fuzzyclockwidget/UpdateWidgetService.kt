@@ -11,6 +11,7 @@ import android.util.TypedValue
 import android.widget.RemoteViews
 import java.util.*
 import android.app.PendingIntent
+import android.graphics.Color
 
 
 class UpdateWidgetService : Service() {
@@ -53,9 +54,14 @@ class UpdateWidgetService : Service() {
             val min = calendar.get(Calendar.MINUTE)
 
             view.setTextViewTextSize(R.id.clocktext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
+            view.setTextColor(R.id.clocktext, Color.parseColor(prefs.foregroundColor))
 
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
-            view.setTextViewText(R.id.clocktext, FuzzyTextGenerator.create(hour, min, pickedLanguage))
+            var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
+            if (prefs.removeLineBreak) {
+               text = text.replace("\n", " ")
+            }
+            view.setTextViewText(R.id.clocktext, text)
 
             view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
             manager.updateAppWidget(id, view)
