@@ -22,6 +22,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.graphics.drawable.GradientDrawable
 import android.os.BatteryManager
+import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 
 
 class FuzzyClockDream : DreamService() {

@@ -24,6 +24,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
 import android.view.WindowInsets
+import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat

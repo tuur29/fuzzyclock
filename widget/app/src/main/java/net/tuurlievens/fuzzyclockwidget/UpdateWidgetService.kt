@@ -12,6 +12,7 @@ import android.widget.RemoteViews
 import java.util.*
 import android.app.PendingIntent
 import android.graphics.Color
+import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 
 
 class UpdateWidgetService : Service() {

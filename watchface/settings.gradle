@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':shared'
+project(':shared').projectDir = new File(settingsDir, '../shared')
