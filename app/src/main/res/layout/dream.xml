@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"
+                >
+
+    <LinearLayout android:id="@+id/parent"
+                  android:orientation="vertical"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerHorizontal="true"
+                  android:layout_centerVertical="true"
+                  android:textAlignment="center">
+
+        <TextView android:id="@+id/clocktext"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="36sp"
+                  android:textColor="#ffffff"
+                  android:ellipsize="none"
+                  android:maxLines="4"
+                  android:scrollHorizontally="false"
+                  />
+
+        <TextView android:id="@+id/datetext"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="24sp"
+                  android:textColor="#a6a6a6"
+                  android:ellipsize="none"
+                  android:singleLine="true"
+                  android:alpha="0.65"
+                  android:scrollHorizontally="false"
+                  />
+
+        <LinearLayout android:id="@+id/notifications"
+                      android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="center"
+                      android:layout_marginTop="10dp">
+
+            <TextView android:id="@+id/notificationcount"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textSize="20sp"
+                      android:textColor="#a6a6a6"
+                      android:textAlignment="center"
+                      android:alpha="0.65"
+                      android:scrollHorizontally="false"
+            />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View android:id="@+id/battery"
+          android:layout_width="fill_parent"
+          android:layout_height="5dp"
+          android:layout_centerHorizontal="true"
+          android:layout_alignParentBottom="true"
+          android:layout_margin="20dp"
+          android:background="@drawable/round_corner_box"
+          android:alpha="0.35"
+    />
+
+</RelativeLayout>
