@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Fuzzy Clock Watchface</string>
+    <string name="watchface_name">Fuzzy Clock</string>
+    <string name="settings_name">Instellingen</string>
+
+    <!-- General -->
+    <string name="visible">Zichtbaar</string>
+    <string name="hidden">Verborgen</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_category_elements">Elementen</string>
+    <string name="pref_category_textformat">Tekst weergave</string>
+    <string name="pref_category_system">Systeem</string>
+
+    <string name="pref_title_showDate">Toon datum</string>
+    <string name="pref_title_language">Taal</string>
+    <string name="pref_title_fontSize">Tekstgrootte</string>
+    <string name="pref_title_textAlignment">Uitlijning</string>
+    <string name="pref_title_foregroundColor">Tekstkleur</string>
+    <string name="pref_title_backgroundColor">Achtergrondkleur</string>
+    <string name="pref_title_notifState">Toon notificaties</string>
+    <string name="pref_title_showStatusbar">Toon statusiconen</string>
+    <string name="pref_title_showDigitalClock">Toon digitale klok</string>
+
+    <string-array name="pref_list_language_titles">
+        <item>Afhankelijk van apparaatinstellingen</item>
+        <item>Engels</item>
+        <item>Nederlands</item>
+    </string-array>
+
+    <string-array name="pref_list_textAlignment_titles">
+        <item>Links</item>
+        <item>Gecentreerd</item>
+        <item>Rechts</item>
+    </string-array>
+
+    <string-array name="pref_list_color_titles">
+        <item>Zwart</item>
+        <item>Grijs</item>
+        <item>Wit</item>
+        <item>Rood</item>
+        <item>Roze</item>
+        <item>Paars</item>
+        <item>Donkerpaars</item>
+        <item>Indigo</item>
+        <item>Blauw</item>
+        <item>Lichtblauw</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Groen</item>
+        <item>Lichtgroen</item>
+        <item>Limoen</item>
+        <item>Geel</item>
+        <item>Amber</item>
+        <item>Oranje</item>
+        <item>Donker oranje</item>
+        <item>Bruin</item>
+        <item>Donkergrijs</item>
+        <item>Grijsblauw</item>
+    </string-array>
+
+    <string-array name="pref_list_notifState_titles">
+        <item>Zichtbaar</item>
+        <item>Toon aantal</item>
+        <item>Verborgen</item>
+    </string-array>
+
+    <string-array name="pref_list_visibility_titles">
+        <item>Nooit</item>
+        <item>Wanneer opgelicht</item>
+        <item>Altijd</item>
+    </string-array>
+
+</resources>
