@@ -35,12 +35,16 @@
                   android:scrollHorizontally="false"
                   />
 
-        <LinearLayout android:id="@+id/notifications"
-                      android:orientation="horizontal"
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:gravity="center"
-                      android:layout_marginTop="10dp">
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/notifications"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            app:justifyContent="center"
+            app:maxLine="3"
+            app:flexWrap="wrap">
 
             <TextView android:id="@+id/notificationcount"
                       android:layout_width="match_parent"
@@ -52,7 +56,7 @@
                       android:scrollHorizontally="false"
             />
 
-        </LinearLayout>
+        </com.google.android.flexbox.FlexboxLayout>
 
     </LinearLayout>
 

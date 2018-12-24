@@ -22,6 +22,8 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.graphics.drawable.GradientDrawable
 import android.os.BatteryManager
+import com.google.android.flexbox.FlexboxLayout
+import com.google.android.flexbox.JustifyContent
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 
 
@@ -127,6 +129,7 @@ class FuzzyClockDream : DreamService() {
 
         findViewById<TextView>(R.id.clocktext).textSize = fontSize.toFloat()
         findViewById<TextView>(R.id.datetext).textSize = (fontSize * 0.65).toFloat()
+        findViewById<TextView>(R.id.notificationcount).textSize = (fontSize * 0.65).toFloat()
 
         findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
         findViewById<TextView>(R.id.datetext).setTextColor(Color.parseColor(foregroundColor))
@@ -144,10 +147,10 @@ class FuzzyClockDream : DreamService() {
         findViewById<TextView>(R.id.clocktext).textAlignment = alignment
         findViewById<TextView>(R.id.datetext).textAlignment = alignment
         findViewById<TextView>(R.id.notificationcount).textAlignment = alignment
-        findViewById<LinearLayout>(R.id.notifications).gravity = when(textAlignment) {
-            "left" -> Gravity.START
-            "right" -> Gravity.END
-            else -> Gravity.CENTER
+        findViewById<FlexboxLayout>(R.id.notifications).justifyContent = when(textAlignment) {
+            "left" -> JustifyContent.FLEX_START
+            "right" -> JustifyContent.FLEX_END
+            else -> JustifyContent.CENTER
         }
         findViewById<LinearLayout>(R.id.parent).gravity = when(textAlignment) {
             "left" -> Gravity.START
@@ -198,7 +201,7 @@ class FuzzyClockDream : DreamService() {
                         }
 
                         if (notifState == "visible" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            val container = findViewById<LinearLayout>(R.id.notifications)
+                            val container = findViewById<FlexboxLayout>(R.id.notifications)
                             container.removeAllViews()
 
                             for (notif in notifications) {
@@ -209,10 +212,10 @@ class FuzzyClockDream : DreamService() {
                                     img.imageTintList = ColorStateList.valueOf(Color.parseColor(foregroundColor))
                                     container.addView(img)
 
-                                    val params = img.layoutParams as LinearLayout.LayoutParams
+                                    val params = img.layoutParams as FlexboxLayout.LayoutParams
                                     params.setMargins(10,10,10,10)
-                                    params.width = 80
-                                    params.height= 80
+                                    params.width = (fontSize * 2.5).toInt()
+                                    params.height= (fontSize * 2.5).toInt()
                                     img.layoutParams = params
                                 }
                             }

@@ -71,11 +71,9 @@ class DreamSettingsActivity : PreferenceActivity() {
                 if (!Settings.Secure.getString(instance?.contentResolver, "enabled_notification_listeners")
                         .contains(instance?.applicationContext?.packageName!!)) {
 
-                    instance!!.applicationContext.startActivity(
-                        Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
-                        )
-                    )
+                    val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    instance!!.applicationContext.startActivity(intent)
                     Toast.makeText(instance, instance!!.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
                     stringValue = "false"
                 }
