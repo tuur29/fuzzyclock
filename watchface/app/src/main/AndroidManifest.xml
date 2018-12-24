@@ -21,7 +21,7 @@
                    android:value="true"/>
 
         <!-- Watchface service -->
-        <service android:name=".FuzzyClock"
+        <service android:name=".FuzzyClockWatchface"
                  android:label="@string/watchface_name"
                  android:permission="android.permission.BIND_WALLPAPER">
 

@@ -19,11 +19,9 @@ import android.support.wearable.watchface.WatchFaceStyle
 import android.text.DynamicLayout
 import android.text.Layout
 import android.text.TextPaint
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
-import android.view.WindowInsets
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 
 import java.lang.ref.WeakReference
@@ -31,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class FuzzyClock : CanvasWatchFaceService() {
+class FuzzyClockWatchface : CanvasWatchFaceService() {
 
     companion object {
         private val NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
@@ -43,8 +41,8 @@ class FuzzyClock : CanvasWatchFaceService() {
         return Engine()
     }
 
-    private class EngineHandler(reference: FuzzyClock.Engine) : Handler() {
-        private val mWeakReference: WeakReference<FuzzyClock.Engine> = WeakReference(reference)
+    private class EngineHandler(reference: FuzzyClockWatchface.Engine) : Handler() {
+        private val mWeakReference: WeakReference<FuzzyClockWatchface.Engine> = WeakReference(reference)
 
         override fun handleMessage(msg: Message) {
             val engine = mWeakReference.get()
@@ -99,7 +97,7 @@ class FuzzyClock : CanvasWatchFaceService() {
             loadSettings()
 
             setWatchFaceStyle(
-                WatchFaceStyle.Builder(this@FuzzyClock)
+                WatchFaceStyle.Builder(this@FuzzyClockWatchface)
                     .setAcceptsTapEvents(true)
                     .setStatusBarGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP)
                     .setShowUnreadCountIndicator(notifState == "count")
@@ -113,7 +111,7 @@ class FuzzyClock : CanvasWatchFaceService() {
         }
 
         private fun loadSettings() {
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@FuzzyClock)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this@FuzzyClockWatchface)
 
             val pickedLanguage = prefs.getString("language", language)
             language = (if (pickedLanguage == "default") Locale.getDefault().language else pickedLanguage) ?: language
@@ -176,8 +174,8 @@ class FuzzyClock : CanvasWatchFaceService() {
             }
 
             val alignment = when (textAlignment) {
-                "left" -> Layout.Alignment.ALIGN_LEFT
-                "right" -> Layout.Alignment.ALIGN_RIGHT
+                "left" -> Layout.Alignment.ALIGN_NORMAL
+                "right" -> Layout.Alignment.ALIGN_OPPOSITE
                 else -> Layout.Alignment.ALIGN_CENTER
             }
             val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width(), alignment, 1F, 1F, true)
@@ -337,7 +335,7 @@ class FuzzyClock : CanvasWatchFaceService() {
         // HELPERS
 
         private fun dipToPixels(value: Int) : Float {
-            val metrics = this@FuzzyClock.resources.displayMetrics
+            val metrics = this@FuzzyClockWatchface.resources.displayMetrics
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), metrics)
         }
     }
