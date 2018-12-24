@@ -74,8 +74,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             }
         }
 
-        private val dateFormat = SimpleDateFormat("E, d MMM")
-
         // SETTINGS
         private var language = "default"
         private var fontSize = 26
@@ -84,6 +82,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private var backgroundColor = "#000000"
         private var showDate = "always"
         private var showDigitalClock = "never"
+        private var simplerDate = true
 
         // the following settings only get updated after watchface restarts
         private var notifState = "hidden"
@@ -123,6 +122,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             notifState = prefs.getString("notifState", notifState)
             showStatusbar = prefs.getBoolean("showStatusbar", showStatusbar)
             showDigitalClock = prefs.getString("showDigitalClock", showDigitalClock)
+            simplerDate = prefs.getBoolean("simplerDate", simplerDate)
         }
 
         private fun updateSettings() {
@@ -190,6 +190,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             if (showDate == "always" || (showDate == "interactive" && !mAmbient)) {
 
                 // create date
+                val dateFormat = if (simplerDate) SimpleDateFormat("EEEE") else SimpleDateFormat("E, d MMM")
                 val date = dateFormat.format(mCalendar.time)
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), alignment, 1F, 1F, true)
 

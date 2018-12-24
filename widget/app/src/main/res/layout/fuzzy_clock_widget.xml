@@ -23,7 +23,7 @@
                   android:scrollHorizontally="false"/>
 
         <TextView android:id="@+id/datetext"
-                  android:layout_width="wrap_content"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textAlignment="center"
                   android:textSize="24sp"

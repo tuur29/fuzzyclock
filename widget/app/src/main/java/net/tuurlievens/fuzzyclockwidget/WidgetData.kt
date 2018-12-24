@@ -7,10 +7,11 @@ class WidgetData(
     var foregroundColor: String = "#ffffff",
     var removeLineBreak: Boolean = false,
     var showDate: Boolean = true,
-    var showBattery: Boolean = false
+    var showBattery: Boolean = false,
+    var simplerDate: Boolean = true
 ) {
 
-    // TODO: never change the order of these datastring parsers! (compatiblity)
+    // Never change the order of these datastring parsers! (compatiblity)
 
     fun toDataString(): String {
         return language.toString() + ";" +
@@ -19,7 +20,8 @@ class WidgetData(
                 foregroundColor.toString() + ";" +
                 removeLineBreak.toString() + ";" +
                 showDate.toString() + ";" +
-                showBattery.toString()
+                showBattery.toString() + ";" +
+                simplerDate.toString()
     }
 
     companion object {
@@ -28,14 +30,16 @@ class WidgetData(
 
         fun fromDataString(data: String) : WidgetData {
             val arr = data.split(";")
+            val defaults = WidgetData()
             return WidgetData(
-                arr[0].toString(),
-                arr[1].toInt(),
-                arr[2].toString(),
-                arr[3].toString(),
-                arr[4].toBoolean(),
-                arr[5].toBoolean(),
-                arr[6].toBoolean()
+                arr.elementAtOrElse(0) { defaults.language.toString() }.toString(),
+                arr.elementAtOrElse(1) { defaults.fontSize.toString() }.toInt(),
+                arr.elementAtOrElse(2) { defaults.textAlignment.toString() }.toString(),
+                arr.elementAtOrElse(3) { defaults.foregroundColor.toString() }.toString(),
+                arr.elementAtOrElse(4) { defaults.removeLineBreak.toString() }.toBoolean(),
+                arr.elementAtOrElse(5) { defaults.showDate.toString() }.toBoolean(),
+                arr.elementAtOrElse(6) { defaults.showBattery.toString() }.toBoolean(),
+                arr.elementAtOrElse(7) { defaults.simplerDate.toString() }.toBoolean()
             )
         }
     }

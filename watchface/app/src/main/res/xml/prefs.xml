@@ -14,6 +14,14 @@
                 android:entryValues="@array/pref_list_visibility_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
+        <CheckBoxPreference
+                android:key="simplerDate"
+                android:title="@string/pref_title_simplerDate"
+                android:summaryOn="@string/visible"
+                android:summaryOff="@string/hidden"
+                app:wear_iconOn="@drawable/ic_check_white_24dp"
+                android:defaultValue="true"/>
+
         <ListPreference
                 android:key="showDigitalClock"
                 android:title="@string/pref_title_showDigitalClock"

@@ -7,6 +7,7 @@
 
     <!-- Strings related to Settings -->
     <string name="pref_category_display">Weergave</string>
+    <string name="pref_category_style">Tekststijl</string>
     <string name="pref_category_working">Configuratie</string>
 
     <string name="pref_title_maxTranslationDisplacement">Percentuele verplaatsing tegen burn-in (0.0 – 1.0)</string>
@@ -21,6 +22,7 @@
     <string name="pref_title_notifState">Toon notificaties</string>
     <string name="pref_title_showBattery">Toon batterijindicator</string>
     <string name="pref_title_showDate">Toon datum</string>
+    <string name="pref_title_simplerDate">Simpele datum</string>
 
     <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
 

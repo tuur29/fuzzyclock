@@ -13,6 +13,7 @@ import java.util.*
 import android.app.PendingIntent
 import android.graphics.Color
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
+import java.text.SimpleDateFormat
 
 
 class UpdateWidgetService : Service() {
@@ -63,6 +64,17 @@ class UpdateWidgetService : Service() {
                text = text.replace("\n", " ")
             }
             view.setTextViewText(R.id.clocktext, text)
+
+            // update date
+            if (prefs.showDate) {
+                val format = if (prefs.simplerDate) SimpleDateFormat("EEEE") else SimpleDateFormat("E, d MMM")
+                view.setTextViewText(R.id.datetext, format.format(calendar.time))
+                view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize * 0.65F)
+                view.setTextColor(R.id.datetext, Color.parseColor(prefs.foregroundColor))
+            } else {
+                view.setTextViewText(R.id.datetext, "")
+                view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, 0F)
+            }
 
             view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
             manager.updateAppWidget(id, view)

@@ -23,6 +23,7 @@
     <string name="pref_title_notifState">Toon notificaties</string>
     <string name="pref_title_showStatusbar">Toon statusiconen</string>
     <string name="pref_title_showDigitalClock">Toon digitale klok</string>
+    <string name="pref_title_simplerDate">Simpele datum</string>
 
     <string-array name="pref_list_language_titles">
         <item>Afhankelijk van apparaatinstellingen</item>

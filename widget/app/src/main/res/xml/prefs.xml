@@ -9,6 +9,11 @@
                 android:defaultValue="true"/>
 
         <SwitchPreference
+                android:key="simplerDate"
+                android:title="@string/pref_title_simplerDate"
+                android:defaultValue="true"/>
+
+        <SwitchPreference
                 android:key="showBattery"
                 android:title="@string/pref_title_showBattery"
                 android:defaultValue="true"/>

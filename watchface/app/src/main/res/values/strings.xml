@@ -23,6 +23,7 @@
     <string name="pref_title_notifState">Show notifications</string>
     <string name="pref_title_showStatusbar">Show status icons</string>
     <string name="pref_title_showDigitalClock">Show digital clock</string>
+    <string name="pref_title_simplerDate">Simpler date</string>
 
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>

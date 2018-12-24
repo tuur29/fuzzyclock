@@ -20,7 +20,7 @@ class AllPreferencesFragment : PreferenceFragment() {
 
         // Bind preferences to parent prefs and their summaries
         // TODO: use this loop in other fuzzy projects as well
-        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate", "showBattery")
+        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate", "showBattery","simplerDate")
         for (item in array) {
             val pref = findPreference(item)
 

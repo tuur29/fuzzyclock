@@ -16,6 +16,7 @@
     <string name="pref_title_removeLineBreak">Uur standaard op 1 lijn</string>
     <string name="pref_title_showBattery">Toon batterijindicator</string>
     <string name="pref_title_showDate">Toon datum</string>
+    <string name="pref_title_simplerDate">Simpele datum</string>
 
     <string-array name="pref_list_language_titles">
         <item>Afhankelijk van apparaatinstellingen</item>

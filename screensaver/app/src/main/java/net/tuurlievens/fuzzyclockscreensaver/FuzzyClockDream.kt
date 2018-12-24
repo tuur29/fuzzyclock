@@ -47,6 +47,7 @@ class FuzzyClockDream : DreamService() {
     private var brightScreen = false
     private var notifState = "hidden"
     private var showBattery = true
+    private var simplerDate = true
 
     // LIFECYCLE
 
@@ -117,6 +118,7 @@ class FuzzyClockDream : DreamService() {
         brightScreen = prefs.getBoolean("brightScreen", brightScreen)
         notifState = prefs.getString("notifState", notifState)
         showBattery = prefs.getBoolean("showBattery", showBattery)
+        simplerDate = prefs.getBoolean("simplerDate", simplerDate)
     }
 
     private fun applySettings() {
@@ -179,7 +181,7 @@ class FuzzyClockDream : DreamService() {
 
                     // update date
                     if (showDate) {
-                        val format = SimpleDateFormat("E, d MMM") // TODO: add more options for date?
+                        val format = if (simplerDate) SimpleDateFormat("EEEE") else SimpleDateFormat("E, d MMM")
                         findViewById<TextView>(R.id.datetext).text = format.format(calendar.time)
                     } else {
                         findViewById<TextView>(R.id.datetext).text = ""
@@ -199,7 +201,6 @@ class FuzzyClockDream : DreamService() {
                             val container = findViewById<LinearLayout>(R.id.notifications)
                             container.removeAllViews()
 
-                            // TODO: load notification icons
                             for (notif in notifications) {
                                 if (notif.value.icon != null) {
                                     val img = ImageView(this@FuzzyClockDream)
