@@ -67,7 +67,8 @@ class UpdateWidgetService : Service() {
 
             // update date
             if (prefs.showDate) {
-                val format = if (prefs.simplerDate) SimpleDateFormat("EEEE") else SimpleDateFormat("E, d MMM")
+                val loc = Locale(pickedLanguage)
+                val format = if (prefs.simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 view.setTextViewText(R.id.datetext, format.format(calendar.time))
                 view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize * 0.65F)
                 view.setTextColor(R.id.datetext, Color.parseColor(prefs.foregroundColor))

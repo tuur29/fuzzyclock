@@ -75,7 +75,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         }
 
         // SETTINGS
-        private var language = "default"
+        private var language = "en"
         private var fontSize = 26
         private var textAlignment = "center"
         private var foregroundColor = "#ffffff"
@@ -190,8 +190,9 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             if (showDate == "always" || (showDate == "interactive" && !mAmbient)) {
 
                 // create date
-                val dateFormat = if (simplerDate) SimpleDateFormat("EEEE") else SimpleDateFormat("E, d MMM")
-                val date = dateFormat.format(mCalendar.time)
+                val loc = Locale(language)
+                val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
+                val date = format.format(mCalendar.time)
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), alignment, 1F, 1F, true)
 
                 // draw date

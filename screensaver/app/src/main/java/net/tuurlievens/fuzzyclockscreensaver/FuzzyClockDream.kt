@@ -184,7 +184,8 @@ class FuzzyClockDream : DreamService() {
 
                     // update date
                     if (showDate) {
-                        val format = if (simplerDate) SimpleDateFormat("EEEE") else SimpleDateFormat("E, d MMM")
+                        val loc = Locale(pickedLanguage)
+                        val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                         findViewById<TextView>(R.id.datetext).text = format.format(calendar.time)
                     } else {
                         findViewById<TextView>(R.id.datetext).text = ""
