@@ -143,7 +143,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 isAntiAlias = true
                 textSize = Math.round(size * 0.65).toFloat()
                 color = Color.parseColor(foregroundColor)
-                alpha = Math.round(255 * 0.65).toInt()
             }
 
             invalidate()
@@ -198,6 +197,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 val loc = Locale(language)
                 val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 val date = format.format(calendar.time)
+                mDateTextPaint.alpha = Math.round(255 * 0.65).toInt()
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), alignment, 1F, 1F, true)
 
                 // draw date
