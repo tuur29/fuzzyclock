@@ -165,14 +165,14 @@ class FuzzyClock : CanvasWatchFaceService() {
             // create clock
             val clock: String = when {
                 (showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient) -> {
-                    val hour = mCalendar.get(Calendar.HOUR)
+                    val hour = mCalendar.get(Calendar.HOUR_OF_DAY)
                     val min = mCalendar.get(Calendar.MINUTE)
                     val hourText = if (hour < 10) "0" + hour.toString() else hour.toString()
                     val minText = if (min < 10) "0" + min.toString() else min.toString()
                     "$hourText:$minText"
                 }
                 else ->
-                    FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), language)
+                    FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), language)
             }
 
             val alignment = when (textAlignment) {
