@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:minWidth="40dp"
-                    android:minHeight="40dp"
+                    android:minWidth="110dp"
+                    android:minHeight="110dp"
+                    android:minResizeWidth="40dp"
+                    android:minResizeHeight="40dp"
+                    android:resizeMode="horizontal|vertical"
                     android:updatePeriodMillis="0"
                     android:previewImage="@drawable/example_appwidget_preview"
                     android:initialLayout="@layout/fuzzy_clock_widget"
                     android:configure="net.tuurlievens.fuzzyclockwidget.FuzzyClockWidgetConfigureActivity"
-                    android:resizeMode="horizontal|vertical"
                     android:widgetCategory="home_screen|keyguard"
-                    android:initialKeyguardLayout="@layout/fuzzy_clock_widget">
-</appwidget-provider>
+                    android:initialKeyguardLayout="@layout/fuzzy_clock_widget"
+/>
+<!-- minResizeWidth is absolute minimum, minWidth is default -->

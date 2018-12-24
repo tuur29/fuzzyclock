@@ -1,8 +1,6 @@
 package net.tuurlievens.fuzzyclockwidget
 
-import android.app.Service
 import android.content.Intent
-import android.os.IBinder
 import android.util.Log
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -12,38 +10,16 @@ import android.widget.RemoteViews
 import java.util.*
 import android.app.PendingIntent
 import android.graphics.Color
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.app.JobIntentService
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 import java.text.SimpleDateFormat
 
 
-class UpdateWidgetService : Service() {
+class UpdateWidgetService : JobIntentService() {
 
-    private val NOTIF_ID = 1
-
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-
-        // Android forces you to show a notification when running a foreground service
-        val notif = NotificationCompat.Builder(this, "fuzzyclockwidgetupdate")
-            .setSmallIcon(R.drawable.ic_empty)
-            .setContentTitle("Updating FuzzyClockWidget")
-            .setContentText("Derp")
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .build()
-
-        NotificationManagerCompat.from(this).notify(NOTIF_ID, notif)
-        startForeground(NOTIF_ID, notif)
-    }
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onHandleWork(intent: Intent) {
         // generates random number
-        Log.i("ALARM","update widgets")
+        Log.i("ALARM","widgets updated")
         pName = packageName
 
         val manager = AppWidgetManager.getInstance(this)
@@ -52,10 +28,6 @@ class UpdateWidgetService : Service() {
         for (id in ids) {
             updateWidget(applicationContext, manager, id)
         }
-
-        NotificationManagerCompat.from(this).cancel(NOTIF_ID)
-
-        return super.onStartCommand(intent, flags, startId)
     }
 
 

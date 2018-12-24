@@ -22,7 +22,6 @@ class FuzzyClockWidget : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
              UpdateWidgetService.updateWidget(context, appWidgetManager, appWidgetId)
         }
-        startAlarm(context)
     }
 
     fun startAlarm(context: Context) {
@@ -34,7 +33,6 @@ class FuzzyClockWidget : AppWidgetProvider() {
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         manager!!.setInexactRepeating(AlarmManager.RTC, cal.timeInMillis, (3 * 60 * 1000).toLong(), alarmIntent)
-//        manager!!.setRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis, (10 * 1000).toLong(), alarmIntent)
 
         Log.i("ALARM", "alarm started")
     }

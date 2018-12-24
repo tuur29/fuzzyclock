@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="net.tuurlievens.fuzzyclockwidget">
 
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
             android:allowBackup="true"
@@ -34,7 +34,9 @@
         <receiver android:name=".AlarmReceiver" />
 
         <!--  Declare  Alarm Sound Service here  -->
-        <service android:name=".UpdateWidgetService" />
+        <service
+                android:name=".UpdateWidgetService"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
 
     </application>
 </manifest>
