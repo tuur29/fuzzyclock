@@ -57,7 +57,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
     inner class Engine : CanvasWatchFaceService.Engine() {
 
         private val myPackageName = "net.tuurlievens.fuzzyclockwatchface"
-        private lateinit var mCalendar: Calendar
         private var mLowBitAmbient: Boolean = false
         private var mBurnInProtection: Boolean = false
         private var mAmbient: Boolean = false
@@ -105,7 +104,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                     .build()
             )
 
-            mCalendar = Calendar.getInstance()
             updateSettings()
         }
 
@@ -153,6 +151,8 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         override fun onDraw(canvas: Canvas, bounds: Rect) {
 
+            val calendar = Calendar.getInstance()
+
             // Draw the background.
             if (mAmbient) {
                 canvas.drawColor(Color.BLACK)
@@ -172,14 +172,14 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             val clock: String = when {
                 (showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient) -> {
 
-                    val hour = mCalendar.get(Calendar.HOUR_OF_DAY)
-                    val min = mCalendar.get(Calendar.MINUTE)
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val min = calendar.get(Calendar.MINUTE)
                     val hourText = if (hour < 10) "0" + hour.toString() else hour.toString()
                     val minText = if (min < 10) "0" + min.toString() else min.toString()
                     "$hourText:$minText"
                 }
                 else ->
-                    FuzzyTextGenerator.create(mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), language)
+                    FuzzyTextGenerator.create(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), language)
             }
 
             val alignment = when (textAlignment) {
@@ -197,7 +197,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 // create date
                 val loc = Locale(language)
                 val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
-                val date = format.format(mCalendar.time)
+                val date = format.format(calendar.time)
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), alignment, 1F, 1F, true)
 
                 // draw date
@@ -279,9 +279,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
             if (visible) {
                 registerReceiver()
-
-                // Update time zone in case it changed while we weren't visible.
-                mCalendar.timeZone = TimeZone.getDefault()
                 invalidate()
             } else {
                 unregisterReceivers()
