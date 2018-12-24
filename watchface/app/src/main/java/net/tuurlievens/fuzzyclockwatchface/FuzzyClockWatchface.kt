@@ -195,12 +195,12 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
                 // draw date
                 val textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
-                val lineHeight = dateLayout.height * 3 // TODO: this isn't the correct measurement, doesn't scale correctly with textsize (ex. digitalclock)
+                val lineHeight = mClockTextPaint.textSize * clockLayout.lineCount * 1.25F
                 canvas.translate(textXCoordinate, textYCoordinate + lineHeight)
                 dateLayout.draw(canvas)
 
                 // draw clock
-                canvas.translate(0F, (-lineHeight).toFloat())
+                canvas.translate(0F, -lineHeight)
 
             } else {
                 val textYCoordinate = bounds.exactCenterY() - (clockLayout.height / 2 )
