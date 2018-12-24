@@ -56,6 +56,7 @@ class FuzzyClockWidget : AppWidgetProvider() {
             val i = Intent(context, FuzzyClockWidgetConfigureActivity::class.java)
             i.putExtras(intent)
             context?.startActivity(i)
+            Log.i("ALARM", "config opened")
             return
         }
 

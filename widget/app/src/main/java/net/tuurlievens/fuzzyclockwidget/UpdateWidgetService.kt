@@ -79,7 +79,7 @@ class UpdateWidgetService : JobIntentService() {
                 view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, 0F)
             }
 
-            view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
+            view.setOnClickPendingIntent(R.id.parent, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
             manager.updateAppWidget(id, view)
             Log.i("ALARM","widget $id updated")
         }
@@ -88,6 +88,7 @@ class UpdateWidgetService : JobIntentService() {
             val intent = Intent(context, FuzzyClockWidget::class.java)
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
             intent.action = action
+            Log.i("ALARM","$action request sent")
             return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
     }
