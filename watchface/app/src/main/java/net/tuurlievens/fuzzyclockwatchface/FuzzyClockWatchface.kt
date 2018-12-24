@@ -156,16 +156,21 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             // Draw the background.
             if (mAmbient) {
                 canvas.drawColor(Color.BLACK)
+
             } else {
                 canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), mBackgroundPaint)
+            }
+
+            // resize textsize when in ambient
+            if ((showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient)) {
+                mClockTextPaint.textSize = dipToPixels(Math.round(fontSize * 1.75F))
+            } else {
+                mClockTextPaint.textSize = dipToPixels(fontSize)
             }
 
             // create clock
             val clock: String = when {
                 (showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient) -> {
-
-                    // resize textsize when in ambient
-                    mClockTextPaint.textSize = (fontSize * 2.75).toFloat()
 
                     val hour = mCalendar.get(Calendar.HOUR_OF_DAY)
                     val min = mCalendar.get(Calendar.MINUTE)
