@@ -11,6 +11,9 @@ import java.util.*
 import android.app.PendingIntent
 import android.graphics.Color
 import android.support.v4.app.JobIntentService
+import android.text.Layout
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 import java.text.SimpleDateFormat
 
@@ -19,7 +22,7 @@ class UpdateWidgetService : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
         // generates random number
-        Log.i("ALARM","widgets updated")
+        Log.i("ALARM","start widget update")
         pName = packageName
 
         val manager = AppWidgetManager.getInstance(this)
@@ -41,8 +44,14 @@ class UpdateWidgetService : JobIntentService() {
         internal fun updateWidget(context: Context, manager: AppWidgetManager, id: Int) {
 
             val calendar = Calendar.getInstance()
-            val view = RemoteViews(pName, R.layout.fuzzy_clock_widget)
             val prefs = FuzzyClockWidgetConfigureActivity.loadPrefs(context, id)
+
+            // get correct view for each alignment
+            val view = when(prefs.textAlignment) {
+                "left" -> RemoteViews(pName, R.layout.fuzzy_clock_widget_left)
+                "right" -> RemoteViews(pName, R.layout.fuzzy_clock_widget_right)
+                else -> RemoteViews(pName, R.layout.fuzzy_clock_widget_center)
+            }
 
             // update clock
             val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -72,6 +81,7 @@ class UpdateWidgetService : JobIntentService() {
 
             view.setOnClickPendingIntent(R.id.root, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
             manager.updateAppWidget(id, view)
+            Log.i("ALARM","widget $id updated")
         }
 
         private fun getPendingSelfIntent(context: Context, action: String, id: Int? = null): PendingIntent {

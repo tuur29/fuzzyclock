@@ -6,16 +6,16 @@
 
     <LinearLayout android:id="@+id/parent"
                   android:orientation="vertical"
-                  android:layout_width="wrap_content"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:layout_centerHorizontal="true"
                   android:layout_centerVertical="true"
-                  android:textAlignment="center">
+                  android:textAlignment="viewStart">
 
         <TextView android:id="@+id/clocktext"
-                  android:layout_width="wrap_content"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textAlignment="center"
+                  android:textAlignment="viewStart"
                   android:textSize="36sp"
                   android:textColor="#ffffff"
                   android:ellipsize="none"
@@ -25,7 +25,7 @@
         <TextView android:id="@+id/datetext"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textAlignment="center"
+                  android:textAlignment="viewStart"
                   android:textSize="24sp"
                   android:textColor="#a6a6a6"
                   android:ellipsize="none"
