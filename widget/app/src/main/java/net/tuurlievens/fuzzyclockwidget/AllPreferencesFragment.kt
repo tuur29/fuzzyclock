@@ -73,9 +73,13 @@ class AllPreferencesFragment : PreferenceFragment() {
                     preference.setValueIndex(index)
                 } else {
                     preference.summary = stringValue
+                    if (preference is EditTextPreference) {
+                        preference.text = stringValue
+                    }
                 }
 
             }
+
             true
         }
 
