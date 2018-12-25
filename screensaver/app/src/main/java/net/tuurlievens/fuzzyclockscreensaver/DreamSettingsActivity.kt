@@ -10,15 +10,12 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.provider.Settings
+import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 
 
 class DreamSettingsActivity : PreferenceActivity() {
-
-    init {
-        instance = this
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,15 +29,15 @@ class DreamSettingsActivity : PreferenceActivity() {
     }
 
     class AllPreferenceFragment : PreferenceFragment() {
+
+
+
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.prefs)
             setHasOptionsMenu(true)
 
             // Bind the summaries of EditText/List/Dialog preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
             bindPreferenceSummaryToValue(findPreference("maxTranslationDisplacement"))
             bindPreferenceSummaryToValue(findPreference("updateSeconds"))
             bindPreferenceSummaryToValue(findPreference("language"))
@@ -48,19 +45,8 @@ class DreamSettingsActivity : PreferenceActivity() {
             bindPreferenceSummaryToValue(findPreference("textAlignment"))
             bindPreferenceSummaryToValue(findPreference("foregroundColor"))
             bindPreferenceSummaryToValue(findPreference("backgroundColor"))
-//            bindPreferenceSummaryToValue(findPreference("removeLineBreak"))
-//            bindPreferenceSummaryToValue(findPreference("showDate"))
-//            bindPreferenceSummaryToValue(findPreference("brightScreen"))
             bindPreferenceSummaryToValue(findPreference("notifState"))
-//            bindPreferenceSummaryToValue(findPreference("showBattery"))
         }
-
-    }
-
-    companion object {
-
-        // TODO: fix memory leak
-        private var instance: Activity? = null
 
         private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->
 
@@ -68,13 +54,13 @@ class DreamSettingsActivity : PreferenceActivity() {
 
             // check notification access permissions and request them
             if (preference.key == "notifState" && value != "hidden") {
-                if (!Settings.Secure.getString(instance?.contentResolver, "enabled_notification_listeners")
-                        .contains(instance?.applicationContext?.packageName!!)) {
+                if (!Settings.Secure.getString(activity.applicationContext.contentResolver, "enabled_notification_listeners")
+                        .contains(activity.applicationContext.packageName)) {
 
                     val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    instance!!.applicationContext.startActivity(intent)
-                    Toast.makeText(instance, instance!!.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
+                    activity.applicationContext.startActivity(intent)
+                    Toast.makeText(activity.applicationContext, activity.applicationContext.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
                     stringValue = "false"
                 }
             }
@@ -111,5 +97,7 @@ class DreamSettingsActivity : PreferenceActivity() {
                 PreferenceManager.getDefaultSharedPreferences(preference.context).getString(preference.key, "")
             )
         }
+
     }
+
 }
