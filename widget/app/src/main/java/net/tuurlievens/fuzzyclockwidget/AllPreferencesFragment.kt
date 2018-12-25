@@ -3,6 +3,7 @@ package net.tuurlievens.fuzzyclockwidget
 import android.os.Bundle
 import android.preference.*
 import android.preference.Preference
+import android.util.Log
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
@@ -20,19 +21,19 @@ class AllPreferencesFragment : PreferenceFragment() {
 
         // Bind preferences to parent prefs and their summaries
         // TODO: use this loop in other fuzzy projects as well
-        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate", "showBattery","simplerDate")
+        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate","simplerDate")
         for (item in array) {
             val pref = findPreference(item)
 
             // Update sharedpreferences to actual preferences
-//            val prefs = PreferenceManager.getDefaultSharedPreferences(parent).edit()
-//            Log.i("JAVACLASS", (pref::class.java).toString())
-//            when (pref::class.java) {
-//                SwitchPreference::class.java -> prefs.putBoolean(item, readPropery(parent!!.prefs, item))
-//                EditTextPreference::class.java -> prefs.putString(item, (readPropery(parent!!.prefs, item) as Int).toString())
-//                ListPreference::class.java -> prefs.putString(item, readPropery(parent!!.prefs, item))
-//            }
-//            prefs.apply()
+            val prefs = PreferenceManager.getDefaultSharedPreferences(parent).edit()
+            Log.i("JAVACLASS", (pref::class.java).toString())
+            when (pref::class.java) {
+                SwitchPreference::class.java -> prefs.putBoolean(item, readPropery(parent!!.prefs, item))
+                EditTextPreference::class.java -> prefs.putString(item, (readPropery(parent!!.prefs, item) as Int).toString())
+                ListPreference::class.java -> prefs.putString(item, readPropery(parent!!.prefs, item))
+            }
+            prefs.apply()
 
             // set and call change listener so summay is updated
             pref.onPreferenceChangeListener = getListener()

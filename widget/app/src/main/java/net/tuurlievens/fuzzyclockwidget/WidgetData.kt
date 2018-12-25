@@ -7,7 +7,6 @@ class WidgetData(
     var foregroundColor: String = "#ffffff",
     var removeLineBreak: Boolean = false,
     var showDate: Boolean = true,
-    var showBattery: Boolean = false,
     var simplerDate: Boolean = true
 ) {
 
@@ -20,7 +19,6 @@ class WidgetData(
                 foregroundColor.toString() + ";" +
                 removeLineBreak.toString() + ";" +
                 showDate.toString() + ";" +
-                showBattery.toString() + ";" +
                 simplerDate.toString()
     }
 
@@ -38,7 +36,6 @@ class WidgetData(
                 arr.elementAtOrElse(3) { defaults.foregroundColor.toString() }.toString(),
                 arr.elementAtOrElse(4) { defaults.removeLineBreak.toString() }.toBoolean(),
                 arr.elementAtOrElse(5) { defaults.showDate.toString() }.toBoolean(),
-                arr.elementAtOrElse(6) { defaults.showBattery.toString() }.toBoolean(),
                 arr.elementAtOrElse(7) { defaults.simplerDate.toString() }.toBoolean()
             )
         }

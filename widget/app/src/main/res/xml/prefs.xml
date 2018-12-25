@@ -13,11 +13,6 @@
                 android:title="@string/pref_title_simplerDate"
                 android:defaultValue="true"/>
 
-        <SwitchPreference
-                android:key="showBattery"
-                android:title="@string/pref_title_showBattery"
-                android:defaultValue="true"/>
-
         <EditTextPreference
                 android:key="fontSize"
                 android:title="@string/pref_title_fontSize"

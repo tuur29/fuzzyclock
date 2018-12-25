@@ -6,7 +6,7 @@
                     android:minResizeHeight="40dp"
                     android:resizeMode="horizontal|vertical"
                     android:updatePeriodMillis="0"
-                    android:previewImage="@drawable/example_appwidget_preview"
+                    android:previewImage="@drawable/preview"
                     android:initialLayout="@layout/fuzzy_clock_widget_center"
                     android:configure="net.tuurlievens.fuzzyclockwidget.FuzzyClockWidgetConfigureActivity"
                     android:widgetCategory="home_screen|keyguard"
