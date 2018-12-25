@@ -12,7 +12,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         JobIntentService.enqueueWork(context, UpdateWidgetService::class.java, 1000, intent)
-        Log.i("ALARM","update enqueued")
+        Log.i("ALARM","updaterequest received and work enqueued")
 
     }
 }

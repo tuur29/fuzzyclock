@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -16,7 +17,7 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
 
     private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var settingsFragment: AllPreferencesFragment
-    public lateinit var prefs: WidgetData
+    public var prefs: WidgetData? = null
 
     // create activity
     public override fun onCreate(icicle: Bundle?) {
@@ -57,7 +58,7 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
         // save button
         findViewById<View>(R.id.save_button).setOnClickListener{
             val context = this@FuzzyClockWidgetConfigureActivity
-            savePrefs(context, widgetId, prefs)
+            savePrefs(context, widgetId, prefs!!)
 
             // It is the responsibility of the configuration activity to update the app widget
             updateWidget(widgetId)

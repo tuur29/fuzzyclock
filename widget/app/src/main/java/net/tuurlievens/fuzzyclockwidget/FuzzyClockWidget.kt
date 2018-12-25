@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import java.util.*
 import android.util.Log
 
@@ -40,7 +41,6 @@ class FuzzyClockWidget : AppWidgetProvider() {
     // when the first widget is made
     override fun onEnabled(context: Context) {
         // start alarm for updates
-        Log.i("ALARM", "onEnabled")
         startAlarm(context)
     }
 
@@ -51,12 +51,13 @@ class FuzzyClockWidget : AppWidgetProvider() {
         val extras = intent?.extras
 
         // open config panel again
-        if (ConfigTag == intent?.action){
+        if (intent?.action!!.contains(ConfigTag)){
             val appWidgetId = extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
             val i = Intent(context, FuzzyClockWidgetConfigureActivity::class.java)
-            i.putExtras(intent)
+            i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context?.startActivity(i)
-            Log.i("ALARM", "config opened")
+            Log.i("ALARM", "open $appWidgetId config")
             return
         }
 

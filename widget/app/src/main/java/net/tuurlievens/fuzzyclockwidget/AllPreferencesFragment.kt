@@ -3,7 +3,6 @@ package net.tuurlievens.fuzzyclockwidget
 import android.os.Bundle
 import android.preference.*
 import android.preference.Preference
-import android.util.Log
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
@@ -20,24 +19,22 @@ class AllPreferencesFragment : PreferenceFragment() {
         addPreferencesFromResource(R.xml.prefs)
 
         // Bind preferences to parent prefs and their summaries
-        // TODO: use this loop in other fuzzy projects as well
         val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate","simplerDate")
         for (item in array) {
-            val pref = findPreference(item)
+            var pref = findPreference(item)
+            pref.onPreferenceChangeListener = getListener()
 
             // Update sharedpreferences to actual preferences
-            val prefs = PreferenceManager.getDefaultSharedPreferences(parent).edit()
-            Log.i("JAVACLASS", (pref::class.java).toString())
-            when (pref::class.java) {
-                SwitchPreference::class.java -> prefs.putBoolean(item, readPropery(parent!!.prefs, item))
-                EditTextPreference::class.java -> prefs.putString(item, (readPropery(parent!!.prefs, item) as Int).toString())
-                ListPreference::class.java -> prefs.putString(item, readPropery(parent!!.prefs, item))
+            if (parent?.prefs != null) {
+                val prefs = PreferenceManager.getDefaultSharedPreferences(parent).edit()
+                when (pref::class.java) {
+                    SwitchPreference::class.java -> prefs.putBoolean(item, readPropery(parent!!.prefs!!, item))
+                    EditTextPreference::class.java -> prefs.putString(item, (readPropery(parent!!.prefs!!, item) as Int).toString())
+                    ListPreference::class.java -> prefs.putString(item, readPropery(parent!!.prefs!!, item))
+                }
+                prefs.apply()
+                pref.onPreferenceChangeListener.onPreferenceChange(pref, readPropery(parent!!.prefs!!, item))
             }
-            prefs.apply()
-
-            // set and call change listener so summay is updated
-            pref.onPreferenceChangeListener = getListener()
-            pref.onPreferenceChangeListener.onPreferenceChange(pref, readPropery(parent!!.prefs, item))
         }
     }
 
@@ -61,7 +58,7 @@ class AllPreferencesFragment : PreferenceFragment() {
         return Preference.OnPreferenceChangeListener { preference, value ->
 
             // sync with parent prefs
-            updateProperty(parent!!.prefs, preference.key, value)
+            updateProperty(parent!!.prefs!!, preference.key, value)
 
             // update summary
             if (preference !is SwitchPreference) {
@@ -73,6 +70,7 @@ class AllPreferencesFragment : PreferenceFragment() {
                     preference.setSummary(
                         if (index >= 0) preference.entries[index] else null
                     )
+                    preference.setValueIndex(index)
                 } else {
                     preference.summary = stringValue
                 }

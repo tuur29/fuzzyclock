@@ -35,7 +35,7 @@ class FuzzyClockDream : DreamService() {
     private val handler =  Handler()
     private var nReceiver: NotificationReceiver? = null
     private val notifications = HashMap<String, NotificationData>()
-    private val ignoredPackageNames = arrayOf("android")
+    private val ignoredPackageNames = arrayOf("android","com.android.systemui")
 
     private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0

@@ -95,9 +95,9 @@ class UpdateWidgetService : JobIntentService() {
 
         private fun getPendingSelfIntent(context: Context, action: String, id: Int? = null): PendingIntent {
             val intent = Intent(context, FuzzyClockWidget::class.java)
+            intent.action = action + id
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
-            Log.i("ALARM","$action request sent")
-            return getPendingIntent(context, intent, action)
+            return getPendingIntent(context, intent, action + id)
         }
 
         private fun getPendingIntent(context: Context, intent: Intent, action: String? = null): PendingIntent {
