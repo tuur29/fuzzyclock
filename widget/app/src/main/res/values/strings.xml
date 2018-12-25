@@ -16,6 +16,8 @@
     <string name="pref_title_showDate">Show date</string>
     <string name="pref_title_simplerDate">Simpler date</string>
 
+    <string name="msg_editbtn">Press the top-right corner of the widget to edit it</string>
+
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>
         <item>English</item>

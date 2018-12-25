@@ -10,12 +10,17 @@ import android.widget.RemoteViews
 import java.util.*
 import android.app.PendingIntent
 import android.graphics.Color
+import android.os.Build
+import android.provider.AlarmClock
 import android.support.v4.app.JobIntentService
 import android.text.Layout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 import java.text.SimpleDateFormat
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.CalendarContract
 
 
 class UpdateWidgetService : JobIntentService() {
@@ -79,7 +84,11 @@ class UpdateWidgetService : JobIntentService() {
                 view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, 0F)
             }
 
-            view.setOnClickPendingIntent(R.id.parent, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
+            // set widget click listeners
+            view.setOnClickPendingIntent(R.id.datetext, getPendingIntentByPackageName(context, getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)))
+            view.setOnClickPendingIntent(R.id.clocktext, getPendingIntentByPackageName(context, getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)))
+            view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
+
             manager.updateAppWidget(id, view)
             Log.i("ALARM","widget $id updated")
         }
@@ -87,9 +96,36 @@ class UpdateWidgetService : JobIntentService() {
         private fun getPendingSelfIntent(context: Context, action: String, id: Int? = null): PendingIntent {
             val intent = Intent(context, FuzzyClockWidget::class.java)
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
-            intent.action = action
             Log.i("ALARM","$action request sent")
+            return getPendingIntent(context, intent, action)
+        }
+
+        private fun getPendingIntent(context: Context, intent: Intent, action: String? = null): PendingIntent {
+            if (action != null) {
+                intent.action = action
+            }
             return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        private fun getPendingIntentByPackageName(context: Context, packagename: String): PendingIntent {
+            return PendingIntent.getActivity(
+                context,
+                0,
+                context.packageManager.getLaunchIntentForPackage(packagename)!!,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        private fun getDefaultPackageName(context: Context, action: String, data: Uri? = null): String {
+            val localPackageManager = context.packageManager
+            val intent = Intent(action)
+            if (data != null) {
+                intent.data = data
+            }
+            return localPackageManager.resolveActivity(
+                intent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            ).activityInfo.packageName
         }
     }
 

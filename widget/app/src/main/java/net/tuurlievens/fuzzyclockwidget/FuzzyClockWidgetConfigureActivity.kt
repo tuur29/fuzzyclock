@@ -8,6 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
+
+
 
 class FuzzyClockWidgetConfigureActivity : Activity() {
 
@@ -58,6 +61,9 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
 
             // It is the responsibility of the configuration activity to update the app widget
             updateWidget(widgetId)
+
+            // Inform user where to press to edit current widget
+            Toast.makeText(applicationContext, getString(R.string.msg_editbtn), Toast.LENGTH_SHORT).show()
 
             // Make sure we pass back the original appWidgetId
             val resultValue = Intent()

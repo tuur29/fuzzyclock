@@ -17,6 +17,8 @@
     <string name="pref_title_showDate">Toon datum</string>
     <string name="pref_title_simplerDate">Simpele datum</string>
 
+    <string name="msg_editbtn">Druk op de rechterbovenhoek van de widget om hem aan te passen</string>
+
     <string-array name="pref_list_language_titles">
         <item>Afhankelijk van apparaatinstellingen</item>
         <item>Engels</item>
