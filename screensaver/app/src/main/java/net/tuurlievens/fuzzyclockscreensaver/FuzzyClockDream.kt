@@ -264,7 +264,7 @@ class FuzzyClockDream : DreamService() {
         override fun onReceive(context: Context, intent: Intent) {
 
             val parcel = intent.getParcelableExtra<NotificationData>("notification_event")
-            Log.i("updatenotif packagename", parcel.packageName)
+            Log.i("NOTIF", parcel.type + " received for " + parcel.packageName)
             if (ignoredPackageNames.contains(parcel.packageName))
                 return
 

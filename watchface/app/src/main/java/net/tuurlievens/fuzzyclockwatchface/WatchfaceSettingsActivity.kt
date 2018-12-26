@@ -33,7 +33,7 @@ class WatchfaceSettingsActivity : WearPreferenceActivity() {
         // show toast in case of showStatusbar and notifState that says you need to reboot etc...
 
         if (viewHolder?.position == 2 && !messageShown) {
-            Toast.makeText(this, "These settings might need a restart of the watchface (switch to another one)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_restartwatch), Toast.LENGTH_SHORT).show()
             messageShown = true
         }
     }

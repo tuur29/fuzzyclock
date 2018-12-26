@@ -85,7 +85,7 @@
         <ListPreference
                 android:key="notifState"
                 android:title="@string/pref_title_notifState"
-                android:defaultValue="dot"
+                android:defaultValue="visible"
                 android:entries="@array/pref_list_notifState_titles"
                 android:entryValues="@array/pref_list_notifState_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
