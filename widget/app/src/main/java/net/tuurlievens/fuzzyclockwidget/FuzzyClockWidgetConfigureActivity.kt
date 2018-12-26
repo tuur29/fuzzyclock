@@ -6,14 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.support.v4.app.ActivityCompat
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 
-
-
-class FuzzyClockWidgetConfigureActivity : Activity() {
+class FuzzyClockWidgetConfigureActivity : FragmentActivity() {
 
     private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var settingsFragment: AllPreferencesFragment
@@ -52,8 +52,7 @@ class FuzzyClockWidgetConfigureActivity : Activity() {
 
         // load preferences fragment
         settingsFragment = AllPreferencesFragment()
-        fragmentManager.beginTransaction().replace(R.id.fragment, settingsFragment).commit()
-
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, settingsFragment as Fragment).commit()
 
         // save button
         findViewById<View>(R.id.save_button).setOnClickListener{

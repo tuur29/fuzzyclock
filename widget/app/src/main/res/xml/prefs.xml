@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/pref_category_display">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="showDate"
                 android:title="@string/pref_title_showDate"
                 android:defaultValue="true"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="simplerDate"
                 android:title="@string/pref_title_simplerDate"
                 android:defaultValue="true"/>
@@ -41,7 +41,7 @@
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="removeLineBreak"
                 android:title="@string/pref_title_removeLineBreak"
                 android:defaultValue="false"/>
@@ -61,4 +61,4 @@
 
     </PreferenceCategory>
 
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>

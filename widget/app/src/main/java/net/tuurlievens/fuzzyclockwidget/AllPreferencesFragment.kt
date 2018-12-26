@@ -3,17 +3,18 @@ package net.tuurlievens.fuzzyclockwidget
 import android.os.Bundle
 import android.preference.*
 import android.preference.Preference
+import android.support.v7.preference.Preference.OnPreferenceChangeListener
+import android.support.v7.preference.PreferenceFragmentCompat
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaType
 
-class AllPreferencesFragment : PreferenceFragment() {
+class AllPreferencesFragment : PreferenceFragmentCompat() {
 
     var parent: FuzzyClockWidgetConfigureActivity? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreatePreferences(p0: Bundle?, p1: String?) {
 
         parent = activity as FuzzyClockWidgetConfigureActivity
         addPreferencesFromResource(R.xml.prefs)
@@ -54,30 +55,31 @@ class AllPreferencesFragment : PreferenceFragment() {
         }
     }
 
-    private fun getListener() : Preference.OnPreferenceChangeListener {
-        return Preference.OnPreferenceChangeListener { preference, value ->
+    private fun getListener() : OnPreferenceChangeListener {
+        return OnPreferenceChangeListener { preference, value ->
 
             // sync with parent prefs
             updateProperty(parent!!.prefs!!, preference.key, value)
 
-            // update summary
-            if (preference !is SwitchPreference) {
+            // update summary (and values on load)
+
+            if (preference is SwitchPreference) {
+                preference.isChecked = value.toString().toBoolean()
+
+            } else {
+
                 val stringValue = value.toString()
+
                 if (preference is ListPreference) {
                     val index = preference.findIndexOfValue(stringValue)
-
-                    // Set the summary to reflect the new value.
                     preference.setSummary(
                         if (index >= 0) preference.entries[index] else null
                     )
                     preference.setValueIndex(index)
-                } else {
-                    preference.summary = stringValue
-                    if (preference is EditTextPreference) {
-                        preference.text = stringValue
-                    }
+                } else if (preference is EditTextPreference) {
+                    preference.setSummary(stringValue)
+                    preference.text = stringValue
                 }
-
             }
 
             true

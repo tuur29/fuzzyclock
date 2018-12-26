@@ -36,7 +36,7 @@ class WidgetData(
                 arr.elementAtOrElse(3) { defaults.foregroundColor.toString() }.toString(),
                 arr.elementAtOrElse(4) { defaults.removeLineBreak.toString() }.toBoolean(),
                 arr.elementAtOrElse(5) { defaults.showDate.toString() }.toBoolean(),
-                arr.elementAtOrElse(7) { defaults.simplerDate.toString() }.toBoolean()
+                arr.elementAtOrElse(6) { defaults.simplerDate.toString() }.toBoolean()
             )
         }
     }
