@@ -2,9 +2,9 @@
 
 > A suite of Android apps with Fuzzy clock faces
 
-You can find all releases and release notes here: https://github.com/tuur29/fuzzyclock/releases.
-
 ![Preview](https://raw.githubusercontent.com/tuur29/fuzzyclock/master/watchface/app/src/main/res/drawable-nodpi/preview.png)
+
+You can find old releases and release notes on the [releases page](https://github.com/tuur29/fuzzyclock/releases).
 
 ### Explanation
 

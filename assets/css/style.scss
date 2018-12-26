@@ -1,0 +1,25 @@
+---
+---
+
+// Headers
+$header-heading-color: #fff !default;
+$header-bg-color: #263238 !default;
+$header-bg-color-secondary: #37474F !default;
+
+// Text
+$section-headings-color: #37474F !default;
+$body-link-color: #FBC02D !default;
+
+@import "{{ site.theme }}";
+
+.main-content table th, .main-content table td {
+    border-color: transparent !important;
+}
+
+.main-content thead {
+    display: none;
+}
+
+#fuzzyclock-app-suite, #fuzzyclock-app-suite + blockquote {
+    display: none;
+}
