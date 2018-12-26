@@ -3,10 +3,11 @@
 
 You can find all releases and release notes here: https://github.com/tuur29/fuzzyclock/releases.
 
-| | | |
-|-|-|-|
-| ![Preview](https://raw.githubusercontent.com/tuur29/fuzzyclock/master/watchface/app/src/main/res/drawable-nodpi/preview.png) | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwatchface) | For: Wear OS / Android Wear 1.5+ |
-| | | |
+| | |
+|:-:|:-:|
+| [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwatchface) | For: Wear OS / Android Wear 1.5+ |
+
+<img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_1.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_2.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_3.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_settings_1.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_settings_2.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_settings_3.png" height="300">
 
 ## Features
 - Localized text (currently not many languages supported)

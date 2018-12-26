@@ -5,18 +5,18 @@
 Each localization can use their own rules of when to show which text. This means the following explanation might be wrong in  some specific languages. The following example will use English.
 
 The app will show a different text at these minute marks:
-- `:02 - :10` -> Just past
-- `:10 - :20` -> Quarter past
-- `:20 - :40` -> Half past
-- `:40 - :50` -> Quarter past
-- `:50 - :58` -> Almost
-- `:58 - :02` -> Around
+- `:02 - :10` → Just past
+- `:10 - :20` → Quarter past
+- `:20 - :40` → Half past
+- `:40 - :50` → Quarter past
+- `:50 - :58` → Almost
+- `:58 - :02` → Around
 
 Hours are a bit trickier because the minute mark they change to the next one can be different in some languages. For example: in English we say `Half past ten`, while Dutch still already uses the next hour for expressing this (`Half elf`).
 
 I try to use as much spoken language instead of translation the numbers (like some other apps do). Some examples include:
-- `12AM / 00:00` -> Midnight
-- `12PM / 12:00` -> Noon
+- `12AM / 00:00` → Midnight
+- `12PM / 12:00` → Noon
 
 ## Adding translations
 
