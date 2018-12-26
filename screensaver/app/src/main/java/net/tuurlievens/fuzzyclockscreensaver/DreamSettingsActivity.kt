@@ -10,6 +10,7 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.provider.Settings
+import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
@@ -52,9 +53,8 @@ class DreamSettingsActivity : PreferenceActivity() {
 
             // check notification access permissions and request them
             if (preference.key == "notifState" && value != "hidden") {
-                if (!Settings.Secure.getString(activity.applicationContext.contentResolver, "enabled_notification_listeners")
-                        .contains(activity.applicationContext.packageName)) {
-
+                val allowedPackages = NotificationManagerCompat.getEnabledListenerPackages(activity.applicationContext)
+                if (!allowedPackages.contains(activity.applicationContext.packageName)) {
                     val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     activity.applicationContext.startActivity(intent)
