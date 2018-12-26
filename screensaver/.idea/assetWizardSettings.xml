@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="50" />
+                                                <entry key="scalingPercent" value="55" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -35,52 +35,15 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="263238" />
-                                      <entry key="foregroundImage" value="F:\Tuur\Downloads\widget.svg" />
+                                      <entry key="foregroundImage" value="F:\Tuur\Downloads\screensaver.svg" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
+                                      <entry key="previewDensity" value="HIGH" />
                                       <entry key="webIconShape" value="CIRCLE" />
                                     </map>
                                   </option>
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                      </PersistentState>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </PersistentState>
-          </value>
-        </entry>
-        <entry key="vectorWizard">
-          <value>
-            <PersistentState>
-              <option name="children">
-                <map>
-                  <entry key="vectorAssetStep">
-                    <value>
-                      <PersistentState>
-                        <option name="children">
-                          <map>
-                            <entry key="clipartAsset">
-                              <value>
-                                <PersistentState>
-                                  <option name="values">
-                                    <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_save_black_24dp.xml" />
-                                    </map>
-                                  </option>
-                                </PersistentState>
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_empty" />
-                            <entry key="sourceFile" value="C:\Users\Tuur" />
                           </map>
                         </option>
                       </PersistentState>
