@@ -8,7 +8,7 @@ You can find old releases and release notes on the [releases page](https://githu
 
 | | | |
 |:-:|:-:|:-:|
-| <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/screensaver_1.jpg" height="300"> | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockscreensaver) | For: Android 4.3+ |
+| <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/screensaver_1.jpg" width="150"> | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockscreensaver) | For: Android 4.3+ |
 
 ## ![Logo](https://raw.githubusercontent.com/tuur29/fuzzyclock/master/watchface/app/src/main/res/mipmap-mdpi/ic_launcher.png "Logo") [Fuzzy Clock Watchface](./watchface)
 
@@ -20,7 +20,7 @@ You can find old releases and release notes on the [releases page](https://githu
 
 | | | |
 |:-:|:-:|:-:|
-| <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/widget_1.jpg" height="300"> | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwidget) | For: Android 4.3+ |
+| <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/widget_1.jpg" width="150"> | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwidget) | For: Android 4.3+ |
 
 ## Explanation
 
