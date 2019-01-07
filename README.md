@@ -4,6 +4,8 @@
 
 You can find old releases and release notes on the [releases page](https://github.com/tuur29/fuzzyclock/releases).
 
+Click on the app names to see more information about each app.
+
 ## ![Logo](https://raw.githubusercontent.com/tuur29/fuzzyclock/master/screensaver/app/src/main/res/mipmap-mdpi/ic_launcher.png "Logo") [Fuzzy Clock Screensaver](./screensaver)
 
 | | | |
