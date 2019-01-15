@@ -7,13 +7,11 @@ import android.os.Parcelable
 
 class NotificationData(
     var packageName: String,
-    var type: String,
-    var count: Int = 0,
+    var count: Int = 1,
     var icon: Icon? = null
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
         parcel.readParcelable(Icon::class.java.classLoader)
@@ -21,7 +19,6 @@ class NotificationData(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(packageName)
-        parcel.writeString(type)
         parcel.writeInt(count)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             parcel.writeParcelable(icon, Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
