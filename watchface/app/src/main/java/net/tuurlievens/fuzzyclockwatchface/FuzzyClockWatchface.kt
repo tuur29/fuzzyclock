@@ -19,6 +19,7 @@ import android.support.wearable.watchface.WatchFaceStyle
 import android.text.DynamicLayout
 import android.text.Layout
 import android.text.TextPaint
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
@@ -61,6 +62,8 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private var mBurnInProtection: Boolean = false
         private var mAmbient: Boolean = false
         private val mUpdateTimeHandler: Handler = EngineHandler(this)
+
+        private var currentScreen: Int = 0
 
         private lateinit var mBackgroundPaint: Paint
         private lateinit var mClockTextPaint: TextPaint
@@ -149,6 +152,13 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect) {
+            when(currentScreen) {
+                1 -> drawComplicationsScreen(canvas, bounds)
+                else -> drawWatchScreen(canvas, bounds)
+            }
+        }
+
+        private fun drawWatchScreen(canvas: Canvas, bounds: Rect) {
 
             val calendar = Calendar.getInstance()
             val padding = Math.round(dipToPixels(18))
@@ -219,6 +229,16 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             canvas.restore()
         }
 
+        private fun drawComplicationsScreen(canvas: Canvas, bounds: Rect) {
+            // Draw the background.
+            if (mAmbient) {
+                canvas.drawColor(Color.BLACK)
+
+            } else {
+                canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), mBackgroundPaint)
+            }
+        }
+
         override fun onTapCommand(tapType: Int, x: Int, y: Int, eventTime: Long) {
             when (tapType) {
                 WatchFaceService.TAP_TYPE_TOUCH -> {
@@ -229,7 +249,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 }
                 WatchFaceService.TAP_TYPE_TAP -> {
                     // The user has completed the tap gesture.
-                    // TODO: Add code to handle the tap gesture.
+                    currentScreen = (currentScreen + 1) % 2
                 }
             }
             invalidate()
@@ -265,6 +285,9 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 mBackgroundPaint.color = Color.BLACK
                 mClockTextPaint.color = Color.WHITE
                 mDateTextPaint.color = Color.WHITE
+
+                currentScreen = 0
+
             } else {
                 mBackgroundPaint.color = Color.parseColor(backgroundColor)
                 mClockTextPaint.color = Color.parseColor(foregroundColor)
