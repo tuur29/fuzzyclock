@@ -151,6 +151,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         override fun onDraw(canvas: Canvas, bounds: Rect) {
 
             val calendar = Calendar.getInstance()
+            val padding = Math.round(dipToPixels(18))
 
             // Draw the background.
             if (mAmbient) {
@@ -186,10 +187,10 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 "right" -> Layout.Alignment.ALIGN_OPPOSITE
                 else -> Layout.Alignment.ALIGN_CENTER
             }
-            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width(), alignment, 1F, 1F, true)
+            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - padding*2, alignment, 1F, 1F, true)
 
             canvas.save()
-            val textXCoordinate = bounds.left.toFloat()
+            val textXCoordinate = bounds.left.toFloat() + padding
 
             if (showDate == "always" || (showDate == "interactive" && !mAmbient)) {
 
@@ -198,7 +199,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 val date = format.format(calendar.time)
                 mDateTextPaint.alpha = Math.round(255 * 0.65).toInt()
-                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width(), alignment, 1F, 1F, true)
+                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - padding*2, alignment, 1F, 1F, true)
 
                 // draw date
                 val textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
