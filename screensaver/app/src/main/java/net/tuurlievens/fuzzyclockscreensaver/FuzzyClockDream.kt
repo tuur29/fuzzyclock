@@ -117,10 +117,8 @@ class FuzzyClockDream : DreamService() {
         language = prefs.getString("language", language)
         fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
         textAlignment = prefs.getString("textAlignment", textAlignment)
-        val parseForeGroundColor = Integer.toHexString(prefs.getInt("foregroundColor", 0))
-        foregroundColor = if (parseForeGroundColor == "0") { foregroundColor } else { "#" + parseForeGroundColor }
-        val parseBackGroundColor = Integer.toHexString(prefs.getInt("backgroundColor", 0))
-        backgroundColor = if (parseBackGroundColor == "0") { backgroundColor } else { "#" + parseBackGroundColor }
+        foregroundColor = "#" + Integer.toHexString(prefs.getInt("foregroundColor", 0xFFFFFFFF.toInt()))
+        backgroundColor = "#" + Integer.toHexString(prefs.getInt("backgroundColor", 0xFF000000.toInt()))
         removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
         showDate = prefs.getBoolean("showDate", showDate)
         brightScreen = prefs.getBoolean("brightScreen", brightScreen)
@@ -210,14 +208,15 @@ class FuzzyClockDream : DreamService() {
                     // Show notifications
                     if (notifState != "hidden") {
                         // show notificationcount if textview still exists (only in < M SDL or manually forced)
-                        if (notifState != "visible" || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                            if (notifications.size < 1)
+                        if (notifState == "count" || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                            if (notifications.size < 1) {
                                 findViewById<TextView>(R.id.notificationcount).text = ""
-                            else
+                            } else {
+//                                val count = notifications.map { n -> n.count }.reduce{ a, c -> c }
                                 findViewById<TextView>(R.id.notificationcount).text = "(${notifications.size})"
-                        }
+                            }
 
-                        if (notifState == "visible" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        } else if (notifState == "visible" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             val container = findViewById<FlexboxLayout>(R.id.notifications)
                             container.removeAllViews()
 

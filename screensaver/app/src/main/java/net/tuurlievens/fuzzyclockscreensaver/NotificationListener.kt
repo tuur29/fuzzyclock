@@ -1,5 +1,6 @@
 package net.tuurlievens.fuzzyclockscreensaver
 
+import android.annotation.SuppressLint
 import android.service.notification.NotificationListenerService
 import android.content.IntentFilter
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.core.graphics.drawable.IconCompat
 import java.util.HashMap
 
 
@@ -62,6 +64,7 @@ class NotificationListener : NotificationListenerService() {
 
     // HELPERS
 
+    @SuppressLint("RestrictedApi")
     private fun handleActiveNotification(notification: StatusBarNotification) {
 
         // ignore certain packages
@@ -70,10 +73,9 @@ class NotificationListener : NotificationListenerService() {
 
         val data = NotificationData(notification.packageName)
 
-        // TODO: Show default icon when API < M
         // get icon
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            data.icon = notification.notification.smallIcon
+            data.icon = IconCompat.createFromIcon(notification.notification.smallIcon)
         }
 
         // update notif count of specific package

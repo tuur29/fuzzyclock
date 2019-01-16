@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/pref_category_display">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="showDate"
                 android:title="@string/pref_title_showDate"
                 android:defaultValue="true"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="simplerDate"
                 android:title="@string/pref_title_simplerDate"
                 android:defaultValue="true"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="showBattery"
                 android:title="@string/pref_title_showBattery"
                 android:defaultValue="true"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="removeLineBreak"
                 android:title="@string/pref_title_removeLineBreak"
                 android:defaultValue="false"/>
@@ -46,14 +46,14 @@
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"/>
 
-        <com.jaredrummler.android.colorpicker.ColorPreference
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
                 android:key="foregroundColor"
                 android:title="@string/pref_title_foregroundColor"
                 android:defaultValue="@android:color/white"
                 cpv_dialogTitle="@string/pref_title_foregroundColor"
                 cpv_showAlphaSlider="true"/>
 
-        <com.jaredrummler.android.colorpicker.ColorPreference
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
                 android:key="backgroundColor"
                 android:title="@string/pref_title_backgroundColor"
                 android:defaultValue="@android:color/black"
@@ -82,7 +82,7 @@
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"/>
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
                 android:key="brightScreen"
                 android:title="@string/pref_title_brightScreen"
                 android:defaultValue="false"/>
@@ -110,4 +110,4 @@
 
     </PreferenceCategory>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -1,12 +1,7 @@
 package net.tuurlievens.fuzzyclockwidget
 
 import android.os.Bundle
-import android.preference.EditTextPreference
-import android.preference.ListPreference
-import android.preference.PreferenceManager
-import android.preference.SwitchPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.*
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
@@ -22,10 +17,21 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
         parent = activity as FuzzyClockWidgetConfigureActivity
         addPreferencesFromResource(R.xml.prefs)
 
+        // set app:iconSpaceReserved="false" on all preferences
+        for (i in 0 until preferenceScreen.preferenceCount) {
+            val cat = preferenceScreen.getPreference(i)
+            cat.isIconSpaceReserved = false
+            if (cat is PreferenceGroup)
+                for (j in 0 until cat.preferenceCount) {
+                    cat.getPreference(j).isIconSpaceReserved = false
+                }
+        }
+
+
         // Bind preferences to parent prefs and their summaries
         val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate","simplerDate")
         for (item in array) {
-            var pref = findPreference(item)
+            var pref = findPreference<Preference>(item)
             pref.onPreferenceChangeListener = getListener()
 
             // Update sharedpreferences to actual preferences
@@ -41,6 +47,8 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
                 pref.onPreferenceChangeListener.onPreferenceChange(pref, readPropery(parent!!.prefs!!, item))
             }
         }
+
+
     }
 
     fun <R: Any?> readPropery(instance: Any, propertyName: String): R {
@@ -69,6 +77,9 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
 
             if (preference is SwitchPreference) {
                 preference.isChecked = value.toString().toBoolean()
+
+            } else if (preference is ColorPreferenceCompat) {
+                preference.setDefaultValue(value as Int)
 
             } else {
 

@@ -1,20 +1,13 @@
 package net.tuurlievens.fuzzyclockscreensaver
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.preference.ListPreference
-import android.preference.Preference
-import android.preference.PreferenceActivity
-import android.preference.PreferenceFragment
-import android.preference.PreferenceManager
-import android.provider.Settings
-import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.preference.*
 
 
 class DreamSettingsActivity : FragmentActivity() {
@@ -27,15 +20,24 @@ class DreamSettingsActivity : FragmentActivity() {
             window.statusBarColor = resources.getColor(android.R.color.black)
         }
 
-        fragmentManager.beginTransaction().replace(android.R.id.content, AllPreferenceFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, AllPreferenceFragment()).commit()
     }
 
-    class AllPreferenceFragment : PreferenceFragment() {
+    class AllPreferenceFragment : PreferenceFragmentCompat() {
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
+        override fun onCreatePreferences(p0: Bundle?, p1: String?) {
+
             addPreferencesFromResource(R.xml.prefs)
-            setHasOptionsMenu(true)
+
+            // set app:iconSpaceReserved="false" on all preferences
+            for (i in 0 until preferenceScreen.preferenceCount) {
+                val cat = preferenceScreen.getPreference(i)
+                cat.isIconSpaceReserved = false
+                if (cat is PreferenceGroup)
+                    for (j in 0 until cat.preferenceCount) {
+                        cat.getPreference(j).isIconSpaceReserved = false
+                    }
+            }
 
             // Bind the summaries of EditText/List/Dialog preferences
             bindPreferenceSummaryToValue(findPreference("maxTranslationDisplacement"))
@@ -52,12 +54,12 @@ class DreamSettingsActivity : FragmentActivity() {
 
             // check notification access permissions and request them
             if (preference.key == "notifState" && value != "hidden") {
-                val allowedPackages = NotificationManagerCompat.getEnabledListenerPackages(activity.applicationContext)
-                if (!allowedPackages.contains(activity.applicationContext.packageName)) {
+                val allowedPackages = NotificationManagerCompat.getEnabledListenerPackages(activity!!.applicationContext)
+                if (!allowedPackages.contains(activity?.applicationContext?.packageName)) {
                     val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    activity.applicationContext.startActivity(intent)
-                    Toast.makeText(activity.applicationContext, activity.applicationContext.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
+                    activity?.applicationContext?.startActivity(intent)
+                    Toast.makeText(activity?.applicationContext, activity?.applicationContext?.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
                     stringValue = "false"
                 }
             }
