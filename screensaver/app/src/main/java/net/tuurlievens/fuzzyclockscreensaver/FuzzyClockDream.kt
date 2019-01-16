@@ -17,11 +17,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.view.Gravity
 import android.widget.ImageView
 import android.graphics.drawable.GradientDrawable
 import android.os.BatteryManager
 import android.util.Log
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
@@ -42,6 +44,7 @@ class FuzzyClockDream : DreamService() {
     private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0
     private var language = "default"
+    private var fontfamily = ""
     private var fontSize = 36
     private var textAlignment = "center"
     private var foregroundColor = "#ffffffff"
@@ -115,6 +118,7 @@ class FuzzyClockDream : DreamService() {
         maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble()
         updateSeconds = prefs.getString("updateSeconds", updateSeconds.toString()).toDouble()
         language = prefs.getString("language", language)
+        fontfamily = prefs.getString("fontfamily", fontfamily)
         fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
         textAlignment = prefs.getString("textAlignment", textAlignment)
         foregroundColor = "#" + Integer.toHexString(prefs.getInt("foregroundColor", 0xFFFFFFFF.toInt()))
@@ -195,6 +199,11 @@ class FuzzyClockDream : DreamService() {
                         time = time.replace("\n"," ")
                     }
                     findViewById<TextView>(R.id.clocktext).text = time
+
+                    val font = applicationContext.resources.getIdentifier(fontfamily, "font", applicationContext.packageName)
+                    if (font != 0) {
+                        findViewById<TextView>(R.id.clocktext).typeface = ResourcesCompat.getFont(applicationContext, font)
+                    }
 
                     // update date
                     if (showDate) {

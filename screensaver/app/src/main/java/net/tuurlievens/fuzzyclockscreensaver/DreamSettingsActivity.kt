@@ -43,6 +43,7 @@ class DreamSettingsActivity : FragmentActivity() {
             bindPreferenceSummaryToValue(findPreference("maxTranslationDisplacement"))
             bindPreferenceSummaryToValue(findPreference("updateSeconds"))
             bindPreferenceSummaryToValue(findPreference("language"))
+            bindPreferenceSummaryToValue(findPreference("fontfamily"))
             bindPreferenceSummaryToValue(findPreference("fontSize"))
             bindPreferenceSummaryToValue(findPreference("textAlignment"))
             bindPreferenceSummaryToValue(findPreference("notifState"))

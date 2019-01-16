@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/root"
+                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/black"
-                >
+>
 
     <LinearLayout android:id="@+id/parent"
                   android:orientation="vertical"
@@ -21,8 +21,7 @@
                   android:textColor="#ffffff"
                   android:ellipsize="none"
                   android:maxLines="4"
-                  android:scrollHorizontally="false"
-                  />
+                  android:scrollHorizontally="false"/>
 
         <TextView android:id="@+id/datetext"
                   android:layout_width="wrap_content"
@@ -33,18 +32,18 @@
                   android:singleLine="true"
                   android:alpha="0.65"
                   android:scrollHorizontally="false"
-                  />
+        />
 
         <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/notifications"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            app:justifyContent="center"
-            app:maxLine="3"
-            app:flexWrap="wrap">
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/notifications"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                app:justifyContent="center"
+                app:maxLine="3"
+                app:flexWrap="wrap">
 
             <TextView android:id="@+id/notificationcount"
                       android:layout_width="match_parent"
@@ -53,8 +52,7 @@
                       android:textColor="#a6a6a6"
                       android:textAlignment="center"
                       android:alpha="0.65"
-                      android:scrollHorizontally="false"
-            />
+                      android:scrollHorizontally="false"/>
 
         </com.google.android.flexbox.FlexboxLayout>
 

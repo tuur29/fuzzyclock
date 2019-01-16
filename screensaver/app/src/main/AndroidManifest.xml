@@ -43,6 +43,9 @@
                 android:label="@string/settings">
         </activity>
 
+        <!--Load fonts-->
+        <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
+
     </application>
 
 </manifest>
