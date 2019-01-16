@@ -45,6 +45,14 @@
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
+                android:key="fontfamily"
+                android:title="@string/pref_title_fontfamily"
+                android:defaultValue="default"
+                android:entries="@array/pref_list_fontfamily_titles"
+                android:entryValues="@array/pref_list_fontfamily_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
+        <ListPreference
                 android:key="textAlignment"
                 android:title="@string/pref_title_textAlignment"
                 android:defaultValue="center"

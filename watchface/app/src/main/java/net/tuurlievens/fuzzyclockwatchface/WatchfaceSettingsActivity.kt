@@ -4,9 +4,7 @@ import android.os.Bundle
 import preference.WearPreferenceActivity
 import android.content.Intent
 import android.support.wearable.view.WearableListView
-import android.util.Log
 import android.widget.Toast
-import java.time.Duration
 
 
 class WatchfaceSettingsActivity : WearPreferenceActivity() {
