@@ -1,10 +1,13 @@
 package net.tuurlievens.fuzzyclockwidget
 
 import android.os.Bundle
-import android.preference.*
-import android.preference.Preference
-import android.support.v7.preference.Preference.OnPreferenceChangeListener
-import android.support.v7.preference.PreferenceFragmentCompat
+import android.preference.EditTextPreference
+import android.preference.ListPreference
+import android.preference.PreferenceManager
+import android.preference.SwitchPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
@@ -27,11 +30,12 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
 
             // Update sharedpreferences to actual preferences
             if (parent?.prefs != null) {
-                val prefs = PreferenceManager.getDefaultSharedPreferences(parent).edit()
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
                 when (pref::class.java) {
                     SwitchPreference::class.java -> prefs.putBoolean(item, readPropery(parent!!.prefs!!, item))
                     EditTextPreference::class.java -> prefs.putString(item, (readPropery(parent!!.prefs!!, item) as Int).toString())
                     ListPreference::class.java -> prefs.putString(item, readPropery(parent!!.prefs!!, item))
+                    ColorPreferenceCompat::class.java -> prefs.putInt(item, readPropery(parent!!.prefs!!, item))
                 }
                 prefs.apply()
                 pref.onPreferenceChangeListener.onPreferenceChange(pref, readPropery(parent!!.prefs!!, item))
@@ -55,8 +59,8 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun getListener() : OnPreferenceChangeListener {
-        return OnPreferenceChangeListener { preference, value ->
+    private fun getListener() : Preference.OnPreferenceChangeListener {
+        return Preference.OnPreferenceChangeListener { preference, value ->
 
             // sync with parent prefs
             updateProperty(parent!!.prefs!!, preference.key, value)

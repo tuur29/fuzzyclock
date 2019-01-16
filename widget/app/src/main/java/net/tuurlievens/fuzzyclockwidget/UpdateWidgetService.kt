@@ -10,17 +10,13 @@ import android.widget.RemoteViews
 import java.util.*
 import android.app.PendingIntent
 import android.graphics.Color
-import android.os.Build
 import android.provider.AlarmClock
-import android.support.v4.app.JobIntentService
-import android.text.Layout
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
 import java.text.SimpleDateFormat
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CalendarContract
+import androidx.core.app.JobIntentService
 
 
 class UpdateWidgetService : JobIntentService() {
@@ -58,12 +54,14 @@ class UpdateWidgetService : JobIntentService() {
                 else -> RemoteViews(pName, R.layout.fuzzy_clock_widget_center)
             }
 
+            val parsedForegroundColor = "#" + Integer.toHexString(prefs.foregroundColor)
+
             // update clock
             val hour = calendar.get(Calendar.HOUR_OF_DAY)
             val min = calendar.get(Calendar.MINUTE)
 
             view.setTextViewTextSize(R.id.clocktext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
-            view.setTextColor(R.id.clocktext, Color.parseColor(prefs.foregroundColor))
+            view.setTextColor(R.id.clocktext, Color.parseColor(parsedForegroundColor))
 
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
             var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
@@ -78,7 +76,7 @@ class UpdateWidgetService : JobIntentService() {
                 val format = if (prefs.simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 view.setTextViewText(R.id.datetext, format.format(calendar.time))
                 view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize * 0.65F)
-                view.setTextColor(R.id.datetext, Color.parseColor(prefs.foregroundColor))
+                view.setTextColor(R.id.datetext, Color.parseColor(parsedForegroundColor))
             } else {
                 view.setTextViewText(R.id.datetext, "")
                 view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, 0F)

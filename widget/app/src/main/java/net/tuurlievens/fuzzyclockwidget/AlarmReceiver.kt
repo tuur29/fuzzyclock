@@ -3,9 +3,8 @@ package net.tuurlievens.fuzzyclockwidget
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.support.v4.app.JobIntentService
 import android.util.Log
-import android.support.v4.content.ContextCompat
+import androidx.core.app.JobIntentService
 
 
 class AlarmReceiver : BroadcastReceiver() {
