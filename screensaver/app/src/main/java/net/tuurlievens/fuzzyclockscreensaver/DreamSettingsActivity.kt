@@ -10,13 +10,14 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.provider.Settings
-import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.FragmentActivity
 
 
-class DreamSettingsActivity : PreferenceActivity() {
+class DreamSettingsActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +43,6 @@ class DreamSettingsActivity : PreferenceActivity() {
             bindPreferenceSummaryToValue(findPreference("language"))
             bindPreferenceSummaryToValue(findPreference("fontSize"))
             bindPreferenceSummaryToValue(findPreference("textAlignment"))
-            bindPreferenceSummaryToValue(findPreference("foregroundColor"))
-            bindPreferenceSummaryToValue(findPreference("backgroundColor"))
             bindPreferenceSummaryToValue(findPreference("notifState"))
         }
 

@@ -44,8 +44,8 @@ class FuzzyClockDream : DreamService() {
     private var language = "default"
     private var fontSize = 36
     private var textAlignment = "center"
-    private var foregroundColor = "#ffffff"
-    private var backgroundColor = "#000000"
+    private var foregroundColor = "#ffffffff"
+    private var backgroundColor = "#ff000000"
     private var removeLineBreak = false
     private var showDate = true
     private var brightScreen = false
@@ -117,8 +117,10 @@ class FuzzyClockDream : DreamService() {
         language = prefs.getString("language", language)
         fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
         textAlignment = prefs.getString("textAlignment", textAlignment)
-        foregroundColor = prefs.getString("foregroundColor", foregroundColor)
-        backgroundColor = prefs.getString("backgroundColor", backgroundColor)
+        val parseForeGroundColor = Integer.toHexString(prefs.getInt("foregroundColor", 0))
+        foregroundColor = if (parseForeGroundColor == "0") { foregroundColor } else { "#" + parseForeGroundColor }
+        val parseBackGroundColor = Integer.toHexString(prefs.getInt("backgroundColor", 0))
+        backgroundColor = if (parseBackGroundColor == "0") { backgroundColor } else { "#" + parseBackGroundColor }
         removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
         showDate = prefs.getBoolean("showDate", showDate)
         brightScreen = prefs.getBoolean("brightScreen", brightScreen)

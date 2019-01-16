@@ -46,23 +46,19 @@
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"/>
 
-        <ListPreference
+        <com.jaredrummler.android.colorpicker.ColorPreference
                 android:key="foregroundColor"
                 android:title="@string/pref_title_foregroundColor"
-                android:defaultValue="#ffffff"
-                android:entries="@array/pref_list_color_titles"
-                android:entryValues="@array/pref_list_color_values"
-                android:negativeButtonText="@null"
-                android:positiveButtonText="@null"/>
+                android:defaultValue="@android:color/white"
+                cpv_dialogTitle="@string/pref_title_foregroundColor"
+                cpv_showAlphaSlider="true"/>
 
-        <ListPreference
+        <com.jaredrummler.android.colorpicker.ColorPreference
                 android:key="backgroundColor"
                 android:title="@string/pref_title_backgroundColor"
-                android:defaultValue="#000000"
-                android:entries="@array/pref_list_color_titles"
-                android:entryValues="@array/pref_list_color_values"
-                android:negativeButtonText="@null"
-                android:positiveButtonText="@null"/>
+                android:defaultValue="@android:color/black"
+                cpv_dialogTitle="@string/pref_title_backgroundColor"
+                cpv_showAlphaSlider="true"/>
 
     </PreferenceCategory>
 
