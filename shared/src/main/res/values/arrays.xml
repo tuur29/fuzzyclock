@@ -63,8 +63,22 @@
     </string-array>
 
     <string-array name="pref_list_fontfamily_values">
-        <item></item>
+        <item>default</item>
+        <item>roboto</item>
+        <item>roboto_thin</item>
+        <item>roboto_black</item>
+        <item>open_sans</item>
+        <item>raleway</item>
+        <item>noto_serif</item>
+        <item>slabo_27px</item>
+        <item>roboto_mono</item>
+        <item>fira_mono</item>
         <item>dancing_script</item>
+        <item>pacifico</item>
+        <item>shadows_into_light_two</item>
+        <item>lobster</item>
+        <item>fredoka_one</item>
+        <item>comfortaa</item>
     </string-array>
 
 </resources>

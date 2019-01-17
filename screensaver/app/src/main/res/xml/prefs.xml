@@ -40,11 +40,16 @@
         <ListPreference
                 android:key="fontfamily"
                 android:title="@string/pref_title_fontfamily"
-                android:defaultValue=""
+                android:defaultValue="default"
                 android:entries="@array/pref_list_fontfamily_titles"
                 android:entryValues="@array/pref_list_fontfamily_values"
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"/>
+
+        <SwitchPreferenceCompat
+                android:key="useDateFont"
+                android:title="@string/pref_title_useDateFont"
+                android:defaultValue="false"/>
 
         <ListPreference
                 android:key="textAlignment"

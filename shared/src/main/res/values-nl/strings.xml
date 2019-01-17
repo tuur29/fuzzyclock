@@ -38,6 +38,7 @@
     <string name="pref_title_showStatusbar">Toon statusiconen</string>
     <string name="pref_title_showDigitalClock">Toon digitale klok</string>
     <string name="pref_title_fontfamily">Lettertype</string>
+    <string name="pref_title_useDateFont">Gebruik lettertype voor datum</string>
 
     <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
     <string name="msg_editbtn">Druk op de rechterbovenhoek van de widget om hem aan te passen</string>
@@ -93,8 +94,22 @@
     </string-array>
 
     <string-array name="pref_list_fontfamily_titles">
-        <item>Normal</item>
+        <item>Standaard</item>
+        <item>Roboto</item>
+        <item>Roboto Thin</item>
+        <item>Roboto Black</item>
+        <item>Open Sans</item>
+        <item>Raleway</item>
+        <item>Noto Serif</item>
+        <item>Slabo</item>
+        <item>Roboto Mono</item>
+        <item>Fira Mono</item>
         <item>Dancing Script</item>
+        <item>Pacifico</item>
+        <item>Shadows into Light 2</item>
+        <item>Lobster</item>
+        <item>Fredoka one</item>
+        <item>Comfortaa</item>
     </string-array>
 
 </resources>

@@ -55,6 +55,7 @@ class FuzzyClockDream : DreamService() {
     private var notifState = "hidden"
     private var showBattery = true
     private var simplerDate = true
+    private var useDateFont = false
 
     // LIFECYCLE
 
@@ -129,6 +130,7 @@ class FuzzyClockDream : DreamService() {
         notifState = prefs.getString("notifState", notifState)
         showBattery = prefs.getBoolean("showBattery", showBattery)
         simplerDate = prefs.getBoolean("simplerDate", simplerDate)
+        useDateFont = prefs.getBoolean("useDateFont", useDateFont)
     }
 
     private fun applySettings() {
@@ -166,6 +168,13 @@ class FuzzyClockDream : DreamService() {
             else -> Gravity.CENTER
         }
 
+        val font = applicationContext.resources.getIdentifier(fontfamily, "font", applicationContext.packageName)
+        if (font != 0) {
+            findViewById<TextView>(R.id.clocktext).typeface = ResourcesCompat.getFont(applicationContext, font)
+            if (useDateFont)
+                findViewById<TextView>(R.id.datetext).typeface = ResourcesCompat.getFont(applicationContext, font)
+        }
+
         if (!showBattery) {
             findViewById<RelativeLayout>(R.id.root).removeView(findViewById<View>(R.id.battery))
         }
@@ -199,11 +208,6 @@ class FuzzyClockDream : DreamService() {
                         time = time.replace("\n"," ")
                     }
                     findViewById<TextView>(R.id.clocktext).text = time
-
-                    val font = applicationContext.resources.getIdentifier(fontfamily, "font", applicationContext.packageName)
-                    if (font != 0) {
-                        findViewById<TextView>(R.id.clocktext).typeface = ResourcesCompat.getFont(applicationContext, font)
-                    }
 
                     // update date
                     if (showDate) {
