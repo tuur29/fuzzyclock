@@ -8,11 +8,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.preference.PreferenceManager
+import android.support.v4.content.res.ResourcesCompat
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
@@ -32,7 +32,6 @@ import java.util.*
 class FuzzyClockWatchface : CanvasWatchFaceService() {
 
     companion object {
-        private val NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
         private const val INTERACTIVE_UPDATE_RATE_MS = 30*1000
         private const val MSG_UPDATE_TIME = 0
     }
@@ -76,6 +75,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         // SETTINGS
         private var language = "en"
         private var fontSize = 26
+        private var fontfamily = ""
         private var textAlignment = "center"
         private var foregroundColor = "#ffffff"
         private var backgroundColor = "#000000"
@@ -114,6 +114,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             language = (if (pickedLanguage == "default") Locale.getDefault().language else pickedLanguage) ?: language
             fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
             textAlignment = prefs.getString("textAlignment", textAlignment)
+            fontfamily = prefs.getString("fontfamily", fontfamily)
             foregroundColor = prefs.getString("foregroundColor", foregroundColor)
             backgroundColor = prefs.getString("backgroundColor", backgroundColor)
             showDate = prefs.getString("showDate", showDate)
@@ -126,20 +127,20 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private fun updateSettings() {
 
             val size = dipToPixels(fontSize)
+            val font = applicationContext.resources.getIdentifier(fontfamily, "font", applicationContext.packageName)
 
             mBackgroundPaint = Paint().apply {
                 color = Color.parseColor(backgroundColor)
             }
 
             mClockTextPaint = TextPaint().apply {
-                typeface = NORMAL_TYPEFACE
+                if (font != 0) typeface = ResourcesCompat.getFont(applicationContext, font)
                 color = Color.parseColor(foregroundColor)
                 isAntiAlias = true
                 textSize = size
             }
 
             mDateTextPaint = TextPaint().apply {
-                typeface = NORMAL_TYPEFACE
                 isAntiAlias = true
                 textSize = Math.round(size * 0.65).toFloat()
                 color = Color.parseColor(foregroundColor)
