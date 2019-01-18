@@ -130,13 +130,21 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
             val size = dipToPixels(fontSize)
 
+            val foreground = Color.parseColor(foregroundColor)
+            val lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
+            val complicationcolor = if (Color.red(foreground)*0.299 + Color.green(foreground)*0.587 + Color.blue(foreground)*0.114 > 186) {
+                ColorUtils.setAlphaComponent(Color.BLACK, 100)
+            } else {
+                ColorUtils.setAlphaComponent(Color.WHITE, 100)
+            }
+
             mBackgroundPaint = Paint().apply {
                 color = Color.parseColor(backgroundColor)
             }
 
             mClockTextPaint = TextPaint().apply {
                 typeface = NORMAL_TYPEFACE
-                color = Color.parseColor(foregroundColor)
+                color = foreground
                 isAntiAlias = true
                 textSize = size
             }
@@ -145,21 +153,24 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 typeface = NORMAL_TYPEFACE
                 isAntiAlias = true
                 textSize = Math.round(size * 0.65).toFloat()
-                color = Color.parseColor(foregroundColor)
+                color = lighterforeground
             }
 
             for (entry in activeComplicationDrawable.entries) {
                 val drawable = entry.value
 
-                drawable.setTextColorActive(Color.parseColor(foregroundColor))
-                drawable.setRangedValuePrimaryColorActive(Color.parseColor(foregroundColor))
-                drawable.setTitleColorActive(Color.parseColor(foregroundColor))
-                drawable.setIconColorActive(Color.parseColor(foregroundColor))
+                drawable.setTextColorActive(foreground)
+                drawable.setRangedValuePrimaryColorActive(foreground)
+                drawable.setTitleColorActive(foreground)
+                drawable.setIconColorActive(foreground)
 
-                val secondaryColor = ColorUtils.setAlphaComponent(Color.parseColor(foregroundColor), 150)
-                drawable.setRangedValueSecondaryColorActive(secondaryColor)
-                drawable.setHighlightColorActive(secondaryColor)
-                drawable.setBorderColorActive(secondaryColor)
+                drawable.setRangedValueSecondaryColorActive(lighterforeground)
+                drawable.setHighlightColorActive(lighterforeground)
+
+                if (activeComplicationData[entry.key]?.type != ComplicationData.TYPE_RANGED_VALUE)
+                    drawable.setBorderColorActive(ColorUtils.setAlphaComponent(foreground, 100))
+
+                drawable.setBackgroundColorActive(complicationcolor)
             }
 
             setWatchFaceStyle(
@@ -196,7 +207,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         // do these static calculations once
         val preparedPadding = Math.round(dipToPixels(18))
-        val preparedAlpha = Math.round(255 * 0.65).toInt()
 
         private fun drawWatchScreen(canvas: Canvas, bounds: Rect) {
             val calendar = Calendar.getInstance()
@@ -238,7 +248,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 val loc = Locale(language)
                 val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 val date = format.format(calendar.time)
-                mDateTextPaint.alpha = preparedAlpha
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - preparedPadding*2, alignment, 1F, 1F, true)
 
                 // draw date
