@@ -15,7 +15,8 @@ class Complications {
                 ComplicationData.TYPE_RANGED_VALUE,
                 ComplicationData.TYPE_ICON,
                 ComplicationData.TYPE_SHORT_TEXT,
-                ComplicationData.TYPE_SMALL_IMAGE
+                ComplicationData.TYPE_SMALL_IMAGE,
+                ComplicationData.TYPE_LONG_TEXT
             ),
             intArrayOf(
                 ComplicationData.TYPE_RANGED_VALUE,

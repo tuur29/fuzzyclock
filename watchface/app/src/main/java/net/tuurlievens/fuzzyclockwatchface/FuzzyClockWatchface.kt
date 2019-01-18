@@ -258,7 +258,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             canvas.restore()
         }
 
-        // TODO: complications not being drawn
         private fun drawComplicationsScreen(canvas: Canvas, bounds: Rect) {
 
             for (entry in activeComplicationDrawable.entries) {
