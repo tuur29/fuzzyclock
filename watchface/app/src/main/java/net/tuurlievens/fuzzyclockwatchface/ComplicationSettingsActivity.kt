@@ -1,37 +1,37 @@
 package net.tuurlievens.fuzzyclockwatchface
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.wearable.complications.ComplicationHelperActivity
-import android.support.wearable.complications.ComplicationProviderInfo
-import android.support.wearable.complications.ProviderChooserIntent
-import android.support.wearable.complications.ProviderInfoRetriever
+import android.support.wearable.complications.*
 import android.util.Log
-import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.Toast
 import java.util.*
 import java.util.concurrent.Executors
+import android.view.MotionEvent
 
 
 class ComplicationSettingsActivity : Activity() {
 
     // Selected complication id by user.
     private var selectedId: Int = 0
-
+    private lateinit var canvas: Canvas
+    private lateinit var bounds : Rect
     private var providerInfoRetriever: ProviderInfoRetriever? = null
-
-    private var complicationBackgrounds: HashMap<Int, ImageView?> = HashMap()
-    private var complicationButtons: HashMap<Int, ImageButton?> = HashMap()
+    private var complicationDrawable: HashMap<Int, Drawable?> = HashMap()
 
     private var defaultAddComplicationDrawable: Drawable? = null
+    private var backgroundComplicationDrawable: Drawable? = null
+
+
+    private var background: Int = Color.BLACK
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,32 +40,15 @@ class ComplicationSettingsActivity : Activity() {
 
         // set background color
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val backgroundColor = prefs.getString("backgroundColor", "#ff000000")
-        findViewById<RelativeLayout>(R.id.root).setBackgroundColor(Color.parseColor(backgroundColor))
+        background = Color.parseColor(prefs.getString("backgroundColor", "#ff000000"))
 
         // show complications
         defaultAddComplicationDrawable = getDrawable(R.drawable.add_complication)
+        backgroundComplicationDrawable = getDrawable(R.drawable.added_complication)
         selectedId = -1
 
         for (id in Complications.IDS) {
-
-            val buttonId = resources.getIdentifier("${Complications.PREVIEW_ID_NAME[id]}_complication", "id", packageName)
-            val backgroundID = resources.getIdentifier("${Complications.PREVIEW_ID_NAME[id]}_complication_background", "id", packageName)
-
-            complicationBackgrounds[id] = findViewById(backgroundID)
-            complicationButtons[id] = findViewById(buttonId)
-
-            complicationButtons[id]?.setOnClickListener{ view ->
-                for (e in complicationButtons.entries) {
-                    if (view == e.value) {
-                        launchComplicationHelperActivity(e.key)
-                    }
-                }
-            }
-
-            // Sets default as "Add Complication" icon.
-            complicationButtons[id]?.setImageDrawable(defaultAddComplicationDrawable)
-            complicationBackgrounds[id]?.visibility = View.INVISIBLE
+            complicationDrawable[id] = defaultAddComplicationDrawable
         }
 
         // Initialization of code to retrieve active complication data for the watch face.
@@ -73,6 +56,67 @@ class ComplicationSettingsActivity : Activity() {
         providerInfoRetriever?.init()
 
         retrieveInitialComplicationsData()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupCanvas() {
+        val imageview = findViewById<ImageView>(R.id.canvas)
+        bounds = Rect(imageview.left, imageview.top, imageview.right, imageview.bottom)
+        val bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
+        imageview.setImageBitmap(bitmap)
+        canvas = Canvas(bitmap)
+
+        imageview.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                val tappedComplicationId = getTappedComplicationId(event.x.toInt(), event.y.toInt())
+                if (tappedComplicationId != -1) {
+                    launchComplicationHelperActivity(tappedComplicationId)
+                }
+            }
+            true
+        }
+    }
+
+    private fun draw() {
+
+        // couldn't find the proper place for this (oncreate or onviewcreated didn't work)
+        setupCanvas()
+
+        canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), Paint().apply {
+            color = background
+        })
+
+        for (entry in complicationDrawable) {
+            val drawable = entry.value
+
+            // layer background circle together with selected icon
+            val final = LayerDrawable(arrayOf(
+                backgroundComplicationDrawable,
+                drawable
+            )).apply{
+                setLayerInset(1, 20,20,20,20)
+            }
+
+            final.bounds = Complications.getPosition(entry.key, bounds)
+            final.draw(canvas)
+        }
+    }
+
+    private fun getTappedComplicationId(x: Int, y: Int): Int {
+
+        for (entry in complicationDrawable.entries) {
+            val complicationDrawable = entry.value
+            val complicationId = entry.key
+
+            val complicationBoundingRect = complicationDrawable?.bounds
+
+            if (complicationBoundingRect!!.width() > 0) {
+                if (complicationBoundingRect.contains(x, y)) {
+                    return complicationId
+                }
+            }
+        }
+        return -1
     }
 
     override fun onDestroy() {
@@ -126,13 +170,12 @@ class ComplicationSettingsActivity : Activity() {
     fun updateComplicationViews(id: Int, complicationProviderInfo: ComplicationProviderInfo?) {
 
         if (complicationProviderInfo == null) {
-            complicationButtons[id]?.setImageDrawable(defaultAddComplicationDrawable)
-            complicationBackgrounds[id]?.visibility = View.INVISIBLE
-
+            complicationDrawable[id] = defaultAddComplicationDrawable
         } else {
-            complicationButtons[id]?.setImageIcon(complicationProviderInfo.providerIcon)
-            complicationBackgrounds[id]?.visibility = View.VISIBLE
+            complicationDrawable[id] = complicationProviderInfo.providerIcon.loadDrawable(this)
         }
+
+        draw()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
