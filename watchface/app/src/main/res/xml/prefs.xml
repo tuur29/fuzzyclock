@@ -100,4 +100,10 @@
 
     </PreferenceScreen>
 
+    <PreferenceScreen
+            android:title="@string/pref_category_complications"
+            android:icon="@drawable/ic_watch_white_24dp">
+
+    </PreferenceScreen>
+
 </PreferenceScreen>

@@ -1,9 +1,7 @@
 package net.tuurlievens.fuzzyclockwatchface
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.PendingIntent
+import android.content.*
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -13,6 +11,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.preference.PreferenceManager
+import android.support.v4.graphics.ColorUtils
+import android.support.wearable.complications.ComplicationData
+import android.support.wearable.complications.ComplicationHelperActivity
+import android.support.wearable.complications.rendering.ComplicationDrawable
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
@@ -24,13 +26,15 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
-
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class FuzzyClockWatchface : CanvasWatchFaceService() {
+
+    // SETUP
 
     companion object {
         private val NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
@@ -62,6 +66,12 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private var mBurnInProtection: Boolean = false
         private var mAmbient: Boolean = false
         private val mUpdateTimeHandler: Handler = EngineHandler(this)
+
+        /* Maps active complication ids to the data and drawables that complication. Note: Data will only be
+         * present if the user has chosen a provider via the settings activity for the watch face.
+         */
+        private var activeComplicationData: HashMap<Int, ComplicationData> = HashMap()
+        private var activeComplicationDrawable: HashMap<Int, ComplicationDrawable> = HashMap()
 
         private var currentScreen: Int = 0
 
@@ -96,17 +106,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             super.onCreate(holder)
 
             loadSettings()
-
-            setWatchFaceStyle(
-                WatchFaceStyle.Builder(this@FuzzyClockWatchface)
-                    .setAcceptsTapEvents(true)
-                    .setStatusBarGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP)
-                    .setShowUnreadCountIndicator(notifState == "count")
-                    .setHideNotificationIndicator(notifState == "count" || notifState == "hidden")
-                    .setHideStatusBar(!showStatusbar)
-                    .build()
-            )
-
+            setupComplications()
             updateSettings()
         }
 
@@ -148,28 +148,57 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 color = Color.parseColor(foregroundColor)
             }
 
+            for (entry in activeComplicationDrawable.entries) {
+                val drawable = entry.value
+
+                drawable.setTextColorActive(Color.parseColor(foregroundColor))
+                drawable.setRangedValuePrimaryColorActive(Color.parseColor(foregroundColor))
+                drawable.setTitleColorActive(Color.parseColor(foregroundColor))
+                drawable.setIconColorActive(Color.parseColor(foregroundColor))
+
+                val secondaryColor = ColorUtils.setAlphaComponent(Color.parseColor(foregroundColor), 150)
+                drawable.setRangedValueSecondaryColorActive(secondaryColor)
+                drawable.setHighlightColorActive(secondaryColor)
+                drawable.setBorderColorActive(secondaryColor)
+            }
+
+            setWatchFaceStyle(
+                WatchFaceStyle.Builder(this@FuzzyClockWatchface)
+                    .setAcceptsTapEvents(true)
+                    .setStatusBarGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP)
+                    .setShowUnreadCountIndicator(notifState == "count")
+                    .setHideNotificationIndicator(notifState == "count" || notifState == "hidden")
+                    .setHideStatusBar(!showStatusbar)
+                    .build()
+            )
+
             invalidate()
         }
 
+        // DRAWING FACES
+
         override fun onDraw(canvas: Canvas, bounds: Rect) {
+            drawBackground(canvas, bounds)
             when(currentScreen) {
                 1 -> drawComplicationsScreen(canvas, bounds)
                 else -> drawWatchScreen(canvas, bounds)
             }
         }
 
-        private fun drawWatchScreen(canvas: Canvas, bounds: Rect) {
-
-            val calendar = Calendar.getInstance()
-            val padding = Math.round(dipToPixels(18))
-
-            // Draw the background.
+        private fun drawBackground(canvas: Canvas, bounds: Rect) {
             if (mAmbient) {
                 canvas.drawColor(Color.BLACK)
-
             } else {
                 canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), mBackgroundPaint)
             }
+        }
+
+        // TODO: optimize drawing of screens by preparing settings-bound calculations in updateSettings ?
+        // TODO: do bounds calculations in onSurfaceChanged ?
+
+        private fun drawWatchScreen(canvas: Canvas, bounds: Rect) {
+            val calendar = Calendar.getInstance()
+            val padding = Math.round(dipToPixels(18))
 
             // resize textsize when in ambient
             if ((showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient)) {
@@ -229,15 +258,45 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             canvas.restore()
         }
 
+        // TODO: complications not being drawn
         private fun drawComplicationsScreen(canvas: Canvas, bounds: Rect) {
-            // Draw the background.
-            if (mAmbient) {
-                canvas.drawColor(Color.BLACK)
 
-            } else {
-                canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), mBackgroundPaint)
+            for (entry in activeComplicationDrawable.entries) {
+                val drawable = entry.value
+                drawable.bounds = Complications.getPosition(entry.key, bounds)
+                drawable.draw(canvas)
             }
+
         }
+
+        // COMPLICATIONS
+
+        private fun setupComplications() {
+
+            for (id in Complications.IDS) {
+                val complicationDrawable = getDrawable(R.drawable.custom_complication_styles) as ComplicationDrawable
+                complicationDrawable.setContext(applicationContext)
+                activeComplicationDrawable[id] = complicationDrawable
+            }
+
+            setActiveComplications(*Complications.IDS)
+        }
+
+        override fun onComplicationDataUpdate(id: Int, data: ComplicationData) {
+
+            if (data.type == ComplicationData.TYPE_EMPTY) {
+                activeComplicationData.remove(id)
+                activeComplicationDrawable.remove(id)
+            } else {
+                activeComplicationData[id] = data
+                val drawable = activeComplicationDrawable[id]
+                drawable?.setComplicationData(data)
+            }
+
+            invalidate()
+        }
+
+        // HANDLE TAPS
 
         override fun onTapCommand(tapType: Int, x: Int, y: Int, eventTime: Long) {
             when (tapType) {
@@ -249,13 +308,73 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 }
                 WatchFaceService.TAP_TYPE_TAP -> {
                     // The user has completed the tap gesture.
-                    currentScreen = (currentScreen + 1) % 2
+
+                    // check if complication tapped
+                    if (currentScreen == 1) {
+                        val tappedComplicationId = getTappedComplicationId(x, y)
+                        if (tappedComplicationId != -1) {
+                            onComplicationTap(tappedComplicationId)
+                            return
+                        }
+                    }
+
+                    if (activeComplicationData.size > 0)
+                        currentScreen = (currentScreen + 1) % 2
                 }
             }
             invalidate()
         }
 
-        // GENERAL CLOCK SETTINGS
+        private fun getTappedComplicationId(x: Int, y: Int): Int {
+
+            val currentTimeMillis = System.currentTimeMillis()
+
+            for (entry in activeComplicationDrawable.entries) {
+                val complicationDrawable = entry.value
+                val complicationId = entry.key
+                val complicationData = activeComplicationData[complicationId]
+
+                if (complicationData != null
+                    && complicationData.isActive(currentTimeMillis)
+                    && complicationData.type != ComplicationData.TYPE_NOT_CONFIGURED
+                    && complicationData.type != ComplicationData.TYPE_EMPTY
+                ) {
+
+                    val complicationBoundingRect = complicationDrawable.bounds
+
+                    if (complicationBoundingRect.width() > 0) {
+                        if (complicationBoundingRect.contains(x, y)) {
+                            return complicationId
+                        }
+                    }
+                }
+            }
+            return -1
+        }
+
+        private fun onComplicationTap(complicationId: Int) {
+
+            val complicationData = activeComplicationData[complicationId]
+            if (complicationData != null) {
+
+                if (complicationData.tapAction != null) {
+                    try {
+                        complicationData.tapAction.send()
+                    } catch (e: PendingIntent.CanceledException) {
+                        Log.e("COMPLICATIONS", "onComplicationTap() tap action error: $e")
+                    }
+
+                } else if (complicationData.type == ComplicationData.TYPE_NO_PERMISSION) {
+                    // Watch face does not have permission to receive complication data, so launch
+                    // permission request.
+                    val componentName = ComponentName(applicationContext, FuzzyClockWatchface::class.java)
+                    val permissionRequestIntent = ComplicationHelperActivity.createPermissionRequestHelperIntent(applicationContext, componentName)
+                    startActivity(permissionRequestIntent);
+                }
+            }
+        }
+
+        // AMBIENT MODE
 
         override fun onTimeTick() {
             super.onTimeTick()
@@ -270,6 +389,13 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             mBurnInProtection = properties.getBoolean(
                 WatchFaceService.PROPERTY_BURN_IN_PROTECTION, false
             )
+
+            for (entry in activeComplicationDrawable.entries) {
+                val complicationDrawable = entry.value
+                complicationDrawable.setLowBitAmbient(mLowBitAmbient)
+                complicationDrawable.setBurnInProtection(mBurnInProtection)
+            }
+
         }
 
         override fun onAmbientModeChanged(inAmbientMode: Boolean) {
@@ -294,8 +420,15 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 mDateTextPaint.color = Color.parseColor(foregroundColor)
             }
 
+            for (entry in activeComplicationDrawable.entries) {
+                val complicationDrawable = entry.value
+                complicationDrawable.setInAmbientMode(mAmbient)
+            }
+
             updateTimer()
         }
+
+        // RECEIVERS & TIMERS
 
         // when your watchface has been picked
         override fun onVisibilityChanged(visible: Boolean) {
@@ -331,30 +464,17 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             super.onDestroy()
         }
 
-        /**
-         * Starts the [.mUpdateTimeHandler] timer if it should be running and isn't currently
-         * or stops it if it shouldn't be running but currently is.
-         */
         private fun updateTimer() {
-            // Whether the timer should be running depends on whether we're visible (as well as
-            // whether we're in ambient mode), so we may need to start or stop the timer.
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME)
             if (shouldTimerBeRunning()) {
                 mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME)
             }
         }
 
-        /**
-         * Returns whether the [.mUpdateTimeHandler] timer should be running. The timer should
-         * only run when we're visible and in interactive mode.
-         */
         private fun shouldTimerBeRunning(): Boolean {
             return isVisible && !isInAmbientMode
         }
 
-        /**
-         * Handle updating the time periodically in interactive mode.
-         */
         fun handleUpdateTimeMessage() {
             invalidate()
             if (shouldTimerBeRunning()) {
