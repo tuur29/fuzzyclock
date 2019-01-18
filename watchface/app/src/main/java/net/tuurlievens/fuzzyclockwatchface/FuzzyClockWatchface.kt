@@ -100,6 +100,10 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private var notifState = "hidden"
         private var showStatusbar = true
 
+        private var foreground: Int = 0
+        private var lighterforeground: Int = 0
+        private var complicationcolor: Int = 0
+
         // MAIN
 
         override fun onCreate(holder: SurfaceHolder) {
@@ -124,19 +128,19 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             showStatusbar = prefs.getBoolean("showStatusbar", showStatusbar)
             showDigitalClock = prefs.getString("showDigitalClock", showDigitalClock)
             simplerDate = prefs.getBoolean("simplerDate", simplerDate)
+
+            foreground = Color.parseColor(foregroundColor)
+            lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
+            complicationcolor = if (Color.red(foreground)*0.299 + Color.green(foreground)*0.587 + Color.blue(foreground)*0.114 > 186) {
+                ColorUtils.setAlphaComponent(Color.BLACK, 100)
+            } else {
+                ColorUtils.setAlphaComponent(Color.WHITE, 100)
+            }
         }
 
         private fun updateSettings() {
 
             val size = dipToPixels(fontSize)
-
-            val foreground = Color.parseColor(foregroundColor)
-            val lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
-            val complicationcolor = if (Color.red(foreground)*0.299 + Color.green(foreground)*0.587 + Color.blue(foreground)*0.114 > 186) {
-                ColorUtils.setAlphaComponent(Color.BLACK, 100)
-            } else {
-                ColorUtils.setAlphaComponent(Color.WHITE, 100)
-            }
 
             mBackgroundPaint = Paint().apply {
                 color = Color.parseColor(backgroundColor)
@@ -157,20 +161,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             }
 
             for (entry in activeComplicationDrawable.entries) {
-                val drawable = entry.value
-
-                drawable.setTextColorActive(foreground)
-                drawable.setRangedValuePrimaryColorActive(foreground)
-                drawable.setTitleColorActive(foreground)
-                drawable.setIconColorActive(foreground)
-
-                drawable.setRangedValueSecondaryColorActive(lighterforeground)
-                drawable.setHighlightColorActive(lighterforeground)
-
-                if (activeComplicationData[entry.key]?.type != ComplicationData.TYPE_RANGED_VALUE)
-                    drawable.setBorderColorActive(ColorUtils.setAlphaComponent(foreground, 100))
-
-                drawable.setBackgroundColorActive(complicationcolor)
+                applyComplicationSettings(entry.key, entry.value)
             }
 
             setWatchFaceStyle(
@@ -280,26 +271,51 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         // COMPLICATIONS
 
-        private fun setupComplications() {
+        private fun createComplication(id: Int, data: ComplicationData?) {
 
-            for (id in Complications.IDS) {
-                val complicationDrawable = getDrawable(R.drawable.custom_complication_styles) as ComplicationDrawable
-                complicationDrawable.setContext(applicationContext)
-                activeComplicationDrawable[id] = complicationDrawable
+            val drawable = (getDrawable(R.drawable.custom_complication_styles) as ComplicationDrawable).apply{
+                setContext(applicationContext)
             }
 
+            if (data != null) {
+                activeComplicationData[id] = data
+                drawable.setComplicationData(data)
+            } else {
+                activeComplicationData.remove(id)
+            }
+
+            applyComplicationSettings(id, drawable)
+            activeComplicationDrawable[id] = drawable
+        }
+
+        private fun setupComplications() {
+            for (id in Complications.IDS) {
+                createComplication(id, null)
+            }
             setActiveComplications(*Complications.IDS)
         }
 
-        override fun onComplicationDataUpdate(id: Int, data: ComplicationData) {
+        private fun applyComplicationSettings(id: Int, drawable: ComplicationDrawable) {
+            drawable.setTextColorActive(foreground)
+            drawable.setRangedValuePrimaryColorActive(foreground)
+            drawable.setTitleColorActive(foreground)
+            drawable.setIconColorActive(foreground)
 
+            drawable.setRangedValueSecondaryColorActive(lighterforeground)
+            drawable.setHighlightColorActive(lighterforeground)
+
+            if (activeComplicationData[id]?.type != ComplicationData.TYPE_RANGED_VALUE)
+                drawable.setBorderColorActive(ColorUtils.setAlphaComponent(foreground, 100))
+
+            drawable.setBackgroundColorActive(complicationcolor)
+        }
+
+        override fun onComplicationDataUpdate(id: Int, data: ComplicationData) {
             if (data.type == ComplicationData.TYPE_EMPTY) {
                 activeComplicationData.remove(id)
                 activeComplicationDrawable.remove(id)
             } else {
-                activeComplicationData[id] = data
-                val drawable = activeComplicationDrawable[id]
-                drawable?.setComplicationData(data)
+                createComplication(id, data)
             }
 
             invalidate()
@@ -351,6 +367,9 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
                     val complicationBoundingRect = complicationDrawable.bounds
 
+                    // Give a bit more space to go to the next screen
+                    complicationBoundingRect.inset(10, 10)
+
                     if (complicationBoundingRect.width() > 0) {
                         if (complicationBoundingRect.contains(x, y)) {
                             return complicationId
@@ -378,7 +397,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                     // permission request.
                     val componentName = ComponentName(applicationContext, FuzzyClockWatchface::class.java)
                     val permissionRequestIntent = ComplicationHelperActivity.createPermissionRequestHelperIntent(applicationContext, componentName)
-                    startActivity(permissionRequestIntent);
+                    startActivity(permissionRequestIntent)
                 }
             }
         }

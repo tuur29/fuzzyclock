@@ -30,7 +30,6 @@ class ComplicationSettingsActivity : Activity() {
     private var defaultAddComplicationDrawable: Drawable? = null
     private var backgroundComplicationDrawable: Drawable? = null
 
-
     private var background: Int = Color.BLACK
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,10 +42,10 @@ class ComplicationSettingsActivity : Activity() {
         background = Color.parseColor(prefs.getString("backgroundColor", "#ff000000"))
 
         // show complications
-        defaultAddComplicationDrawable = getDrawable(R.drawable.add_complication)
-        backgroundComplicationDrawable = getDrawable(R.drawable.added_complication)
-        selectedId = -1
+        defaultAddComplicationDrawable = getDrawable(R.drawable.ic_add_white_24dp)
+        backgroundComplicationDrawable = getDrawable(R.drawable.complication_circle)
 
+        selectedId = -1
         for (id in Complications.IDS) {
             complicationDrawable[id] = defaultAddComplicationDrawable
         }
@@ -58,16 +57,19 @@ class ComplicationSettingsActivity : Activity() {
         retrieveInitialComplicationsData()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setupCanvas() {
         val imageview = findViewById<ImageView>(R.id.canvas)
         bounds = Rect(imageview.left, imageview.top, imageview.right, imageview.bottom)
         val bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
         imageview.setImageBitmap(bitmap)
         canvas = Canvas(bitmap)
+    }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun listenToTouches() {
+        val imageview = findViewById<ImageView>(R.id.canvas)
         imageview.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
+            if (event.action == MotionEvent.ACTION_UP) {
                 val tappedComplicationId = getTappedComplicationId(event.x.toInt(), event.y.toInt())
                 if (tappedComplicationId != -1) {
                     launchComplicationHelperActivity(tappedComplicationId)
@@ -88,31 +90,25 @@ class ComplicationSettingsActivity : Activity() {
 
         for (entry in complicationDrawable) {
             val drawable = entry.value
-
-            // layer background circle together with selected icon
-            val final = LayerDrawable(arrayOf(
-                backgroundComplicationDrawable,
-                drawable
-            )).apply{
-                setLayerInset(1, 20,20,20,20)
-            }
-
-            final.bounds = Complications.getPosition(entry.key, bounds)
-            final.draw(canvas)
+            drawable?.bounds = Complications.getPosition(entry.key, bounds)
+            drawable?.draw(canvas)
         }
+
+        listenToTouches()
     }
 
     private fun getTappedComplicationId(x: Int, y: Int): Int {
 
         for (entry in complicationDrawable.entries) {
-            val complicationDrawable = entry.value
-            val complicationId = entry.key
+            val drawable = entry.value
+            val id = entry.key
 
-            val complicationBoundingRect = complicationDrawable?.bounds
+            val rect = drawable?.bounds
 
-            if (complicationBoundingRect!!.width() > 0) {
-                if (complicationBoundingRect.contains(x, y)) {
-                    return complicationId
+            if (rect!!.width() > 0) {
+                if (rect.contains(x, y)) {
+                    Log.i("COMPLICATION","Tapped $id being $rect at $x,$y")
+                    return id
                 }
             }
         }
@@ -128,16 +124,14 @@ class ComplicationSettingsActivity : Activity() {
 
     private fun retrieveInitialComplicationsData() {
 
-        val complicationIds = Complications.IDS
-
         providerInfoRetriever?.retrieveProviderInfo(
             object : ProviderInfoRetriever.OnProviderInfoReceivedCallback() {
                 override fun onProviderInfoReceived( watchFaceComplicationId: Int, complicationProviderInfo: ComplicationProviderInfo?) {
-                    updateComplicationViews(watchFaceComplicationId, complicationProviderInfo)
+                    updateComplicationViews(watchFaceComplicationId, complicationProviderInfo, (watchFaceComplicationId == Complications.count - 1))
                 }
             },
             ComponentName(applicationContext, FuzzyClockWatchface::class.java),
-            *complicationIds
+            *Complications.IDS
         )
     }
 
@@ -167,13 +161,23 @@ class ComplicationSettingsActivity : Activity() {
         }
     }
 
-    fun updateComplicationViews(id: Int, complicationProviderInfo: ComplicationProviderInfo?) {
+    fun updateComplicationViews(id: Int, complicationProviderInfo: ComplicationProviderInfo?, refresh: Boolean = true) {
 
-        if (complicationProviderInfo == null) {
-            complicationDrawable[id] = defaultAddComplicationDrawable
-        } else {
-            complicationDrawable[id] = complicationProviderInfo.providerIcon.loadDrawable(this)
+        // layer background circle together with selected icon
+        val final = LayerDrawable(arrayOf(
+            backgroundComplicationDrawable?.constantState?.newDrawable()?.mutate(),
+            if (complicationProviderInfo == null) {
+                defaultAddComplicationDrawable?.constantState?.newDrawable()?.mutate()
+            } else {
+                complicationProviderInfo.providerIcon.loadDrawable(this)
+            }
+        )).apply{
+            setLayerInset(1, 20,20,20,20)
         }
+
+        complicationDrawable[id] = final
+
+        if (!refresh) return
 
         draw()
     }
