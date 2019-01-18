@@ -193,12 +193,13 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             }
         }
 
-        // TODO: optimize drawing of screens by preparing settings-bound calculations in updateSettings ?
-        // TODO: do bounds calculations in onSurfaceChanged ?
+
+        // do these static calculations once
+        val preparedPadding = Math.round(dipToPixels(18))
+        val preparedAlpha = Math.round(255 * 0.65).toInt()
 
         private fun drawWatchScreen(canvas: Canvas, bounds: Rect) {
             val calendar = Calendar.getInstance()
-            val padding = Math.round(dipToPixels(18))
 
             // resize textsize when in ambient
             if ((showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient)) {
@@ -226,10 +227,10 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 "right" -> Layout.Alignment.ALIGN_OPPOSITE
                 else -> Layout.Alignment.ALIGN_CENTER
             }
-            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - padding*2, alignment, 1F, 1F, true)
+            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - preparedPadding*2, alignment, 1F, 1F, true)
 
             canvas.save()
-            val textXCoordinate = bounds.left.toFloat() + padding
+            val textXCoordinate = bounds.left.toFloat() + preparedPadding
 
             if (showDate == "always" || (showDate == "interactive" && !mAmbient)) {
 
@@ -237,8 +238,8 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 val loc = Locale(language)
                 val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 val date = format.format(calendar.time)
-                mDateTextPaint.alpha = Math.round(255 * 0.65).toInt()
-                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - padding*2, alignment, 1F, 1F, true)
+                mDateTextPaint.alpha = preparedAlpha
+                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - preparedPadding*2, alignment, 1F, 1F, true)
 
                 // draw date
                 val textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
