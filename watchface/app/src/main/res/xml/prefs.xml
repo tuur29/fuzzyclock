@@ -100,4 +100,14 @@
 
     </PreferenceScreen>
 
+    <!-- This needs to be a CheckBoxPreference because otherwise an empty PreferenceScreen opens as well -->
+    <CheckBoxPreference
+            android:key="empty"
+            android:summaryOn=""
+            android:summaryOff=""
+            android:title="@string/pref_category_complications"
+            android:icon="@drawable/ic_watch_white_24dp">
+
+    </CheckBoxPreference>
+
 </PreferenceScreen>
