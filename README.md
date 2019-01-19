@@ -1,4 +1,4 @@
-# FuzzyClock Apps
+# Fuzzy Clock Apps
 
 > A suite of Android apps with Fuzzy clock faces
 
