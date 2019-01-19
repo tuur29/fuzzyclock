@@ -133,6 +133,7 @@ class ComplicationSettingsActivity : Activity() {
     }
 
     override fun onDestroy() {
+        Toast.makeText(this, resources.getText(R.string.msg_secondscreen), Toast.LENGTH_SHORT).show()
         super.onDestroy()
 
         // Required to release retriever for active complication data.

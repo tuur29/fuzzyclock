@@ -13,7 +13,7 @@ You can find all releases and release notes here: https://github.com/tuur29/fuzz
 - Localized text (currently not many languages supported)
 - Battery indicator
 - Notification icons / counter
-- Settings like: fontsize, colors, alignment...
+- Settings like: fontsize, typeface, colors, alignment...
 - Supports Android 4.3+
 
 ## Other apps and more info

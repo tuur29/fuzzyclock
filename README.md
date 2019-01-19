@@ -16,7 +16,7 @@ Click on the app names to see more information about each app.
 
 | | | |
 |:-:|:-:|:-:|
-| <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_1.png" width="150"> | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwatchface) | For: Wear OS / Android Wear 1.5+ |
+| <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_1.png" width="150"> | [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwatchface) | For: Wear OS / Android Wear 2.0+ |
 
 ## ![Logo](https://raw.githubusercontent.com/tuur29/fuzzyclock/master/widget/app/src/main/res/mipmap-mdpi/ic_launcher.png "Logo") [Fuzzy Clock Widget](./widget)
 

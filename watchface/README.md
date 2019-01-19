@@ -5,15 +5,16 @@ You can find all releases and release notes here: https://github.com/tuur29/fuzz
 
 | | |
 |:-:|:-:|
-| [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwatchface) | For: Wear OS / Android Wear 1.5+ |
+| [![Google Play Store badge](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=net.tuurlievens.fuzzyclockwatchface) | For: Wear OS / Android Wear 2.0+ |
 
 <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_1.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_2.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_3.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_settings_1.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_settings_2.png" height="300"> <img alt="Preview" title="Preview" src="https://raw.githubusercontent.com/tuur29/fuzzyclock/master/assets/screenshots/watch_settings_3.png" height="300">
 
 ## Features
+- A second screen with 7 complications
 - Localized text (currently not many languages supported)
 - Show notification count or a simple dot
 - Settings like: fontsize, colors, alignment...
-- Supports Wear OS / Android Wear 1.5+
+- Supports Wear OS / Android Wear 2.0+
 
 ## Other apps and more info
 There's also a [Fuzzy Clock Widget](../widget) and [Fuzzy Clock Screensaver](../screensaver) available!

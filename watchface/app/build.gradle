@@ -10,8 +10,8 @@ android {
         applicationId "net.tuurlievens.fuzzyclockwatchface"
         minSdkVersion 25
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 100100
+        versionName "1.1"
         multiDexEnabled true
     }
     buildTypes {
