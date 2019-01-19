@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -110,7 +111,9 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             super.onCreate(holder)
 
             loadSettings()
-            setupComplications()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                setupComplications()
+            }
             updateSettings()
         }
 
@@ -335,16 +338,19 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                     // The user has completed the tap gesture.
 
                     // check if complication tapped
-                    if (currentScreen == 1) {
-                        val tappedComplicationId = getTappedComplicationId(x, y)
-                        if (tappedComplicationId != -1) {
-                            onComplicationTap(tappedComplicationId)
-                            return
-                        }
-                    }
 
-                    if (activeComplicationData.size > 0)
-                        currentScreen = (currentScreen + 1) % 2
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                        if (currentScreen == 1) {
+                            val tappedComplicationId = getTappedComplicationId(x, y)
+                            if (tappedComplicationId != -1) {
+                                onComplicationTap(tappedComplicationId)
+                                return
+                            }
+                        }
+
+                        if (activeComplicationData.size > 0)
+                            currentScreen = (currentScreen + 1) % 2
+                    }
                 }
             }
             invalidate()

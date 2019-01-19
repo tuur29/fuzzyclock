@@ -3,7 +3,9 @@ package net.tuurlievens.fuzzyclockwatchface
 import android.os.Bundle
 import preference.WearPreferenceActivity
 import android.content.Intent
+import android.os.Build
 import android.support.wearable.view.WearableListView
+import android.widget.Toast
 
 
 class WatchfaceSettingsActivity : WearPreferenceActivity() {
@@ -29,8 +31,12 @@ class WatchfaceSettingsActivity : WearPreferenceActivity() {
         // show toast in case of showStatusbar and notifState that says you need to reboot etc...
 
         if (viewHolder?.position == 3) {
-            val intent = Intent(this, ComplicationSettingsActivity::class.java)
-            startActivity(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                val intent = Intent(this, ComplicationSettingsActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, resources.getText(R.string.msg_notsupported), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

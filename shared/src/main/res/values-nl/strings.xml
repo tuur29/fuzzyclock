@@ -41,6 +41,7 @@
 
     <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
     <string name="msg_editbtn">Druk op de rechterbovenhoek van de widget om hem aan te passen</string>
+    <string name="msg_notsupported">Wordt niet ondersteund op deze Android versie</string>
 
     <string-array name="pref_list_language_titles">
         <item>Afhankelijk van apparaatinstellingen</item>

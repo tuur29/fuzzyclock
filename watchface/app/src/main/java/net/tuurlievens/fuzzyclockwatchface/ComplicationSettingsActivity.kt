@@ -90,8 +90,25 @@ class ComplicationSettingsActivity : Activity() {
 
         for (entry in complicationDrawable) {
             val drawable = entry.value
-            drawable?.bounds = Complications.getPosition(entry.key, bounds)
-            drawable?.draw(canvas)
+            if (drawable != null) {
+                val bounds = Complications.getPosition(entry.key, bounds)
+
+                // check if is not square and resize it if so (otherwise app icon gets stretched)
+                if (bounds.width() - bounds.height() > 4) {
+                    if (bounds.width() > bounds.height()) {
+                        val newstart = bounds.centerX() - bounds.height() / 2
+                        bounds.left = newstart
+                        bounds.right = newstart + bounds.height()
+                    } else {
+                        val newstart = bounds.centerY() - bounds.width() / 2
+                        bounds.top = newstart
+                        bounds.bottom = newstart + bounds.width()
+                    }
+                }
+
+                drawable.bounds = bounds
+                drawable.draw(canvas)
+            }
         }
 
         listenToTouches()

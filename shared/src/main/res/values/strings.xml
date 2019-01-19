@@ -41,6 +41,7 @@
 
     <string name="msg_notificationaccess">You have to enable Notification Access for this feature to work</string>
     <string name="msg_editbtn">Press the top-right corner of the widget to edit it</string>
+    <string name="msg_notsupported">Not supported on this Android version</string>
 
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>
