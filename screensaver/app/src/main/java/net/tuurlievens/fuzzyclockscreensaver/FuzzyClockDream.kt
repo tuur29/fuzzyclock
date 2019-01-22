@@ -27,6 +27,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
 import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
+import java.lang.IllegalArgumentException
 
 
 class FuzzyClockDream : DreamService() {
@@ -116,11 +117,11 @@ class FuzzyClockDream : DreamService() {
     private fun loadSettings() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        maxTranslationDisplacement = prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble()
-        updateSeconds = prefs.getString("updateSeconds", updateSeconds.toString()).toDouble()
+        maxTranslationDisplacement = try { prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble() } catch (e:IllegalArgumentException) { maxTranslationDisplacement }
+        updateSeconds = try { prefs.getString("updateSeconds", updateSeconds.toString()).toDouble() } catch (e:IllegalArgumentException) { updateSeconds }
         language = prefs.getString("language", language)
         fontfamily = prefs.getString("fontfamily", fontfamily)
-        fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
+        fontSize = try { prefs.getString("fontSize", fontSize.toString()).toInt() } catch (e:IllegalArgumentException) { fontSize }
         textAlignment = prefs.getString("textAlignment", textAlignment)
         foregroundColor = "#" + Integer.toHexString(prefs.getInt("foregroundColor", 0xFFFFFFFF.toInt()))
         backgroundColor = "#" + Integer.toHexString(prefs.getInt("backgroundColor", 0xFF000000.toInt()))

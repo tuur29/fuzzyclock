@@ -59,8 +59,8 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
         val property = instance::class.memberProperties.find { it.name == propertyName }
         if (property is KMutableProperty<*>) {
             val newValue = when (property.returnType.javaType.toString()) {
-                "int" -> value.toString().toInt()
-                "boolean" -> value.toString().toBoolean()
+                "int" -> try { value.toString().toInt() } catch (e:IllegalArgumentException) { readPropery<Int>(WidgetData.default, propertyName) }
+                "boolean" -> try { value.toString().toBoolean() } catch (e:IllegalArgumentException) { readPropery<Boolean>(WidgetData.default, propertyName) }
                 else -> value.toString()
             }
             property.setter.call(instance, newValue)
