@@ -33,7 +33,7 @@
                 android:positiveButtonText="@null"/>
 
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-                android:key="foregroundColor"
+                android:key="foregroundColorInt"
                 android:title="@string/pref_title_foregroundColor"
                 android:defaultValue="@android:color/white"
                 cpv_dialogTitle="@string/pref_title_foregroundColor"

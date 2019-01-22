@@ -54,7 +54,7 @@ class UpdateWidgetService : JobIntentService() {
                 else -> RemoteViews(pName, R.layout.fuzzy_clock_widget_center)
             }
 
-            val parsedForegroundColor = "#" + Integer.toHexString(prefs.foregroundColor)
+            val parsedForegroundColor = "#" + Integer.toHexString(prefs.foregroundColorInt)
 
             // update clock
             val hour = calendar.get(Calendar.HOUR_OF_DAY)

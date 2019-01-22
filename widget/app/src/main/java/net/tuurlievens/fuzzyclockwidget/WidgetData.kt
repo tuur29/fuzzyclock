@@ -4,7 +4,7 @@ class WidgetData(
     var language: String = "default",
     var fontSize: Int = 26,
     var textAlignment: String = "center",
-    var foregroundColor: Int = 0xFFFFFFFF.toInt(),
+    var foregroundColorInt: Int = 0xFFFFFFFF.toInt(),
     var removeLineBreak: Boolean = false,
     var showDate: Boolean = true,
     var simplerDate: Boolean = true
@@ -16,7 +16,7 @@ class WidgetData(
         return language.toString() + ";" +
                 fontSize.toString() + ";" +
                 textAlignment.toString() + ";" +
-                foregroundColor.toString() + ";" +
+                foregroundColorInt.toString() + ";" +
                 removeLineBreak.toString() + ";" +
                 showDate.toString() + ";" +
                 simplerDate.toString()
@@ -29,11 +29,18 @@ class WidgetData(
         fun fromDataString(data: String) : WidgetData {
             val arr = data.split(";")
             val defaults = WidgetData()
+
+            // for compatibility from 1.0 to 1.1
+            var element3Temp = arr.elementAtOrElse(3) { defaults.foregroundColorInt.toString() }
+            if (element3Temp.contains("#")) {
+                element3Temp = defaults.foregroundColorInt.toString()
+            }
+
             return WidgetData(
                 arr.elementAtOrElse(0) { defaults.language.toString() }.toString(),
                 arr.elementAtOrElse(1) { defaults.fontSize.toString() }.toInt(),
                 arr.elementAtOrElse(2) { defaults.textAlignment.toString() }.toString(),
-                arr.elementAtOrElse(3) { defaults.foregroundColor.toString() }.toInt(),
+                element3Temp.toInt(),
                 arr.elementAtOrElse(4) { defaults.removeLineBreak.toString() }.toBoolean(),
                 arr.elementAtOrElse(5) { defaults.showDate.toString() }.toBoolean(),
                 arr.elementAtOrElse(6) { defaults.simplerDate.toString() }.toBoolean()
