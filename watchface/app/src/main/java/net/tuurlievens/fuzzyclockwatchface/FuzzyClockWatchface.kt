@@ -93,7 +93,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private var textAlignment = "center"
         private var foregroundColor = "#ffffff"
         private var backgroundColor = "#000000"
-        private var showDate = "always"
+        private var showDate = "interactive"
         private var showDigitalClock = "never"
         private var simplerDate = true
 
