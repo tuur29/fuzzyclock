@@ -90,9 +90,11 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         // SETTINGS
         private var language = "en"
         private var fontSize = 26
+        private var shadowSize = 4
         private var textAlignment = "center"
         private var foregroundColor = "#ffffff"
         private var backgroundColor = "#000000"
+        private var shadowColor = "#000000"
         private var showDate = "interactive"
         private var showDigitalClock = "never"
         private var simplerDate = true
@@ -123,9 +125,11 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             val pickedLanguage = prefs.getString("language", language)
             language = (if (pickedLanguage == "default") Locale.getDefault().language else pickedLanguage) ?: language
             fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
+            shadowSize = prefs.getString("shadowSize", shadowSize.toString()).toInt()
             textAlignment = prefs.getString("textAlignment", textAlignment)
             foregroundColor = prefs.getString("foregroundColor", foregroundColor)
             backgroundColor = prefs.getString("backgroundColor", backgroundColor)
+            shadowColor = prefs.getString("shadowColor", shadowColor)
             showDate = prefs.getString("showDate", showDate)
             notifState = prefs.getString("notifState", notifState)
             showStatusbar = prefs.getBoolean("showStatusbar", showStatusbar)
@@ -154,6 +158,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 color = foreground
                 isAntiAlias = true
                 textSize = size
+                setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
             }
 
             mDateTextPaint = TextPaint().apply {
@@ -161,6 +166,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 isAntiAlias = true
                 textSize = Math.round(size * 0.65).toFloat()
                 color = lighterforeground
+                setShadowLayer(shadowSize.toFloat(), 0F, 0F, ColorUtils.setAlphaComponent(Color.parseColor(shadowColor), 150))
             }
 
             for (entry in activeComplicationDrawable.entries) {

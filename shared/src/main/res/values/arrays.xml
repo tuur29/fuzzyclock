@@ -50,6 +50,23 @@
         <item>32</item>
     </string-array>
 
+    <string-array name="pref_list_shadowSize_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
     <string-array name="pref_list_notifState_values">
         <item>visible</item>
         <item>count</item>

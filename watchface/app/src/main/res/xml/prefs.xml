@@ -68,6 +68,22 @@
                 android:entryValues="@array/pref_list_color_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
+        <ListPreference
+                android:key="shadowSize"
+                android:title="@string/pref_title_shadowSize"
+                android:defaultValue="4"
+                android:entries="@array/pref_list_shadowSize_values"
+                android:entryValues="@array/pref_list_shadowSize_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
+        <ListPreference
+                android:key="shadowColor"
+                android:title="@string/pref_title_shadowColor"
+                android:defaultValue="#000000"
+                android:entries="@array/pref_list_color_titles"
+                android:entryValues="@array/pref_list_color_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
     </PreferenceScreen>
 
     <PreferenceScreen
