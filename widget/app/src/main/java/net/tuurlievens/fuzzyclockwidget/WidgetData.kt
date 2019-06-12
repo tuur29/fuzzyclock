@@ -7,7 +7,8 @@ class WidgetData(
     var foregroundColorInt: Int = 0xFFFFFFFF.toInt(),
     var removeLineBreak: Boolean = false,
     var showDate: Boolean = true,
-    var simplerDate: Boolean = true
+    var simplerDate: Boolean = true,
+    var showShadow: Boolean = true
 ) {
 
     // Never change the order of these datastring parsers! (compatiblity)
@@ -19,7 +20,8 @@ class WidgetData(
                 foregroundColorInt.toString() + ";" +
                 removeLineBreak.toString() + ";" +
                 showDate.toString() + ";" +
-                simplerDate.toString()
+                simplerDate.toString() + ";" +
+                showShadow.toString()
     }
 
     companion object {
@@ -43,7 +45,8 @@ class WidgetData(
                 element3Temp.toInt(),
                 arr.elementAtOrElse(4) { defaults.removeLineBreak.toString() }.toBoolean(),
                 arr.elementAtOrElse(5) { defaults.showDate.toString() }.toBoolean(),
-                arr.elementAtOrElse(6) { defaults.simplerDate.toString() }.toBoolean()
+                arr.elementAtOrElse(6) { defaults.simplerDate.toString() }.toBoolean(),
+                arr.elementAtOrElse(7) { defaults.showShadow.toString() }.toBoolean()
             )
         }
     }

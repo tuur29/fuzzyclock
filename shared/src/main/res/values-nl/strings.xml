@@ -40,6 +40,7 @@
     <string name="pref_title_showDigitalClock">Toon digitale klok</string>
     <string name="pref_title_fontfamily">Lettertype</string>
     <string name="pref_title_useDateFont">Gebruik lettertype voor datum</string>
+    <string name="pref_title_showShadow">Toon schaduw</string>
 
     <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
     <string name="msg_editbtn">Druk op de rechterbovenhoek van de widget om hem aan te passen</string>

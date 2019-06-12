@@ -20,7 +20,8 @@
                   android:textColor="#ffffff"
                   android:ellipsize="none"
                   android:maxLines="4"
-                  android:scrollHorizontally="false"/>
+                  android:scrollHorizontally="false"
+        />
 
         <TextView android:id="@+id/datetext"
                   android:layout_width="match_parent"
@@ -31,7 +32,36 @@
                   android:ellipsize="none"
                   android:singleLine="true"
                   android:alpha="0.65"
-                  android:scrollHorizontally="false"/>
+                  android:scrollHorizontally="false"
+        />
+
+        <!--With shadows-->
+        <TextView android:id="@+id/clocktextshadow"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="viewStart"
+                  android:textSize="36sp"
+                  android:textColor="#ffffff"
+                  android:ellipsize="none"
+                  android:maxLines="4"
+                  android:scrollHorizontally="false"
+                  android:shadowColor="@android:color/black"
+                  android:shadowRadius="6"
+        />
+
+        <TextView android:id="@+id/datetextshadow"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="viewStart"
+                  android:textSize="24sp"
+                  android:textColor="#a6a6a6"
+                  android:ellipsize="none"
+                  android:singleLine="true"
+                  android:alpha="0.65"
+                  android:scrollHorizontally="false"
+                  android:shadowColor="@android:color/black"
+                  android:shadowRadius="6"
+        />
 
     </LinearLayout>
 

@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CalendarContract
+import android.view.View
 import androidx.core.app.JobIntentService
 
 
@@ -39,7 +40,6 @@ class UpdateWidgetService : JobIntentService() {
 
         var pName: String = "net.tuurlievens.fuzzyclockwidget"
 
-
         // UPDATE widget view
 
         internal fun updateWidget(context: Context, manager: AppWidgetManager, id: Int) {
@@ -56,40 +56,63 @@ class UpdateWidgetService : JobIntentService() {
 
             val parsedForegroundColor = "#" + Integer.toHexString(prefs.foregroundColorInt)
 
+            // get correct textviews depending on shadow setting and hide other
+            val clockTextID = when(prefs.showShadow) {
+                true -> {
+                    view.setViewVisibility(R.id.clocktext, View.GONE)
+                    R.id.clocktextshadow
+                }
+                else -> {
+                    view.setViewVisibility(R.id.clocktextshadow, View.GONE)
+                    R.id.clocktext
+                }
+            }
+            view.setViewVisibility(clockTextID, View.VISIBLE)
+            val dateTextID = when(prefs.showShadow) {
+                true -> {
+                    view.setViewVisibility(R.id.datetext, View.GONE)
+                    R.id.datetextshadow
+                }
+                else -> {
+                    view.setViewVisibility(R.id.datetextshadow, View.GONE)
+                    R.id.datetext
+                }
+            }
+            view.setViewVisibility(dateTextID, View.VISIBLE)
+
             // update clock
             val hour = calendar.get(Calendar.HOUR_OF_DAY)
             val min = calendar.get(Calendar.MINUTE)
 
-            view.setTextViewTextSize(R.id.clocktext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
-            view.setTextColor(R.id.clocktext, Color.parseColor(parsedForegroundColor))
-
+            view.setTextViewTextSize(clockTextID, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
+            view.setTextColor(clockTextID, Color.parseColor(parsedForegroundColor))
 
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
             var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
             if (prefs.removeLineBreak) {
                text = text.replace("\n", " ")
             }
-            view.setTextViewText(R.id.clocktext, text)
+            view.setTextViewText(clockTextID, text)
 
             // update date
             if (prefs.showDate) {
                 val loc = Locale(pickedLanguage)
                 val format = if (prefs.simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
-                view.setTextViewText(R.id.datetext, format.format(calendar.time))
-                view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize * 0.65F)
-                view.setTextColor(R.id.datetext, Color.parseColor(parsedForegroundColor))
+                view.setTextViewText(dateTextID, format.format(calendar.time))
+                view.setTextViewTextSize(dateTextID, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize * 0.65F)
+                view.setTextColor(dateTextID, Color.parseColor(parsedForegroundColor))
             } else {
-                view.setTextViewText(R.id.datetext, "")
-                view.setTextViewTextSize(R.id.datetext, TypedValue.COMPLEX_UNIT_SP, 0F)
+                view.setTextViewText(dateTextID, "")
+                view.setTextViewTextSize(dateTextID, TypedValue.COMPLEX_UNIT_SP, 0F)
             }
 
             // set widget click listeners
             val calendarPackageName = getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)
             val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
             if (calendarPackageName != "")
-                view.setOnClickPendingIntent(R.id.datetext, getPendingIntentByPackageName(context, calendarPackageName))
+                view.setOnClickPendingIntent(dateTextID, getPendingIntentByPackageName(context, calendarPackageName))
             if (clockPackageName != "")
-                view.setOnClickPendingIntent(R.id.clocktext, getPendingIntentByPackageName(context, clockPackageName))
+                view.setOnClickPendingIntent(clockTextID, getPendingIntentByPackageName(context, clockPackageName))
             view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
 
             manager.updateAppWidget(id, view)

@@ -44,6 +44,11 @@
                 android:title="@string/pref_title_removeLineBreak"
                 android:defaultValue="false"/>
 
+        <SwitchPreferenceCompat
+                android:key="showShadow"
+                android:title="@string/pref_title_showShadow"
+                android:defaultValue="true"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_working">

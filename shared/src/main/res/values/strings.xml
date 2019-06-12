@@ -40,6 +40,7 @@
     <string name="pref_title_showDigitalClock">Show digital clock</string>
     <string name="pref_title_fontfamily">Typeface</string>
     <string name="pref_title_useDateFont">Use typeface for date</string>
+    <string name="pref_title_showShadow">Show shadow</string>
 
     <string name="msg_notificationaccess">You have to enable Notification Access for this feature to work</string>
     <string name="msg_editbtn">Press the top-right corner of the widget to edit it</string>
