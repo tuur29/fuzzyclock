@@ -74,6 +74,23 @@
                 cpv_dialogTitle="@string/pref_title_backgroundColor"
                 cpv_showAlphaSlider="true"/>
 
+        <EditTextPreference
+                android:key="shadowSize"
+                android:title="@string/pref_title_shadowSize"
+                android:defaultValue="6"
+                android:maxLength="2"
+                android:selectAllOnFocus="true"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLines="1"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+                android:key="shadowColor"
+                android:title="@string/pref_title_shadowColor"
+                android:defaultValue="@android:color/black"
+                cpv_dialogTitle="@string/pref_title_shadowColor"
+                cpv_showAlphaSlider="false"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_working">

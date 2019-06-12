@@ -47,9 +47,11 @@ class FuzzyClockDream : DreamService() {
     private var language = "default"
     private var fontfamily = ""
     private var fontSize = 36
+    private var shadowSize = 6
     private var textAlignment = "center"
     private var foregroundColor = "#ffffffff"
     private var backgroundColor = "#ff000000"
+    private var shadowColor = "#ff000000"
     private var removeLineBreak = false
     private var showDate = true
     private var brightScreen = false
@@ -122,9 +124,11 @@ class FuzzyClockDream : DreamService() {
         language = prefs.getString("language", language)
         fontfamily = prefs.getString("fontfamily", fontfamily)
         fontSize = try { prefs.getString("fontSize", fontSize.toString()).toInt() } catch (e:IllegalArgumentException) { fontSize }
+        shadowSize = try { prefs.getString("shadowSize", shadowSize.toString()).toInt() } catch (e:IllegalArgumentException) { shadowSize }
         textAlignment = prefs.getString("textAlignment", textAlignment)
         foregroundColor = "#" + Integer.toHexString(prefs.getInt("foregroundColor", 0xFFFFFFFF.toInt()))
         backgroundColor = "#" + Integer.toHexString(prefs.getInt("backgroundColor", 0xFF000000.toInt()))
+        shadowColor = "#" + Integer.toHexString(prefs.getInt("shadowColor", 0xFF000000.toInt()))
         removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
         showDate = prefs.getBoolean("showDate", showDate)
         brightScreen = prefs.getBoolean("brightScreen", brightScreen)
@@ -145,6 +149,10 @@ class FuzzyClockDream : DreamService() {
         findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
         findViewById<TextView>(R.id.datetext).setTextColor(Color.parseColor(foregroundColor))
         findViewById<TextView>(R.id.notificationcount).setTextColor(Color.parseColor(foregroundColor))
+
+        findViewById<TextView>(R.id.clocktext).setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
+        findViewById<TextView>(R.id.datetext).setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
+        findViewById<TextView>(R.id.notificationcount).setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
 
         val batt = findViewById<View>(R.id.battery);
         val gd = batt.background.current as GradientDrawable

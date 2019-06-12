@@ -47,6 +47,7 @@ class DreamSettingsActivity : FragmentActivity() {
             bindPreferenceSummaryToValue(findPreference("fontSize"))
             bindPreferenceSummaryToValue(findPreference("textAlignment"))
             bindPreferenceSummaryToValue(findPreference("notifState"))
+            bindPreferenceSummaryToValue(findPreference("shadowSize"))
         }
 
         private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->
