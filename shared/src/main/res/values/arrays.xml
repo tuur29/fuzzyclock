@@ -98,4 +98,30 @@
         <item>comfortaa</item>
     </string-array>
 
+    <string-array name="pref_list_typeface_values">
+        <item>SANS_SERIF</item>
+        <item>SERIF</item>
+        <item>MONOSPACE</item>
+    </string-array>
+
+    <string-array name="pref_list_typestyle_values">
+        <item>NORMAL</item>
+        <item>BOLD</item>
+        <item>ITALIC</item>
+        <item>BOLD_ITALIC</item>
+    </string-array>
+
+    <string-array name="pref_list_typeface_names">
+        <item>Sans serif</item>
+        <item>Serif</item>
+        <item>Monospace</item>
+    </string-array>
+
+    <string-array name="pref_list_typestyle_names">
+        <item>Normal</item>
+        <item>Bold</item>
+        <item>Italic</item>
+        <item>Bold italic</item>
+    </string-array>
+
 </resources>

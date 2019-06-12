@@ -38,7 +38,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
     // SETUP
 
     companion object {
-        private val NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
         private const val INTERACTIVE_UPDATE_RATE_MS = 30*1000
         private const val MSG_UPDATE_TIME = 0
     }
@@ -96,8 +95,10 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         private var backgroundColor = "#000000"
         private var shadowColor = "#000000"
         private var showDate = "interactive"
+        private var font = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
         private var showDigitalClock = "never"
         private var simplerDate = true
+        private var useDateFont = false
 
         // the following settings only get updated after watchface restarts
         private var notifState = "hidden"
@@ -135,6 +136,24 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             showStatusbar = prefs.getBoolean("showStatusbar", showStatusbar)
             showDigitalClock = prefs.getString("showDigitalClock", showDigitalClock)
             simplerDate = prefs.getBoolean("simplerDate", simplerDate)
+            useDateFont = prefs.getBoolean("useDateFont", useDateFont)
+
+            val typeface = prefs.getString("typeface", "")
+            val typestyle = prefs.getString("typestyle", "")
+            if (typeface != "" && typestyle != "") {
+                font = Typeface.create(
+                    when(typeface) {
+                        "SERIF" -> Typeface.SERIF
+                        "MONOSPACE" -> Typeface.MONOSPACE
+                        else -> Typeface.SANS_SERIF
+                    },
+                    when(typestyle) {
+                        "BOLD" -> Typeface.BOLD
+                        "ITALIC" -> Typeface.ITALIC
+                        "BOLD_ITALIC" -> Typeface.BOLD_ITALIC
+                        else -> Typeface.NORMAL
+                    })
+            }
 
             foreground = Color.parseColor(foregroundColor)
             lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
@@ -154,7 +173,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             }
 
             mClockTextPaint = TextPaint().apply {
-                typeface = NORMAL_TYPEFACE
+                typeface = font
                 color = foreground
                 isAntiAlias = true
                 textSize = size
@@ -162,7 +181,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             }
 
             mDateTextPaint = TextPaint().apply {
-                typeface = NORMAL_TYPEFACE
+                typeface = if (!useDateFont) { Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL) } else { font }
                 isAntiAlias = true
                 textSize = Math.round(size * 0.65).toFloat()
                 color = lighterforeground

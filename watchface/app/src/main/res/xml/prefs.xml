@@ -69,6 +69,30 @@
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
+                android:key="typeface"
+                android:title="@string/pref_title_fontfamily"
+                android:defaultValue="SANS_SERIF"
+                android:entries="@array/pref_list_typeface_names"
+                android:entryValues="@array/pref_list_typeface_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
+        <ListPreference
+                android:key="typestyle"
+                android:title="@string/pref_title_typestyle"
+                android:defaultValue="NORMAL"
+                android:entries="@array/pref_list_typestyle_names"
+                android:entryValues="@array/pref_list_typestyle_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
+        <CheckBoxPreference
+                android:key="useDateFont"
+                android:title="@string/pref_title_useDateFont"
+                android:summaryOn="@string/visible"
+                android:summaryOff="@string/hidden"
+                app:wear_iconOn="@drawable/ic_check_white_24dp"
+                android:defaultValue="false"/>
+
+        <ListPreference
                 android:key="shadowSize"
                 android:title="@string/pref_title_shadowSize"
                 android:defaultValue="4"
