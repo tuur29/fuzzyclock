@@ -63,6 +63,7 @@ class UpdateWidgetService : JobIntentService() {
             view.setTextViewTextSize(R.id.clocktext, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
             view.setTextColor(R.id.clocktext, Color.parseColor(parsedForegroundColor))
 
+
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
             var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
             if (prefs.removeLineBreak) {
@@ -83,8 +84,12 @@ class UpdateWidgetService : JobIntentService() {
             }
 
             // set widget click listeners
-            view.setOnClickPendingIntent(R.id.datetext, getPendingIntentByPackageName(context, getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)))
-            view.setOnClickPendingIntent(R.id.clocktext, getPendingIntentByPackageName(context, getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)))
+            val calendarPackageName = getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)
+            val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
+            if (calendarPackageName != "")
+                view.setOnClickPendingIntent(R.id.datetext, getPendingIntentByPackageName(context, calendarPackageName))
+            if (clockPackageName != "")
+                view.setOnClickPendingIntent(R.id.clocktext, getPendingIntentByPackageName(context, clockPackageName))
             view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
 
             manager.updateAppWidget(id, view)
@@ -115,15 +120,19 @@ class UpdateWidgetService : JobIntentService() {
         }
 
         private fun getDefaultPackageName(context: Context, action: String, data: Uri? = null): String {
-            val localPackageManager = context.packageManager
-            val intent = Intent(action)
-            if (data != null) {
-                intent.data = data
+            try {
+                val localPackageManager = context.packageManager
+                val intent = Intent(action)
+                if (data != null) {
+                    intent.data = data
+                }
+                return localPackageManager.resolveActivity(
+                    intent,
+                    PackageManager.MATCH_DEFAULT_ONLY
+                ).activityInfo.packageName
+            } catch (e: Exception) {
+                return ""
             }
-            return localPackageManager.resolveActivity(
-                intent,
-                PackageManager.MATCH_DEFAULT_ONLY
-            ).activityInfo.packageName
         }
     }
 
