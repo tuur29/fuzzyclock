@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import java.util.*
 import android.util.Log
 
@@ -21,7 +20,7 @@ class FuzzyClockWidget : AppWidgetProvider() {
 
         // update widgets
         for (appWidgetId in appWidgetIds) {
-             UpdateWidgetService.updateWidget(context, appWidgetManager, appWidgetId)
+            UpdateWidgetService.updateWidget(context, appWidgetManager, appWidgetId)
         }
     }
 

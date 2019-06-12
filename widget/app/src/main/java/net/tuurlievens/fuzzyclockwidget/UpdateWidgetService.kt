@@ -106,7 +106,18 @@ class UpdateWidgetService : JobIntentService() {
                 view.setTextViewTextSize(dateTextID, TypedValue.COMPLEX_UNIT_SP, 0F)
             }
 
-            // set widget click listeners
+            // refresh widget on empty space click
+            val updateIntent = Intent(context, FuzzyClockWidget::class.java)
+            updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+            view.setOnClickPendingIntent(R.id.root, PendingIntent.getBroadcast(
+                context,
+                id,
+                updateIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            ))
+
+            // open clock and calendar on text click
             val calendarPackageName = getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)
             val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
             if (calendarPackageName != "")
