@@ -5,9 +5,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.*
+import net.tuurlievens.fuzzyclock.PreferenceValidator
 
 
 class DreamSettingsActivity : FragmentActivity() {
@@ -52,38 +54,55 @@ class DreamSettingsActivity : FragmentActivity() {
 
         private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->
 
-            var stringValue = value.toString()
+            if (PreferenceValidator.validate(preference.key, value.toString())) {
+                var stringValue = value.toString()
 
-            // check notification access permissions and request them
-            if (preference.key == "notifState" && value != "hidden") {
-                val allowedPackages = NotificationManagerCompat.getEnabledListenerPackages(activity!!.applicationContext)
-                if (!allowedPackages.contains(activity?.applicationContext?.packageName)) {
-                    val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    activity?.applicationContext?.startActivity(intent)
-                    Toast.makeText(activity?.applicationContext, activity?.applicationContext?.getString(R.string.msg_notificationaccess), Toast.LENGTH_SHORT).show()
-                    stringValue = "false"
+                // check notification access permissions and request them
+                if (preference.key == "notifState" && value != "hidden") {
+                    val allowedPackages =
+                        NotificationManagerCompat.getEnabledListenerPackages(activity!!.applicationContext)
+                    if (!allowedPackages.contains(activity?.applicationContext?.packageName)) {
+                        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        activity?.applicationContext?.startActivity(intent)
+                        Toast.makeText(
+                            activity?.applicationContext,
+                            activity?.applicationContext?.getString(R.string.msg_notificationaccess),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        stringValue = "false"
+                    }
                 }
-            }
 
-            if (preference is ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                val index = preference.findIndexOfValue(stringValue)
+                if (preference is ListPreference) {
+                    // For list preferences, look up the correct display value in
+                    // the preference's 'entries' list.
+                    val index = preference.findIndexOfValue(stringValue)
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                    if (index >= 0)
-                        preference.entries[index]
-                    else
-                        null
-                )
+                    // Set the summary to reflect the new value.
+                    preference.setSummary(
+                        if (index >= 0)
+                            preference.entries[index]
+                        else
+                            null
+                    )
 
+                } else {
+                    // For all other preferences, set the summary to the value's
+                    // simple string representation.
+                    preference.summary = stringValue
+                }
             } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.summary = stringValue
+                Toast.makeText(
+                    activity?.applicationContext,
+                    activity?.applicationContext?.getString(R.string.error) + ": " +
+                    activity?.applicationContext?.getString(R.string.msg_validationfail),
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@OnPreferenceChangeListener false
             }
+
             true
         }
 

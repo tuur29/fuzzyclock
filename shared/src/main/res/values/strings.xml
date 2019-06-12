@@ -13,6 +13,7 @@
     <string name="settings">Settings</string>
     <string name="visible">Visible</string>
     <string name="hidden">Hidden</string>
+    <string name="error">Error</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_category_display">Display</string>
@@ -48,6 +49,7 @@
     <string name="msg_editbtn">Press the top-right corner of the widget to edit it</string>
     <string name="msg_notsupported">Not supported on this Android version</string>
     <string name="msg_secondscreen">Tap the watchface to see all the complications</string>
+    <string name="msg_validationfail">This data is not valid</string>
 
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>

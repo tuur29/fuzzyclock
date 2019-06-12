@@ -1,8 +1,10 @@
 package net.tuurlievens.fuzzyclockwidget
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.*
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+import net.tuurlievens.fuzzyclock.PreferenceValidator
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
@@ -70,31 +72,44 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
     private fun getListener() : Preference.OnPreferenceChangeListener {
         return Preference.OnPreferenceChangeListener { preference, value ->
 
-            // sync with parent prefs
-            updateProperty(parent!!.prefs!!, preference.key, value)
+            if (PreferenceValidator.validate(preference.key, value.toString())) {
 
-            // update summary (and values on load)
+                // sync with parent prefs
+                updateProperty(parent!!.prefs!!, preference.key, value)
 
-            if (preference is SwitchPreference) {
-                preference.isChecked = value.toString().toBoolean()
+                // update summary (and values on load)
 
-            } else if (preference is ColorPreferenceCompat) {
-                preference.setDefaultValue(value as Int)
+                if (preference is SwitchPreference) {
+                    preference.isChecked = value.toString().toBoolean()
+
+                } else if (preference is ColorPreferenceCompat) {
+                    preference.setDefaultValue(value as Int)
+
+                } else {
+
+                    val stringValue = value.toString()
+
+                    if (preference is ListPreference) {
+                        val index = preference.findIndexOfValue(stringValue)
+                        preference.setSummary(
+                            if (index >= 0) preference.entries[index] else null
+                        )
+                        preference.setValueIndex(index)
+                    } else if (preference is EditTextPreference) {
+                        preference.setSummary(stringValue)
+                        preference.text = stringValue
+                    }
+                }
 
             } else {
 
-                val stringValue = value.toString()
-
-                if (preference is ListPreference) {
-                    val index = preference.findIndexOfValue(stringValue)
-                    preference.setSummary(
-                        if (index >= 0) preference.entries[index] else null
-                    )
-                    preference.setValueIndex(index)
-                } else if (preference is EditTextPreference) {
-                    preference.setSummary(stringValue)
-                    preference.text = stringValue
-                }
+                Toast.makeText(
+                    activity?.applicationContext,
+                    activity?.applicationContext?.getString(R.string.error) + ": " +
+                            activity?.applicationContext?.getString(R.string.msg_validationfail),
+                    Toast.LENGTH_LONG
+                ).show()
+                return@OnPreferenceChangeListener false
             }
 
             true
