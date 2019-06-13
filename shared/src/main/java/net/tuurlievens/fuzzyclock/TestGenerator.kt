@@ -27,6 +27,10 @@ class TestGenerator {
                 intArrayOf(7,16),
                 intArrayOf(8,20),
                 intArrayOf(9,29),
+                intArrayOf(9,30),
+                intArrayOf(9,31),
+                intArrayOf(9,35),
+                intArrayOf(9,36),
                 intArrayOf(10,41),
                 intArrayOf(11,50),
                 intArrayOf(12,53),
@@ -40,7 +44,7 @@ class TestGenerator {
             times.forEach {
                 val (hour, min) = it
                 val text = FuzzyTextGenerator.create(hour, min, locale).replace("\n", " ")
-                println("${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')} -> $text \n")
+                println("${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')} -> $text\n")
             }
         }
 

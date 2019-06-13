@@ -55,6 +55,7 @@
     <string-array name="pref_list_language_titles">
         <item>Dependent on device setting</item>
         <item>English</item>
+        <item>English (numbers)</item>
         <item>Dutch</item>
     </string-array>
 

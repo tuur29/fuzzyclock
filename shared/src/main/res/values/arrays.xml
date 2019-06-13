@@ -4,6 +4,7 @@
     <string-array name="pref_list_language_values">
         <item>default</item>
         <item>en</item>
+        <item>en-num</item>
         <item>nl</item>
     </string-array>
 
