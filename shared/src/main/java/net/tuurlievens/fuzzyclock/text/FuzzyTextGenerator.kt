@@ -1,4 +1,4 @@
-package net.tuurlievens.fuzzyclock
+package net.tuurlievens.fuzzyclock.text
 
 class FuzzyTextGenerator {
     companion object {

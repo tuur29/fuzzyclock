@@ -26,7 +26,7 @@ import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
-import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
+import net.tuurlievens.fuzzyclock.text.FuzzyTextGenerator
 import java.lang.IllegalArgumentException
 
 

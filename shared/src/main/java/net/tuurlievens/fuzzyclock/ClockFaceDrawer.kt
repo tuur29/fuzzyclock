@@ -1,5 +1,5 @@
 package net.tuurlievens.fuzzyclock
-// TODO: move this to UI package and generator classes to text package
+
 import android.content.Context
 import android.graphics.*
 import android.text.DynamicLayout
@@ -7,6 +7,7 @@ import android.text.Layout
 import android.text.TextPaint
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
+import net.tuurlievens.fuzzyclock.text.FuzzyTextGenerator
 import java.text.SimpleDateFormat
 import java.util.*
 

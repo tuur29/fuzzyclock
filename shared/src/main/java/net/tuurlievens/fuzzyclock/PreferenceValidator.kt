@@ -1,12 +1,13 @@
 package net.tuurlievens.fuzzyclock
 
-enum class Status {
-    NOT,
-    PASSED,
-    FAILED
-}
-
 class PreferenceValidator {
+
+    enum class Status {
+        NOT,
+        PASSED,
+        FAILED
+    }
+
     companion object {
         fun validate(name: String, value: String): Boolean {
             var validated = Status.NOT

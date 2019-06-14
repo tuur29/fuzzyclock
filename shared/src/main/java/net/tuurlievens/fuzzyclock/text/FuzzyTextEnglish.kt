@@ -1,23 +1,23 @@
-package net.tuurlievens.fuzzyclock
+package net.tuurlievens.fuzzyclock.text
 
-class FuzzyTextEnglishNumbered : FuzzyTextInterface {
+class FuzzyTextEnglish : FuzzyTextInterface {
 
     // hour is a 24-hour based integer
     override fun generate(hour: Int, min: Int): String {
 
         // convert from minute count to fuzzy text
         val mintext = when {
-            min in 0..5 -> ""
-            min in 5..15 -> "ten past"
-            min in 15..25 -> "twenty past"
-            min in 25..35 -> "thirty past"
-            min in 35..45 -> "twenty to" // hour switches here
-            min in 45..55 -> "ten to"
-            else -> ""
+            min < 2 -> "around"
+            min < 10 -> "just past"
+            min < 20 -> "quarter past"
+            min < 40 -> "half past" // hour switches here
+            min < 50 -> "quarter to"
+            min < 58 -> "almost"
+            else -> "around"
         }
 
         // change the displayed hour to the next one (instead of the current one) because english uses "Quarter to <hour+1>"
-        var hourtext = if (min < 36) { // see line 14 for switch
+        var hourtext = if (min < 40) {
             when {
                 hour % 12 == 1 -> "one" // 1:15 -> quarter past one
                 hour % 12 == 2 -> "two" // 2:15 -> quarter past two
@@ -31,8 +31,8 @@ class FuzzyTextEnglishNumbered : FuzzyTextInterface {
                 hour % 12 == 10 -> "ten"
                 hour % 12 == 11 -> "eleven"
                 else -> when (hour) {
-                    12 -> "twelve" // 12:15 -> quarter past noon
-                    else -> "twelve"
+                    12 -> "noon" // 12:15 -> quarter past noon
+                    else -> "midnight"
                 }
             }
         } else {
@@ -48,15 +48,15 @@ class FuzzyTextEnglishNumbered : FuzzyTextInterface {
                 hour % 12 == 9 -> "ten"
                 hour % 12 == 10 -> "eleven"
                 else -> when (hour) {
-                    11 -> "twelve" // 11:45 -> quarter to noon
-                    23 -> "twelve"
+                    11 -> "noon" // 11:45 -> quarter to noon
+                    23 -> "midnight"
                     else -> "one"
                 }
             }
         }
 
         // linebreak is later removed when the setting is active
-        return "$mintext${if(mintext == ""){""}else{"\n"}}$hourtext"
+        return "$mintext\n$hourtext"
     }
 
 }
