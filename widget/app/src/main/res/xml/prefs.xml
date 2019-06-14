@@ -13,6 +13,15 @@
                 android:title="@string/pref_title_simplerDate"
                 android:defaultValue="true"/>
 
+        <SwitchPreferenceCompat
+                android:key="removeLineBreak"
+                android:title="@string/pref_title_removeLineBreak"
+                android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_style">
+
         <EditTextPreference
                 android:key="fontSize"
                 android:title="@string/pref_title_fontSize"
@@ -24,6 +33,20 @@
                 android:maxLines="1"/>
 
         <ListPreference
+                android:key="fontFamily"
+                android:title="@string/pref_title_fontFamily"
+                android:defaultValue="default"
+                android:entries="@array/pref_list_fontFamily_titles"
+                android:entryValues="@array/pref_list_fontFamily_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"/>
+
+        <SwitchPreferenceCompat
+                android:key="useDateFont"
+                android:title="@string/pref_title_useDateFont"
+                android:defaultValue="false"/>
+
+        <ListPreference
                 android:key="textAlignment"
                 android:title="@string/pref_title_textAlignment"
                 android:defaultValue="center"
@@ -33,21 +56,28 @@
                 android:positiveButtonText="@null"/>
 
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-                android:key="foregroundColorInt"
+                android:key="foregroundColor"
                 android:title="@string/pref_title_foregroundColor"
                 android:defaultValue="@android:color/white"
                 cpv_dialogTitle="@string/pref_title_foregroundColor"
                 cpv_showAlphaSlider="true"/>
 
-        <SwitchPreferenceCompat
-                android:key="removeLineBreak"
-                android:title="@string/pref_title_removeLineBreak"
-                android:defaultValue="false"/>
+        <EditTextPreference
+                android:key="shadowSize"
+                android:title="@string/pref_title_shadowSize"
+                android:defaultValue="6"
+                android:maxLength="2"
+                android:selectAllOnFocus="true"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLines="1"/>
 
-        <SwitchPreferenceCompat
-                android:key="showShadow"
-                android:title="@string/pref_title_showShadow"
-                android:defaultValue="true"/>
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+                android:key="shadowColor"
+                android:title="@string/pref_title_shadowColor"
+                android:defaultValue="@android:color/black"
+                cpv_dialogTitle="@string/pref_title_shadowColor"
+                cpv_showAlphaSlider="true"/>
 
     </PreferenceCategory>
 

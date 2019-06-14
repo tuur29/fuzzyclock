@@ -1,6 +1,7 @@
 package net.tuurlievens.fuzzyclockwidget
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.preference.*
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
@@ -30,10 +31,10 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
         }
 
 
-        // Bind preferences to parent prefs and their summaries
-        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColorInt", "removeLineBreak", "showDate","simplerDate", "showShadow")
+        // Bind preferences to parent prefs and their summaries (all preferences)
+        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate","simplerDate", "shadowSize", "fontFamily", "useDateFont", "shadowColor")
         for (item in array) {
-            var pref = findPreference<Preference>(item)
+            val pref = findPreference<Preference>(item)
             pref.onPreferenceChangeListener = getListener()
 
             // Update sharedpreferences to actual preferences

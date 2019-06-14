@@ -39,7 +39,7 @@
     <string name="pref_title_simplerDate">Simpler date</string>
     <string name="pref_title_showStatusbar">Show status icons</string>
     <string name="pref_title_showDigitalClock">Show digital clock</string>
-    <string name="pref_title_fontfamily">Typeface</string>
+    <string name="pref_title_fontFamily">Typeface</string>
     <string name="pref_title_useDateFont">Use typeface for date</string>
     <string name="pref_title_showShadow">Show shadow</string>
     <string name="pref_title_shadowSize">Shadow size</string>
@@ -102,7 +102,7 @@
         <item>Always</item>
     </string-array>
 
-    <string-array name="pref_list_fontfamily_titles">
+    <string-array name="pref_list_fontFamily_titles">
         <item>Default</item>
         <item>Roboto</item>
         <item>Roboto Thin</item>

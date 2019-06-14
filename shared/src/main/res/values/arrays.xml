@@ -80,7 +80,7 @@
         <item>always</item>
     </string-array>
 
-    <string-array name="pref_list_fontfamily_values">
+    <string-array name="pref_list_fontFamily_values">
         <item>default</item>
         <item>roboto</item>
         <item>roboto_thin</item>

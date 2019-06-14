@@ -1,15 +1,20 @@
 package net.tuurlievens.fuzzyclockwidget
 
+import net.tuurlievens.fuzzyclock.PossiblePreferences
+
 class WidgetData(
-    var language: String = "default",
-    var fontSize: Int = 26,
-    var textAlignment: String = "center",
-    var foregroundColorInt: Int = 0xFFFFFFFF.toInt(),
-    var removeLineBreak: Boolean = false,
-    var showDate: Boolean = true,
-    var simplerDate: Boolean = true,
-    var showShadow: Boolean = true
-) {
+    override var language: String = "default",
+    override var fontSize: Int = 26,
+    override var textAlignment: String = "center",
+    override var foregroundColor: Int = 0xFFFFFFFF.toInt(),
+    override var removeLineBreak: Boolean = false,
+    override var showDate: Boolean = true,
+    override var simplerDate: Boolean = true,
+    override var shadowSize: Int = 4,
+    override var shadowColor: Int = 0xFF000000.toInt(),
+    override var fontFamily: String = "default",
+    override var useDateFont: Boolean = false
+): PossiblePreferences() {
 
     // Never change the order of these datastring parsers! (compatiblity)
 
@@ -17,11 +22,14 @@ class WidgetData(
         return language.toString() + ";" +
                 fontSize.toString() + ";" +
                 textAlignment.toString() + ";" +
-                foregroundColorInt.toString() + ";" +
+                foregroundColor.toString() + ";" +
                 removeLineBreak.toString() + ";" +
                 showDate.toString() + ";" +
                 simplerDate.toString() + ";" +
-                showShadow.toString()
+                shadowSize.toString() + ";" +
+                shadowColor.toString() + ";" +
+                fontFamily.toString() + ";" +
+                useDateFont.toString()
     }
 
     companion object {
@@ -33,9 +41,9 @@ class WidgetData(
             val defaults = WidgetData()
 
             // for compatibility from 1.0 to 1.1
-            var element3Temp = arr.elementAtOrElse(3) { defaults.foregroundColorInt.toString() }
+            var element3Temp = arr.elementAtOrElse(3) { defaults.foregroundColor.toString() }
             if (element3Temp.contains("#")) {
-                element3Temp = defaults.foregroundColorInt.toString()
+                element3Temp = defaults.foregroundColor.toString()
             }
 
             return WidgetData(
@@ -46,7 +54,10 @@ class WidgetData(
                 arr.elementAtOrElse(4) { defaults.removeLineBreak.toString() }.toBoolean(),
                 arr.elementAtOrElse(5) { defaults.showDate.toString() }.toBoolean(),
                 arr.elementAtOrElse(6) { defaults.simplerDate.toString() }.toBoolean(),
-                arr.elementAtOrElse(7) { defaults.showShadow.toString() }.toBoolean()
+                arr.elementAtOrElse(7) { defaults.shadowSize.toString() }.toInt(),
+                arr.elementAtOrElse(8) { defaults.shadowColor.toString() }.toInt(),
+                arr.elementAtOrElse(9) { defaults.fontFamily.toString() }.toString(),
+                arr.elementAtOrElse(10) { defaults.useDateFont.toString() }.toBoolean()
             )
         }
     }

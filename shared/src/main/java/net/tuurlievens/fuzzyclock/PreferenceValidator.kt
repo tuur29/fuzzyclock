@@ -17,13 +17,12 @@ class PreferenceValidator {
                     "maxTranslationDisplacement" -> validated = if (value.toDouble() in 0.0..1.0) { Status.PASSED } else { Status.FAILED }
                     "updateSeconds" -> validated = if (value.toInt() in 0..86400) { Status.PASSED } else { Status.FAILED }
                     "fontSize" -> validated = if (value.toInt() in 1..500) { Status.PASSED } else { Status.FAILED }
-                    "shadowSize" -> validated = if (value.toInt() in 1..500) { Status.PASSED } else { Status.FAILED }
+                    "shadowSize" -> validated = if (value.toInt() in 0..500) { Status.PASSED } else { Status.FAILED }
 
                     // these preferences are set with controls that can't be easily tampered with
                     "language" -> validated = Status.PASSED
                     "textAlignment" -> validated = Status.PASSED
                     "foregroundColor" -> validated = Status.PASSED
-                    "foregroundColorInt" -> validated = Status.PASSED
                     "backgroundColor" -> validated = Status.PASSED
                     "removeLineBreak" -> validated = Status.PASSED
                     "brightScreen" -> validated = Status.PASSED
@@ -33,7 +32,7 @@ class PreferenceValidator {
                     "simplerDate" -> validated = Status.PASSED
                     "showStatusbar" -> validated = Status.PASSED
                     "showDigitalClock" -> validated = Status.PASSED
-                    "fontfamily" -> validated = Status.PASSED
+                    "fontFamily" -> validated = Status.PASSED
                     "useDateFont" -> validated = Status.PASSED
                     "showShadow" -> validated = Status.PASSED
                     "shadowColor" -> validated = Status.PASSED

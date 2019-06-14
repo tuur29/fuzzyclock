@@ -5,19 +5,14 @@ import android.util.Log
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
-import android.util.TypedValue
 import android.widget.RemoteViews
-import java.util.*
 import android.app.PendingIntent
-import android.graphics.Color
-import android.provider.AlarmClock
-import net.tuurlievens.fuzzyclock.FuzzyTextGenerator
-import java.text.SimpleDateFormat
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.*
 import android.net.Uri
-import android.provider.CalendarContract
-import android.view.View
 import androidx.core.app.JobIntentService
+import net.tuurlievens.fuzzyclock.ClockFaceDrawer
 
 
 class UpdateWidgetService : JobIntentService() {
@@ -43,89 +38,44 @@ class UpdateWidgetService : JobIntentService() {
         // UPDATE widget view
 
         internal fun updateWidget(context: Context, manager: AppWidgetManager, id: Int) {
-
-            val calendar = Calendar.getInstance()
             val prefs = FuzzyClockWidgetConfigureActivity.loadPrefs(context, id)
+            val view = RemoteViews(pName, R.layout.fuzzy_clock_widget)
 
-            // get correct view for each alignment
-            val view = when(prefs.textAlignment) {
-                "left" -> RemoteViews(pName, R.layout.fuzzy_clock_widget_left)
-                "right" -> RemoteViews(pName, R.layout.fuzzy_clock_widget_right)
-                else -> RemoteViews(pName, R.layout.fuzzy_clock_widget_center)
-            }
-
-            val parsedForegroundColor = "#" + Integer.toHexString(prefs.foregroundColorInt)
-
-            // get correct textviews depending on shadow setting and hide other
-            val clockTextID = when(prefs.showShadow) {
-                true -> {
-                    view.setViewVisibility(R.id.clocktext, View.GONE)
-                    R.id.clocktextshadow
-                }
-                else -> {
-                    view.setViewVisibility(R.id.clocktextshadow, View.GONE)
-                    R.id.clocktext
-                }
-            }
-            view.setViewVisibility(clockTextID, View.VISIBLE)
-            val dateTextID = when(prefs.showShadow) {
-                true -> {
-                    view.setViewVisibility(R.id.datetext, View.GONE)
-                    R.id.datetextshadow
-                }
-                else -> {
-                    view.setViewVisibility(R.id.datetextshadow, View.GONE)
-                    R.id.datetext
-                }
-            }
-            view.setViewVisibility(dateTextID, View.VISIBLE)
-
-            // update clock
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val min = calendar.get(Calendar.MINUTE)
-
-            view.setTextViewTextSize(clockTextID, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize.toFloat())
-            view.setTextColor(clockTextID, Color.parseColor(parsedForegroundColor))
-
-            val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
-            var text = FuzzyTextGenerator.create(hour, min, pickedLanguage)
-            if (prefs.removeLineBreak) {
-               text = text.replace("\n", " ")
-            }
-            view.setTextViewText(clockTextID, text)
-
-            // update date
-            if (prefs.showDate) {
-                val loc = Locale(pickedLanguage)
-                val format = if (prefs.simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
-                view.setTextViewText(dateTextID, format.format(calendar.time))
-                view.setTextViewTextSize(dateTextID, TypedValue.COMPLEX_UNIT_SP, prefs.fontSize * 0.65F)
-                view.setTextColor(dateTextID, Color.parseColor(parsedForegroundColor))
+            // calculate current widget size (https://stackoverflow.com/a/18723268)
+            val options = manager.getAppWidgetOptions(id)
+            val width: Int
+            val height: Int
+            if (context.resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
+                height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
             } else {
-                view.setTextViewText(dateTextID, "")
-                view.setTextViewTextSize(dateTextID, TypedValue.COMPLEX_UNIT_SP, 0F)
+                width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+                height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+            }
+            val bounds = Rect(0, 0, width, height)
+
+            // create canvas and draw
+            if (width > 0 && height > 0) {
+                val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(image)
+                ClockFaceDrawer.draw(canvas, bounds, prefs, context)
+                view.setImageViewBitmap(R.id.canvas, image)
             }
 
-            // refresh widget on empty space click
+            // add click handlers
             val updateIntent = Intent(context, FuzzyClockWidget::class.java)
             updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
-            view.setOnClickPendingIntent(R.id.root, PendingIntent.getBroadcast(
+            view.setOnClickPendingIntent(R.id.canvas, PendingIntent.getBroadcast(
                 context,
                 id,
                 updateIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             ))
-
-            // open clock and calendar on text click
-            val calendarPackageName = getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)
-            val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
-            if (calendarPackageName != "")
-                view.setOnClickPendingIntent(dateTextID, getPendingIntentByPackageName(context, calendarPackageName))
-            if (clockPackageName != "")
-                view.setOnClickPendingIntent(clockTextID, getPendingIntentByPackageName(context, clockPackageName))
             view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
+            // TODO: re-add clock and calendar click handlers
 
+            // display canvas
             manager.updateAppWidget(id, view)
             Log.i("ALARM","widget $id updated")
         }

@@ -70,7 +70,7 @@
 
         <ListPreference
                 android:key="typeface"
-                android:title="@string/pref_title_fontfamily"
+                android:title="@string/pref_title_fontFamily"
                 android:defaultValue="SANS_SERIF"
                 android:entries="@array/pref_list_typeface_names"
                 android:entryValues="@array/pref_list_typeface_values"

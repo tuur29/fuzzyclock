@@ -45,7 +45,7 @@ class FuzzyClockDream : DreamService() {
     private var maxTranslationDisplacement = 0.0
     private var updateSeconds = 60.0
     private var language = "default"
-    private var fontfamily = ""
+    private var fontFamily = ""
     private var fontSize = 36
     private var shadowSize = 6
     private var textAlignment = "center"
@@ -122,7 +122,7 @@ class FuzzyClockDream : DreamService() {
         maxTranslationDisplacement = try { prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble() } catch (e:IllegalArgumentException) { maxTranslationDisplacement }
         updateSeconds = try { prefs.getString("updateSeconds", updateSeconds.toString()).toDouble() } catch (e:IllegalArgumentException) { updateSeconds }
         language = prefs.getString("language", language)
-        fontfamily = prefs.getString("fontfamily", fontfamily)
+        fontFamily = prefs.getString("fontFamily", fontFamily)
         fontSize = try { prefs.getString("fontSize", fontSize.toString()).toInt() } catch (e:IllegalArgumentException) { fontSize }
         shadowSize = try { prefs.getString("shadowSize", shadowSize.toString()).toInt() } catch (e:IllegalArgumentException) { shadowSize }
         textAlignment = prefs.getString("textAlignment", textAlignment)
@@ -177,7 +177,7 @@ class FuzzyClockDream : DreamService() {
             else -> Gravity.CENTER
         }
 
-        val font = applicationContext.resources.getIdentifier(fontfamily, "font", applicationContext.packageName)
+        val font = applicationContext.resources.getIdentifier(fontFamily, "font", applicationContext.packageName)
         if (font != 0) {
             findViewById<TextView>(R.id.clocktext).typeface = ResourcesCompat.getFont(applicationContext, font)
             if (useDateFont)
