@@ -12,8 +12,9 @@ class WidgetData(
     override var simplerDate: Boolean = true,
     override var shadowSize: Int = 4,
     override var shadowColor: Int = 0xFF000000.toInt(),
-    override var fontFamily: String = "default",
-    override var useDateFont: Boolean = false
+    override var fontFamily: String = "sans_serif",
+    override var useDateFont: Boolean = false,
+    override var emphasis: String = "normal"
 ): PossiblePreferences() {
 
     // Never change the order of these datastring parsers! (compatiblity)
@@ -29,7 +30,8 @@ class WidgetData(
                 shadowSize.toString() + ";" +
                 shadowColor.toString() + ";" +
                 fontFamily.toString() + ";" +
-                useDateFont.toString()
+                useDateFont.toString() + ";" +
+                emphasis.toString()
     }
 
     companion object {
@@ -57,7 +59,8 @@ class WidgetData(
                 arr.elementAtOrElse(7) { defaults.shadowSize.toString() }.toInt(),
                 arr.elementAtOrElse(8) { defaults.shadowColor.toString() }.toInt(),
                 arr.elementAtOrElse(9) { defaults.fontFamily.toString() }.toString(),
-                arr.elementAtOrElse(10) { defaults.useDateFont.toString() }.toBoolean()
+                arr.elementAtOrElse(10) { defaults.useDateFont.toString() }.toBoolean(),
+                arr.elementAtOrElse(11) { defaults.emphasis.toString() }.toString()
             )
         }
     }

@@ -11,6 +11,11 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.net.Uri
+import android.provider.AlarmClock
+import android.provider.CalendarContract
+import android.util.DisplayMetrics
+import android.util.TypedValue
+import android.view.View
 import androidx.core.app.JobIntentService
 import net.tuurlievens.fuzzyclock.ClockFaceDrawer
 
@@ -53,16 +58,17 @@ class UpdateWidgetService : JobIntentService() {
                 height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
             }
             val bounds = Rect(0, 0, width, height)
+            var hitRegions: Array<Rect> = arrayOf()
 
             // create canvas and draw
             if (width > 0 && height > 0) {
                 val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(image)
-                ClockFaceDrawer.draw(canvas, bounds, prefs, context)
+                hitRegions = ClockFaceDrawer.draw(canvas, bounds, prefs, context)
                 view.setImageViewBitmap(R.id.canvas, image)
             }
 
-            // add click handlers
+            // add config click handler
             val updateIntent = Intent(context, FuzzyClockWidget::class.java)
             updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
@@ -73,7 +79,38 @@ class UpdateWidgetService : JobIntentService() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             ))
             view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
-            // TODO: re-add clock and calendar click handlers
+
+             // add calendar click handlers
+            if (prefs.showDate && hitRegions.size > 1) {
+                val calendarPackageName = getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)
+                if (calendarPackageName != "") {
+                    view.setViewPadding(R.id.datebuttoncontainer,
+                        pixelsToDip(hitRegions[1].left, context),
+                        pixelsToDip(hitRegions[1].top, context),
+                        pixelsToDip(width - hitRegions[1].right, context),
+                        pixelsToDip(height - hitRegions[1].bottom, context)
+                    )
+                    view.setOnClickPendingIntent(R.id.datebutton, getPendingIntentByPackageName(context, calendarPackageName))
+                } else {
+                    view.setViewVisibility(R.id.datebuttoncontainer, View.GONE)
+                }
+            } else {
+                view.setViewVisibility(R.id.datebuttoncontainer, View.GONE)
+            }
+
+            // add clock click handler
+            val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
+            if (clockPackageName != "") {
+                view.setViewPadding(R.id.clockbuttoncontainer,
+                    pixelsToDip(hitRegions[0].left, context),
+                    pixelsToDip(hitRegions[0].top, context),
+                    pixelsToDip(width - hitRegions[0].right, context),
+                    pixelsToDip(height - hitRegions[0].bottom, context)
+                )
+                view.setOnClickPendingIntent(R.id.clockbutton, getPendingIntentByPackageName(context, clockPackageName))
+            } else {
+                view.setViewVisibility(R.id.clockbuttoncontainer, View.GONE)
+            }
 
             // display canvas
             manager.updateAppWidget(id, view)
@@ -104,19 +141,30 @@ class UpdateWidgetService : JobIntentService() {
         }
 
         private fun getDefaultPackageName(context: Context, action: String, data: Uri? = null): String {
-            try {
+            return try {
                 val localPackageManager = context.packageManager
                 val intent = Intent(action)
                 if (data != null) {
                     intent.data = data
                 }
-                return localPackageManager.resolveActivity(
+                val info = localPackageManager.resolveActivity(
                     intent,
                     PackageManager.MATCH_DEFAULT_ONLY
-                ).activityInfo.packageName
+                ).activityInfo
+
+                info.packageName
             } catch (e: Exception) {
-                return ""
+                ""
             }
+        }
+
+        private fun dipToPixels(value: Int, context: Context) : Int {
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), context.resources.displayMetrics).toInt()
+        }
+
+        private fun pixelsToDip(value: Int, context: Context) : Int {
+            return Math.ceil((value * context.resources.displayMetrics.density).toDouble()).toInt()
+
         }
     }
 

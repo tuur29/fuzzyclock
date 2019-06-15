@@ -44,7 +44,7 @@
     <string name="pref_title_showShadow">Show shadow</string>
     <string name="pref_title_shadowSize">Shadow size</string>
     <string name="pref_title_shadowColor">Shadow color</string>
-    <string name="pref_title_typestyle">Emphasis</string>
+    <string name="pref_title_emphasis">Emphasis</string>
 
     <string name="msg_notificationaccess">You have to enable Notification Access for this feature to work</string>
     <string name="msg_editbtn">Press the top-right corner of the widget to edit it</string>
@@ -100,25 +100,6 @@
         <item>Never</item>
         <item>When awake</item>
         <item>Always</item>
-    </string-array>
-
-    <string-array name="pref_list_fontFamily_titles">
-        <item>Default</item>
-        <item>Roboto</item>
-        <item>Roboto Thin</item>
-        <item>Roboto Black</item>
-        <item>Open Sans</item>
-        <item>Raleway</item>
-        <item>Noto Serif</item>
-        <item>Slabo</item>
-        <item>Roboto Mono</item>
-        <item>Fira Mono</item>
-        <item>Dancing Script</item>
-        <item>Pacifico</item>
-        <item>Shadows into Light 2</item>
-        <item>Lobster</item>
-        <item>Fredoka one</item>
-        <item>Comfortaa</item>
     </string-array>
 
 </resources>

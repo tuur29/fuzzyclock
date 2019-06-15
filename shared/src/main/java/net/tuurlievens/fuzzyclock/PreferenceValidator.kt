@@ -34,6 +34,7 @@ class PreferenceValidator {
                     "showStatusbar" -> validated = Status.PASSED
                     "showDigitalClock" -> validated = Status.PASSED
                     "fontFamily" -> validated = Status.PASSED
+                    "emphasis" -> validated = Status.PASSED
                     "useDateFont" -> validated = Status.PASSED
                     "showShadow" -> validated = Status.PASSED
                     "shadowColor" -> validated = Status.PASSED
@@ -44,7 +45,7 @@ class PreferenceValidator {
             }
 
             if (validated == Status.PASSED) return true
-            if (validated == Status.NOT) throw Exception("Preference "+ name +" not validated!")
+            if (validated == Status.NOT) throw Exception("Preference $name not validated!")
 
             return false
         }

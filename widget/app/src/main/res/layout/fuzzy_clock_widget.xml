@@ -1,16 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/widget_margin">
+>
 
     <ImageView
             android:id="@+id/canvas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
     />
+
+    <FrameLayout
+        android:id="@+id/clockbuttoncontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    >
+        <FrameLayout
+                android:id="@+id/clockbutton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        />
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/datebuttoncontainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    >
+        <FrameLayout
+                android:id="@+id/datebutton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        />
+    </FrameLayout>
 
     <FrameLayout android:id="@+id/configbtn"
           android:layout_width="40dp"

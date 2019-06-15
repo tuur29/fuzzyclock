@@ -32,7 +32,21 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
 
 
         // Bind preferences to parent prefs and their summaries (all preferences)
-        val array = arrayOf("language", "fontSize", "textAlignment", "foregroundColor", "removeLineBreak", "showDate","simplerDate", "shadowSize", "fontFamily", "useDateFont", "shadowColor")
+        val array = arrayOf(
+            "language",
+            "fontSize",
+            "textAlignment",
+            "foregroundColor",
+            "removeLineBreak",
+            "showDate",
+            "simplerDate",
+            "shadowSize",
+            "shadowColor",
+            "fontFamily",
+            "useDateFont",
+            "emphasis"
+        )
+
         for (item in array) {
             val pref = findPreference<Preference>(item)
             pref.onPreferenceChangeListener = getListener()

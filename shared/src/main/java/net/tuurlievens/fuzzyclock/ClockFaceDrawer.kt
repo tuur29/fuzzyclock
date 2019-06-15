@@ -10,11 +10,12 @@ import androidx.core.graphics.ColorUtils
 import net.tuurlievens.fuzzyclock.text.FuzzyTextGenerator
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 class ClockFaceDrawer {
 
     companion object {
-        fun draw(canvas: Canvas, bounds: Rect, prefs: PossiblePreferences, context: Context) {
+        fun draw(canvas: Canvas, bounds: Rect, prefs: PossiblePreferences, context: Context): Array<Rect> {
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
             canvas.translate(0F, 0F)
 
@@ -23,12 +24,24 @@ class ClockFaceDrawer {
             val lighterForeground = ColorUtils.setAlphaComponent(prefs.foregroundColor, 150)
             val shadowColor = "#" + Integer.toHexString(prefs.shadowColor)
 
-            val fontFile = context.resources.getIdentifier(prefs.fontFamily, "font", context.packageName)
-            var font = Typeface.DEFAULT
-            if (fontFile != 0) {
-                try {
-                    font = ResourcesCompat.getFont(context, fontFile)
-                } catch (e: Exception) {}
+            val emphasis = when(prefs.emphasis) {
+                "bold" -> Typeface.BOLD
+                "italic" -> Typeface.ITALIC
+                "bold_italic" -> Typeface.BOLD_ITALIC
+                else -> Typeface.NORMAL
+            }
+            val font = when (prefs.fontFamily) {
+                "sans_serif" -> Typeface.create(Typeface.SANS_SERIF, emphasis)
+                "serif" -> Typeface.create(Typeface.SERIF, emphasis)
+                "monospace" -> Typeface.create(Typeface.MONOSPACE, emphasis)
+                else -> {
+                    val fontID = context.resources.getIdentifier(prefs.fontFamily, "font", context.packageName)
+                    var typeface = Typeface.create(Typeface.SANS_SERIF, emphasis)
+                    try {
+                        if (fontID != 0) typeface = Typeface.create(ResourcesCompat.getFont(context, fontID), emphasis)
+                    } catch (e: Exception) {}
+                    typeface
+                }
             }
 
             val mClockTextPaint = TextPaint().apply {
@@ -40,7 +53,7 @@ class ClockFaceDrawer {
             }
 
             val mDateTextPaint = TextPaint().apply {
-                typeface = if (prefs.useDateFont) { Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL) } else { font }
+                typeface = if (prefs.useDateFont) { font } else { Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL) }
                 isAntiAlias = true
                 textSize = Math.round(prefs.fontSize * 0.65).toFloat()
                 color = lighterForeground
@@ -65,7 +78,10 @@ class ClockFaceDrawer {
             val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - prefs.padding*2, alignment, 1F, 1F, true)
 
             canvas.save()
+            // used for clock and date listeners
+            val hitRegions = mutableListOf(Rect(), Rect())
             val textXCoordinate = bounds.left.toFloat() + prefs.padding
+            val textYCoordinate: Float
 
             if (prefs.showDate) {
                 // create date
@@ -75,20 +91,34 @@ class ClockFaceDrawer {
                 val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - prefs.padding*2, alignment, 1F, 1F, true)
 
                 // draw date
-                val textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
-                val lineHeight = mClockTextPaint.textSize * clockLayout.lineCount * 1.25F
-                canvas.translate(textXCoordinate, textYCoordinate + lineHeight)
+                textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
+                canvas.translate(textXCoordinate, textYCoordinate + clockLayout.height)
                 dateLayout.draw(canvas)
 
                 // draw clock
-                canvas.translate(0F, -lineHeight)
+                canvas.translate(0F, -clockLayout.height.toFloat())
+
+                hitRegions[1] = Rect(
+                    textXCoordinate.roundToInt(),
+                    textYCoordinate.roundToInt() + clockLayout.height,
+                    (textXCoordinate + dateLayout.width).roundToInt(),
+                    textYCoordinate.roundToInt() + clockLayout.height + dateLayout.height
+                )
 
             } else {
-                val textYCoordinate = bounds.exactCenterY() - (clockLayout.height / 2 )
+                textYCoordinate = bounds.exactCenterY() - (clockLayout.height / 2 )
                 canvas.translate(textXCoordinate, textYCoordinate)
             }
-
             clockLayout.draw(canvas)
+
+            hitRegions[0] = Rect( // clock bounds
+                textXCoordinate.roundToInt(),
+                textYCoordinate.roundToInt(),
+                (textXCoordinate + clockLayout.width).roundToInt(),
+                textYCoordinate.roundToInt() + clockLayout.height
+            )
+
+            return hitRegions.toTypedArray()
         }
     }
 
