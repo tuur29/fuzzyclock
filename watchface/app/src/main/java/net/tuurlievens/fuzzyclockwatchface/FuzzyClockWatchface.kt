@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.preference.PreferenceManager
-import android.support.v4.graphics.ColorUtils
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationHelperActivity
 import android.support.wearable.complications.rendering.ComplicationDrawable
@@ -26,6 +25,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
+import androidx.core.graphics.ColorUtils
 import net.tuurlievens.fuzzyclock.text.FuzzyTextGenerator
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -138,16 +138,16 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             simplerDate = prefs.getBoolean("simplerDate", simplerDate)
             useDateFont = prefs.getBoolean("useDateFont", useDateFont)
 
-            val typeface = prefs.getString("typeface", "")
-            val typestyle = prefs.getString("typestyle", "")
-            if (typeface != "" && typestyle != "") {
+            val fontFamily = prefs.getString("fontFamily", "")
+            val emphasis = prefs.getString("emphasis", "")
+            if (fontFamily != "" && emphasis != "") {
                 font = Typeface.create(
-                    when(typeface) {
+                    when(fontFamily) {
                         "SERIF" -> Typeface.SERIF
                         "MONOSPACE" -> Typeface.MONOSPACE
                         else -> Typeface.SANS_SERIF
                     },
-                    when(typestyle) {
+                    when(emphasis) {
                         "BOLD" -> Typeface.BOLD
                         "ITALIC" -> Typeface.ITALIC
                         "BOLD_ITALIC" -> Typeface.BOLD_ITALIC

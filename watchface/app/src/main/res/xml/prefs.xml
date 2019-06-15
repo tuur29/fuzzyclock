@@ -72,16 +72,16 @@
                 android:key="typeface"
                 android:title="@string/pref_title_fontFamily"
                 android:defaultValue="SANS_SERIF"
-                android:entries="@array/pref_list_typeface_names"
-                android:entryValues="@array/pref_list_typeface_values"
+                android:entries="@array/pref_list_fontFamily_titles"
+                android:entryValues="@array/pref_list_fontFamily_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
-                android:key="typestyle"
-                android:title="@string/pref_title_typestyle"
+                android:key="emphasis"
+                android:title="@string/pref_title_emphasis"
                 android:defaultValue="NORMAL"
-                android:entries="@array/pref_list_typestyle_names"
-                android:entryValues="@array/pref_list_typestyle_values"
+                android:entries="@array/pref_list_emphasis_titles"
+                android:entryValues="@array/pref_list_emphasis_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <CheckBoxPreference
