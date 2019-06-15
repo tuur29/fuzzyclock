@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.*
@@ -42,14 +41,17 @@ class DreamSettingsActivity : FragmentActivity() {
             }
 
             // Bind the summaries of EditText/List/Dialog preferences
-            bindPreferenceSummaryToValue(findPreference("maxTranslationDisplacement"))
-            bindPreferenceSummaryToValue(findPreference("updateSeconds"))
-            bindPreferenceSummaryToValue(findPreference("language"))
-            bindPreferenceSummaryToValue(findPreference("fontFamily"))
-            bindPreferenceSummaryToValue(findPreference("fontSize"))
-            bindPreferenceSummaryToValue(findPreference("textAlignment"))
-            bindPreferenceSummaryToValue(findPreference("notifState"))
-            bindPreferenceSummaryToValue(findPreference("shadowSize"))
+            val prefsWithSummary = arrayOf(
+                "maxTranslationDisplacement",
+                "updateSeconds",
+                "language",
+                "fontFamily",
+                "fontSize",
+                "textAlignment",
+                "notifState",
+                "shadowSize"
+            )
+            prefsWithSummary.forEach { name -> bindPreferenceSummaryToValue(findPreference(name)) }
         }
 
         private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->

@@ -9,24 +9,25 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import java.util.*
-import android.util.DisplayMetrics
 import android.widget.LinearLayout
-import java.text.SimpleDateFormat
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.content.res.ColorStateList
-import android.graphics.Typeface
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Rect
 import android.view.Gravity
 import android.widget.ImageView
 import android.graphics.drawable.GradientDrawable
 import android.os.BatteryManager
+import android.util.DisplayMetrics
 import android.util.Log
-import androidx.core.content.res.ResourcesCompat
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
-import net.tuurlievens.fuzzyclock.text.FuzzyTextGenerator
+import net.tuurlievens.fuzzyclock.ClockFaceDrawer
+import net.tuurlievens.fuzzyclock.Helpers
 import java.lang.IllegalArgumentException
 
 
@@ -42,30 +43,19 @@ class FuzzyClockDream : DreamService() {
     val defaultNotificationRefreshTimeout = 300
     var lastNotificationRefreshTime = 0L
 
-    private var maxTranslationDisplacement = 0.0
-    private var updateSeconds = 60.0
-    private var language = "default"
-    private var fontFamily = ""
-    private var fontSize = 36
-    private var shadowSize = 6
-    private var textAlignment = "center"
-    private var foregroundColor = "#ffffffff"
-    private var backgroundColor = "#ff000000"
-    private var shadowColor = "#ff000000"
-    private var removeLineBreak = false
-    private var showDate = true
-    private var brightScreen = false
-    private var notifState = "hidden"
-    private var showBattery = true
-    private var simplerDate = true
-    private var useDateFont = false
+    private var prefs = DreamData()
+    private var normalFontSize = prefs.fontSize
 
     // LIFECYCLE
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        loadSettings()
+        val manager = PreferenceManager.getDefaultSharedPreferences(this)
+        prefs = DreamData.loadFromMap(manager.all)
+        normalFontSize = prefs.fontSize
+        prefs.fontSize = Math.round(prefs.fontSize * getDisplayParams().scaledDensity) // manually scale up fontSize
+
         createTask()
 
         // Hide system UI
@@ -80,14 +70,14 @@ class FuzzyClockDream : DreamService() {
 
         // Configure dream
         isInteractive = false
-        isScreenBright = brightScreen
+        isScreenBright = prefs.brightScreen
         setContentView(R.layout.dream)
         applySettings()
     }
 
     override fun onDreamingStarted() {
 
-        if (notifState == "hidden") {
+        if (prefs.notifState == "hidden") {
             // Show initial value of clock
             task.run()
 
@@ -103,7 +93,7 @@ class FuzzyClockDream : DreamService() {
         }
 
         // Update clock every minute
-        timer.scheduleAtFixedRate(task, 0, (updateSeconds*1000).toLong())
+        timer.scheduleAtFixedRate(task, 0, (prefs.updateSeconds*1000).toLong())
 
     }
 
@@ -116,75 +106,38 @@ class FuzzyClockDream : DreamService() {
 
     // HELPERS
 
-    private fun loadSettings() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        maxTranslationDisplacement = try { prefs.getString("maxTranslationDisplacement", maxTranslationDisplacement.toString()).toDouble() } catch (e:IllegalArgumentException) { maxTranslationDisplacement }
-        updateSeconds = try { prefs.getString("updateSeconds", updateSeconds.toString()).toDouble() } catch (e:IllegalArgumentException) { updateSeconds }
-        language = prefs.getString("language", language)
-        fontFamily = prefs.getString("fontFamily", fontFamily)
-        fontSize = try { prefs.getString("fontSize", fontSize.toString()).toInt() } catch (e:IllegalArgumentException) { fontSize }
-        shadowSize = try { prefs.getString("shadowSize", shadowSize.toString()).toInt() } catch (e:IllegalArgumentException) { shadowSize }
-        textAlignment = prefs.getString("textAlignment", textAlignment)
-        foregroundColor = "#" + Integer.toHexString(prefs.getInt("foregroundColor", 0xFFFFFFFF.toInt()))
-        backgroundColor = "#" + Integer.toHexString(prefs.getInt("backgroundColor", 0xFF000000.toInt()))
-        shadowColor = "#" + Integer.toHexString(prefs.getInt("shadowColor", 0xFF000000.toInt()))
-        removeLineBreak = prefs.getBoolean("removeLineBreak", removeLineBreak)
-        showDate = prefs.getBoolean("showDate", showDate)
-        brightScreen = prefs.getBoolean("brightScreen", brightScreen)
-        notifState = prefs.getString("notifState", notifState)
-        showBattery = prefs.getBoolean("showBattery", showBattery)
-        simplerDate = prefs.getBoolean("simplerDate", simplerDate)
-        useDateFont = prefs.getBoolean("useDateFont", useDateFont)
-    }
-
     private fun applySettings() {
         // apply settings to ui
-        findViewById<RelativeLayout>(R.id.root).setBackgroundColor(Color.parseColor(backgroundColor))
+        findViewById<RelativeLayout>(R.id.root).setBackgroundColor(convertIntColor(prefs.backgroundColor))
+        findViewById<TextView>(R.id.notificationcount).setTextColor(convertIntColor(prefs.foregroundColor))
+        findViewById<TextView>(R.id.notificationcount).setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, convertIntColor(prefs.shadowColor))
+        findViewById<TextView>(R.id.notificationcount).textSize = (normalFontSize * 0.65).toFloat()
 
-        findViewById<TextView>(R.id.clocktext).textSize = fontSize.toFloat()
-        findViewById<TextView>(R.id.datetext).textSize = (fontSize * 0.65).toFloat()
-        findViewById<TextView>(R.id.notificationcount).textSize = (fontSize * 0.65).toFloat()
-
-        findViewById<TextView>(R.id.clocktext).setTextColor(Color.parseColor(foregroundColor))
-        findViewById<TextView>(R.id.datetext).setTextColor(Color.parseColor(foregroundColor))
-        findViewById<TextView>(R.id.notificationcount).setTextColor(Color.parseColor(foregroundColor))
-
-        findViewById<TextView>(R.id.clocktext).setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
-        findViewById<TextView>(R.id.datetext).setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
-        findViewById<TextView>(R.id.notificationcount).setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
-
-        val batt = findViewById<View>(R.id.battery);
-        val gd = batt.background.current as GradientDrawable
-        gd.setColor(Color.parseColor(foregroundColor))
-
-        val alignment = when(textAlignment) {
+        val alignment = when(prefs.textAlignment) {
             "center" -> TextView.TEXT_ALIGNMENT_CENTER
             "right" -> TextView.TEXT_ALIGNMENT_TEXT_END
             else -> TextView.TEXT_ALIGNMENT_TEXT_START
         }
-        findViewById<TextView>(R.id.clocktext).textAlignment = alignment
-        findViewById<TextView>(R.id.datetext).textAlignment = alignment
         findViewById<TextView>(R.id.notificationcount).textAlignment = alignment
-        findViewById<FlexboxLayout>(R.id.notifications).justifyContent = when(textAlignment) {
+        findViewById<FlexboxLayout>(R.id.notifications).justifyContent = when(prefs.textAlignment) {
             "left" -> JustifyContent.FLEX_START
             "right" -> JustifyContent.FLEX_END
             else -> JustifyContent.CENTER
         }
-        findViewById<LinearLayout>(R.id.parent).gravity = when(textAlignment) {
+        findViewById<LinearLayout>(R.id.parent).gravity = when(prefs.textAlignment) {
             "left" -> Gravity.START
             "right" -> Gravity.END
             else -> Gravity.CENTER
         }
+        val layout = findViewById<FlexboxLayout>(R.id.notifications).layoutParams as LinearLayout.LayoutParams
+        layout.setMargins(prefs.padding, prefs.padding, prefs.padding, prefs.padding)
+        findViewById<FlexboxLayout>(R.id.notifications).layoutParams = layout
 
-        val font = applicationContext.resources.getIdentifier(fontFamily, "font", applicationContext.packageName)
-        if (font != 0) {
-            findViewById<TextView>(R.id.clocktext).typeface = ResourcesCompat.getFont(applicationContext, font)
-            if (useDateFont)
-                findViewById<TextView>(R.id.datetext).typeface = ResourcesCompat.getFont(applicationContext, font)
-        }
+        val batt = findViewById<View>(R.id.battery);
+        val gd = batt.background.current as GradientDrawable
+        gd.setColor(convertIntColor(prefs.foregroundColor))
 
-        if (!showBattery) {
+        if (!prefs.showBattery) {
             findViewById<RelativeLayout>(R.id.root).removeView(findViewById<View>(R.id.battery))
         }
     }
@@ -202,43 +155,33 @@ class FuzzyClockDream : DreamService() {
                 }
 
                 handler.post {
-
                     Log.i("NOTIF","update clock")
 
-                    // get the current timestamp
-                    val calendar = Calendar.getInstance()
-                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                    val min = calendar.get(Calendar.MINUTE)
+                    // show clock
+                    val width = getDisplayParams().widthPixels
+                    val height = getDisplayParams().heightPixels
 
-                    // update clock
-                    val pickedLanguage = if (language == "default") Locale.getDefault().language else language
-                    var time = FuzzyTextGenerator.create(hour, min, pickedLanguage)
-                    if (removeLineBreak) {
-                        time = time.replace("\n"," ")
-                    }
-                    findViewById<TextView>(R.id.clocktext).text = time
+                    val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                    val canvas = Canvas(image)
+                    val hitRegions = ClockFaceDrawer.draw(canvas, Rect(0, 0, width, height), prefs, applicationContext)
+                    findViewById<ImageView>(R.id.canvas).setImageBitmap(image)
 
-                    // update date
-                    if (showDate) {
-                        val loc = Locale(pickedLanguage)
-                        val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
-                        findViewById<TextView>(R.id.datetext).text = format.format(calendar.time)
-                    } else {
-                        findViewById<TextView>(R.id.datetext).text = ""
-                    }
+                    // decrease canvas size to actual in use
+                    val params = findViewById<ImageView>(R.id.canvas).layoutParams as LinearLayout.LayoutParams
+                    params.height = hitRegions.last().bottom - hitRegions.first().top
+                    findViewById<ImageView>(R.id.canvas).layoutParams = params
 
-                    // Show notifications
-                    if (notifState != "hidden") {
+                    if (prefs.notifState != "hidden") {
                         // show notificationcount if textview still exists (only in < M SDL or manually forced)
-                        if (notifState == "count" || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                            if (notifications.size < 1) {
+                        if (prefs.notifState == "count" || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                            if (notifications.isEmpty()) {
                                 findViewById<TextView>(R.id.notificationcount).text = ""
                             } else {
-//                                val count = notifications.map { n -> n.count }.reduce{ a, c -> c }
+                                // val count = notifications.map { n -> n.count }.reduce{ a, c -> c }
                                 findViewById<TextView>(R.id.notificationcount).text = "(${notifications.size})"
                             }
 
-                        } else if (notifState == "visible" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        } else if (prefs.notifState == "visible" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             val container = findViewById<FlexboxLayout>(R.id.notifications)
                             container.removeAllViews()
 
@@ -247,20 +190,20 @@ class FuzzyClockDream : DreamService() {
                                     val img = ImageView(this@FuzzyClockDream)
                                     img.setImageDrawable(notif.icon!!.loadDrawable(this@FuzzyClockDream))
                                     img.alpha = 0.65F
-                                    img.imageTintList = ColorStateList.valueOf(Color.parseColor(foregroundColor))
+                                    img.imageTintList = ColorStateList.valueOf(convertIntColor(prefs.foregroundColor))
                                     container.addView(img)
 
                                     val params = img.layoutParams as FlexboxLayout.LayoutParams
                                     params.setMargins(10,10,10,10)
-                                    params.width = (fontSize * 2.5).toInt()
-                                    params.height= (fontSize * 2.5).toInt()
+                                    params.width = 64
+                                    params.height= 64
                                     img.layoutParams = params
                                 }
                             }
                         }
                     }
 
-                    if (showBattery) {
+                    if (prefs.showBattery) {
                         val display = getDisplayParams()
                         val batteryStatus = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { filter ->
                             this@FuzzyClockDream.registerReceiver(null, filter)
@@ -271,11 +214,11 @@ class FuzzyClockDream : DreamService() {
                     }
 
                     // move clock around (randomly max 10% of total) against burn in
-                    if (maxTranslationDisplacement != 0.0) {
+                    if (prefs.maxTranslationDisplacement != 0.0) {
                         val parent = findViewById<LinearLayout>(R.id.parent)
                         val display = getDisplayParams()
-                        parent.translationX = calcRandomTranslation(display.widthPixels * maxTranslationDisplacement)
-                        parent.translationY = calcRandomTranslation(display.heightPixels * maxTranslationDisplacement)
+                        parent.translationX = calcRandomTranslation(display.widthPixels * prefs.maxTranslationDisplacement)
+                        parent.translationY = calcRandomTranslation(display.heightPixels * prefs.maxTranslationDisplacement)
                     }
                 }
             }
@@ -284,7 +227,7 @@ class FuzzyClockDream : DreamService() {
     }
 
     private fun requestNotificationUpdate() {
-        if (notifState != "hidden") {
+        if (prefs.notifState != "hidden") {
             val intent = Intent("$myPackageName.NOTIFICATION_LISTENER_SERVICE")
             sendBroadcast(intent)
         }
@@ -299,6 +242,10 @@ class FuzzyClockDream : DreamService() {
     private fun calcRandomTranslation(max: Double) : Float {
         val random = Random().nextFloat()
         return Math.round( random*max*2 - max ).toFloat()
+    }
+
+    private fun convertIntColor(value: Int): Int {
+        return Color.parseColor("#" + Integer.toHexString(value))
     }
 
     // RECEIVERS

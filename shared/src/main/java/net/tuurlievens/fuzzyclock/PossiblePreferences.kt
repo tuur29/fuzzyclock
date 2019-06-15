@@ -6,6 +6,7 @@ open class PossiblePreferences {
     open var removeLineBreak: Boolean = false
     open var showDate: Boolean = true
     open var simplerDate: Boolean = true
+    open var showBattery: Boolean = true
 
     // style
     open var fontFamily: String = "default"
@@ -20,9 +21,12 @@ open class PossiblePreferences {
 
     // config
     open var language: String = "default"
+    open var notifState: String = "hidden"
+    open var maxTranslationDisplacement: Double = 0.0
+    open var updateSeconds: Double = 60.0
+    open var brightScreen: Boolean = false
 
-    // TODO: convert watchface (and screensaver) to use same clockfacedrawer
-    // TODO: refactor all projects to use this class
+    // TODO: convert watchface to use same clockfacedrawer and this pref class
 
     // defaults, not editable
     open var padding: Int = 16
