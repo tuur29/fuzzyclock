@@ -11,3 +11,4 @@
 .externalNativeBuild
 /app/release
 /app/build
+.idea/misc.xml
