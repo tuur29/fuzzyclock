@@ -40,9 +40,18 @@
         <ListPreference
                 android:key="fontFamily"
                 android:title="@string/pref_title_fontFamily"
-                android:defaultValue="default"
+                android:defaultValue="sans_serif"
                 android:entries="@array/pref_list_fontFamily_titles"
                 android:entryValues="@array/pref_list_fontFamily_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"/>
+
+        <ListPreference
+                android:key="emphasis"
+                android:title="@string/pref_title_emphasis"
+                android:defaultValue="normal"
+                android:entries="@array/pref_list_emphasis_titles"
+                android:entryValues="@array/pref_list_emphasis_values"
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"/>
 

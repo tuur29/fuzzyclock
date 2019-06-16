@@ -1,6 +1,5 @@
 package net.tuurlievens.fuzzyclockscreensaver
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.preference.PreferenceManager
@@ -15,9 +14,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Rect
+import android.graphics.*
 import android.view.Gravity
 import android.widget.ImageView
 import android.graphics.drawable.GradientDrawable
@@ -28,7 +25,6 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
 import net.tuurlievens.fuzzyclock.ClockFaceDrawer
 import net.tuurlievens.fuzzyclock.Helpers
-import java.lang.IllegalArgumentException
 
 
 class FuzzyClockDream : DreamService() {
@@ -108,9 +104,9 @@ class FuzzyClockDream : DreamService() {
 
     private fun applySettings() {
         // apply settings to ui
-        findViewById<RelativeLayout>(R.id.root).setBackgroundColor(convertIntColor(prefs.backgroundColor))
-        findViewById<TextView>(R.id.notificationcount).setTextColor(convertIntColor(prefs.foregroundColor))
-        findViewById<TextView>(R.id.notificationcount).setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, convertIntColor(prefs.shadowColor))
+        findViewById<RelativeLayout>(R.id.root).setBackgroundColor(Helpers.convertIntColor(prefs.backgroundColor))
+        findViewById<TextView>(R.id.notificationcount).setTextColor(Helpers.convertIntColor(prefs.foregroundColor))
+        findViewById<TextView>(R.id.notificationcount).setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, Helpers.convertIntColor(prefs.shadowColor))
         findViewById<TextView>(R.id.notificationcount).textSize = (normalFontSize * 0.65).toFloat()
 
         val alignment = when(prefs.textAlignment) {
@@ -133,9 +129,9 @@ class FuzzyClockDream : DreamService() {
         layout.setMargins(prefs.padding, prefs.padding, prefs.padding, prefs.padding)
         findViewById<FlexboxLayout>(R.id.notifications).layoutParams = layout
 
-        val batt = findViewById<View>(R.id.battery);
+        val batt = findViewById<View>(R.id.battery)
         val gd = batt.background.current as GradientDrawable
-        gd.setColor(convertIntColor(prefs.foregroundColor))
+        gd.setColor(Helpers.convertIntColor(prefs.foregroundColor))
 
         if (!prefs.showBattery) {
             findViewById<RelativeLayout>(R.id.root).removeView(findViewById<View>(R.id.battery))
@@ -191,7 +187,7 @@ class FuzzyClockDream : DreamService() {
                                     val img = ImageView(this@FuzzyClockDream)
                                     img.setImageDrawable(notif.icon!!.loadDrawable(this@FuzzyClockDream))
                                     img.alpha = 0.65F
-                                    img.imageTintList = ColorStateList.valueOf(convertIntColor(prefs.foregroundColor))
+                                    img.imageTintList = ColorStateList.valueOf(Helpers.convertIntColor(prefs.foregroundColor))
                                     container.addView(img)
 
                                     val params = img.layoutParams as FlexboxLayout.LayoutParams
@@ -243,10 +239,6 @@ class FuzzyClockDream : DreamService() {
     private fun calcRandomTranslation(max: Double) : Float {
         val random = Random().nextFloat()
         return Math.round( random*max*2 - max ).toFloat()
-    }
-
-    private fun convertIntColor(value: Int): Int {
-        return Color.parseColor("#" + Integer.toHexString(value))
     }
 
     // RECEIVERS

@@ -49,7 +49,8 @@ class DreamSettingsActivity : FragmentActivity() {
                 "fontSize",
                 "textAlignment",
                 "notifState",
-                "shadowSize"
+                "shadowSize",
+                "emphasis"
             )
             prefsWithSummary.forEach { name -> bindPreferenceSummaryToValue(findPreference(name)) }
         }

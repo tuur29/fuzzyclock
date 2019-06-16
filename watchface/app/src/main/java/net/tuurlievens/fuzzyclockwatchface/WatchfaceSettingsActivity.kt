@@ -29,7 +29,7 @@ class WatchfaceSettingsActivity : WearPreferenceActivity() {
     override fun onClick(viewHolder: WearableListView.ViewHolder) {
         super.onClick(viewHolder)
 
-        // TODO: fix this
+        // TODO: find a way to notify user some settings only update after app restart
         // show toast in case of showStatusbar and notifState that says you need to reboot etc...
 //        if (viewHolder?.position == 3) {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {

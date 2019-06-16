@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
 
-// TODO: use helpers in widget and watchface
 class Helpers {
     companion object {
 

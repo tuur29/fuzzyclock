@@ -13,11 +13,10 @@ import android.graphics.*
 import android.net.Uri
 import android.provider.AlarmClock
 import android.provider.CalendarContract
-import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.View
 import androidx.core.app.JobIntentService
 import net.tuurlievens.fuzzyclock.ClockFaceDrawer
+import net.tuurlievens.fuzzyclock.Helpers
 
 
 class UpdateWidgetService : JobIntentService() {
@@ -86,10 +85,10 @@ class UpdateWidgetService : JobIntentService() {
                 val calendarPackageName = getDefaultPackageName(context, Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI)
                 if (calendarPackageName != "") {
                     view.setViewPadding(R.id.datebuttoncontainer,
-                        pixelsToDip(hitRegions[1].left, context),
-                        pixelsToDip(hitRegions[1].top, context),
-                        pixelsToDip(width - hitRegions[1].right, context),
-                        pixelsToDip(height - hitRegions[1].bottom, context)
+                        Helpers.pixelsToDip(hitRegions[1].left, context),
+                        Helpers.pixelsToDip(hitRegions[1].top, context),
+                        Helpers.pixelsToDip(width - hitRegions[1].right, context),
+                        Helpers.pixelsToDip(height - hitRegions[1].bottom, context)
                     )
                     view.setOnClickPendingIntent(R.id.datebutton, getPendingIntentByPackageName(context, calendarPackageName))
                 } else {
@@ -103,10 +102,10 @@ class UpdateWidgetService : JobIntentService() {
             val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
             if (clockPackageName != "") {
                 view.setViewPadding(R.id.clockbuttoncontainer,
-                    pixelsToDip(hitRegions[0].left, context),
-                    pixelsToDip(hitRegions[0].top, context),
-                    pixelsToDip(width - hitRegions[0].right, context),
-                    pixelsToDip(height - hitRegions[0].bottom, context)
+                    Helpers.pixelsToDip(hitRegions[0].left, context),
+                    Helpers.pixelsToDip(hitRegions[0].top, context),
+                    Helpers.pixelsToDip(width - hitRegions[0].right, context),
+                    Helpers.pixelsToDip(height - hitRegions[0].bottom, context)
                 )
                 view.setOnClickPendingIntent(R.id.clockbutton, getPendingIntentByPackageName(context, clockPackageName))
             } else {
@@ -157,15 +156,6 @@ class UpdateWidgetService : JobIntentService() {
             } catch (e: Exception) {
                 ""
             }
-        }
-
-        private fun dipToPixels(value: Int, context: Context) : Int {
-            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), context.resources.displayMetrics).toInt()
-        }
-
-        private fun pixelsToDip(value: Int, context: Context) : Int {
-            return Math.ceil((value * context.resources.displayMetrics.density).toDouble()).toInt()
-
         }
     }
 

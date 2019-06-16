@@ -20,37 +20,36 @@ class DreamData(
     override var showBattery: Boolean = true,
     override var simplerDate: Boolean = true,
     override var useDateFont: Boolean = false,
-    override var padding: Int = 32
-    // TODO: add emphasis preference
+    override var padding: Int = 32,
+    override var emphasis: String = "normal"
 ): PossiblePreferences() {
 
     companion object {
         val default = DreamData()
 
-        // TODO: map probably doesn't contain all default keys this needs to be solved like watchface
         fun loadFromMap(map: Map<String, *>): DreamData {
             val prefs = DreamData()
 
-            // TODO: color types were changed from string to int, this needs to stay compatible,
-            // see widgetdata for a solution
+            prefs.maxTranslationDisplacement = (map["maxTranslationDisplacement"]?.toString() ?: prefs.maxTranslationDisplacement.toString()).toDouble()
+            prefs.updateSeconds = (map["updateSeconds"]?.toString() ?: prefs.updateSeconds.toString()).toDouble()
+            prefs.fontSize = (map["fontSize"]?.toString() ?: prefs.fontSize.toString()).toInt()
+            prefs.shadowSize = (map["shadowSize"]?.toString() ?: prefs.shadowSize.toString()).toInt()
+            prefs.language = (map["language"]?.toString() ?: prefs.language.toString())
+            prefs.fontFamily = (map["fontFamily"]?.toString() ?: prefs.fontFamily.toString())
+            prefs.textAlignment = (map["textAlignment"]?.toString() ?: prefs.textAlignment.toString())
+            prefs.removeLineBreak = (map["removeLineBreak"]?.toString() ?: prefs.removeLineBreak.toString()).toBoolean()
+            prefs.showDate = (map["showDate"]?.toString() ?: prefs.showDate.toString()).toBoolean()
+            prefs.brightScreen = (map["brightScreen"]?.toString() ?: prefs.brightScreen.toString()).toBoolean()
+            prefs.notifState = (map["notifState"]?.toString() ?: prefs.notifState.toString())
+            prefs.showBattery = (map["showBattery"]?.toString() ?: prefs.showBattery.toString()).toBoolean()
+            prefs.simplerDate = (map["simplerDate"]?.toString() ?: prefs.simplerDate.toString()).toBoolean()
+            prefs.useDateFont = (map["useDateFont"]?.toString() ?: prefs.useDateFont.toString()).toBoolean()
+            prefs.emphasis = (map["emphasis"]?.toString() ?: prefs.emphasis.toString())
 
-            try { prefs.maxTranslationDisplacement = map["maxTranslationDisplacement"].toString().toDouble()  } catch(e: Exception) {}
-            try { prefs.updateSeconds = map["updateSeconds"].toString().toDouble()                            } catch(e: Exception) {}
-            try { prefs.fontSize = map["fontSize"].toString().toInt()                                         } catch(e: Exception) {}
-            try { prefs.shadowSize = map["shadowSize"].toString().toInt()                                     } catch(e: Exception) {}
-            try { prefs.language = map["language"].toString()                                                 } catch(e: Exception) {}
-            try { prefs.fontFamily = map["fontFamily"].toString()                                             } catch(e: Exception) {}
-            try { prefs.textAlignment = map["textAlignment"].toString()                                       } catch(e: Exception) {}
-            try { prefs.foregroundColor = map["foregroundColor"].toString().toInt()                           } catch(e: Exception) {}
-            try { prefs.backgroundColor = map["backgroundColor"].toString().toInt()                           } catch(e: Exception) {}
-            try { prefs.shadowColor = map["shadowColor"].toString().toInt()                                   } catch(e: Exception) {}
-            try { prefs.removeLineBreak = map["removeLineBreak"].toString().toBoolean()                       } catch(e: Exception) {}
-            try { prefs.showDate = map["showDate"].toString().toBoolean()                                     } catch(e: Exception) {}
-            try { prefs.brightScreen = map["brightScreen"].toString().toBoolean()                             } catch(e: Exception) {}
-            try { prefs.notifState = map["notifState"].toString()                                             } catch(e: Exception) {}
-            try { prefs.showBattery = map["showBattery"].toString().toBoolean()                               } catch(e: Exception) {}
-            try { prefs.simplerDate = map["simplerDate"].toString().toBoolean()                               } catch(e: Exception) {}
-            try { prefs.useDateFont = map["useDateFont"].toString().toBoolean()                               } catch(e: Exception) {}
+            // TODO: color types were changed from string to int, this needs to stay compatible?
+            prefs.foregroundColor = (map["foregroundColor"]?.toString() ?: prefs.foregroundColor.toString()).toInt()
+            prefs.backgroundColor = (map["backgroundColor"]?.toString() ?: prefs.backgroundColor.toString()).toInt()
+            prefs.shadowColor = (map["shadowColor"]?.toString() ?: prefs.shadowColor.toString()).toInt()
 
             return prefs
         }

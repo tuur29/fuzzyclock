@@ -16,7 +16,7 @@ class FuzzyClockWidgetConfigureActivity : FragmentActivity() {
 
     private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var settingsFragment: AllPreferencesFragment
-    public var prefs: WidgetData? = null
+    var prefs: WidgetData? = null
 
     // create activity
     public override fun onCreate(icicle: Bundle?) {
