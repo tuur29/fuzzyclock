@@ -26,18 +26,19 @@ class WatchfaceSettingsActivity : WearPreferenceActivity() {
         sendBroadcast(intent)
     }
 
-    override fun onClick(viewHolder: WearableListView.ViewHolder?) {
+    override fun onClick(viewHolder: WearableListView.ViewHolder) {
         super.onClick(viewHolder)
-        // show toast in case of showStatusbar and notifState that says you need to reboot etc...
 
-        if (viewHolder?.position == 3) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                val intent = Intent(this, ComplicationSettingsActivity::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, resources.getText(R.string.msg_notsupported), Toast.LENGTH_SHORT).show()
-            }
-        }
+        // TODO: fix this
+        // show toast in case of showStatusbar and notifState that says you need to reboot etc...
+//        if (viewHolder?.position == 3) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+//                val intent = Intent(this, ComplicationSettingsActivity::class.java)
+//                startActivity(intent)
+//            } else {
+//                Toast.makeText(this, resources.getText(R.string.msg_notsupported), Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
 }

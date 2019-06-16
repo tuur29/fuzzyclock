@@ -64,6 +64,7 @@ class UpdateWidgetService : JobIntentService() {
             if (width > 0 && height > 0) {
                 val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(image)
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
                 hitRegions = ClockFaceDrawer.draw(canvas, bounds, prefs, context)
                 view.setImageViewBitmap(R.id.canvas, image)
             }

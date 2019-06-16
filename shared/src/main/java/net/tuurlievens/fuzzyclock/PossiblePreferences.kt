@@ -7,10 +7,11 @@ open class PossiblePreferences {
     open var showDate: Boolean = true
     open var simplerDate: Boolean = true
     open var showBattery: Boolean = true
+    open var showDigitalClock: Boolean = false
 
     // style
-    open var fontFamily: String = "default"
-    open var emphasis: String = "sans_serif"
+    open var fontFamily: String = "sans_serif"
+    open var emphasis: String = "normal"
     open var textAlignment: String = "center"
     open var foregroundColor: Int = 0xFFFFFFFF.toInt()
     open var backgroundColor: Int = 0xFF000000.toInt()
@@ -25,9 +26,9 @@ open class PossiblePreferences {
     open var maxTranslationDisplacement: Double = 0.0
     open var updateSeconds: Double = 60.0
     open var brightScreen: Boolean = false
-
-    // TODO: convert watchface to use same clockfacedrawer and this pref class
+    open var showStatusbar: Boolean = true
 
     // defaults, not editable
     open var padding: Int = 16
+    open var antialiasing = true
 }

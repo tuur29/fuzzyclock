@@ -7,7 +7,7 @@
             android:icon="@drawable/ic_visibility_off_white_24dp">
 
         <ListPreference
-                android:key="showDate"
+                android:key="showDateString"
                 android:title="@string/pref_title_showDate"
                 android:defaultValue="interactive"
                 android:entries="@array/pref_list_visibility_titles"
@@ -23,7 +23,7 @@
                 android:defaultValue="true"/>
 
         <ListPreference
-                android:key="showDigitalClock"
+                android:key="showDigitalClockString"
                 android:title="@string/pref_title_showDigitalClock"
                 android:defaultValue="never"
                 android:entries="@array/pref_list_visibility_titles"
@@ -39,7 +39,7 @@
         <ListPreference
                 android:key="fontSize"
                 android:title="@string/pref_title_fontSize"
-                android:defaultValue="26"
+                android:defaultValue="35"
                 android:entries="@array/pref_list_fontSize_values"
                 android:entryValues="@array/pref_list_fontSize_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
@@ -53,15 +53,15 @@
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
-                android:key="foregroundColor"
+                android:key="foregroundColorString"
                 android:title="@string/pref_title_foregroundColor"
-                android:defaultValue="#ffffff"
+                android:defaultValue="#FFFFFF"
                 android:entries="@array/pref_list_color_titles"
                 android:entryValues="@array/pref_list_color_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
-                android:key="backgroundColor"
+                android:key="backgroundColorString"
                 android:title="@string/pref_title_backgroundColor"
                 android:defaultValue="#000000"
                 android:entries="@array/pref_list_color_titles"
@@ -69,17 +69,17 @@
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
-                android:key="typeface"
+                android:key="fontFamily"
                 android:title="@string/pref_title_fontFamily"
-                android:defaultValue="SANS_SERIF"
-                android:entries="@array/pref_list_fontFamily_titles"
-                android:entryValues="@array/pref_list_fontFamily_values"
+                android:defaultValue="sans_serif"
+                android:entries="@array/pref_list_fontFamilyLimited_titles"
+                android:entryValues="@array/pref_list_fontFamilyLimited_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
                 android:key="emphasis"
                 android:title="@string/pref_title_emphasis"
-                android:defaultValue="NORMAL"
+                android:defaultValue="normal"
                 android:entries="@array/pref_list_emphasis_titles"
                 android:entryValues="@array/pref_list_emphasis_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
@@ -101,7 +101,7 @@
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
-                android:key="shadowColor"
+                android:key="shadowColorString"
                 android:title="@string/pref_title_shadowColor"
                 android:defaultValue="#000000"
                 android:entries="@array/pref_list_color_titles"

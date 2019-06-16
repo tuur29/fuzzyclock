@@ -4,9 +4,7 @@ import android.app.PendingIntent
 import android.content.*
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -18,18 +16,13 @@ import android.support.wearable.complications.rendering.ComplicationDrawable
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
-import android.text.DynamicLayout
-import android.text.Layout
-import android.text.TextPaint
 import android.util.Log
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.SurfaceHolder
 import androidx.core.graphics.ColorUtils
-import net.tuurlievens.fuzzyclock.text.FuzzyTextGenerator
+import net.tuurlievens.fuzzyclock.ClockFaceDrawer
+import net.tuurlievens.fuzzyclock.Helpers
 import java.lang.ref.WeakReference
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.HashMap
 
 
@@ -75,10 +68,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         private var currentScreen: Int = 0
 
-        private lateinit var mBackgroundPaint: Paint
-        private lateinit var mClockTextPaint: TextPaint
-        private lateinit var mDateTextPaint: TextPaint
-
         private var settingsUpdateReceiver : BroadcastReceiver? = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 loadSettings()
@@ -86,27 +75,11 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             }
         }
 
-        // SETTINGS
-        private var language = "en"
-        private var fontSize = 26
-        private var shadowSize = 4
-        private var textAlignment = "center"
-        private var foregroundColor = "#ffffff"
-        private var backgroundColor = "#000000"
-        private var shadowColor = "#000000"
-        private var showDate = "interactive"
-        private var font = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
-        private var showDigitalClock = "never"
-        private var simplerDate = true
-        private var useDateFont = false
+        private var prefs: WatchfaceData = WatchfaceData()
+        private var normalprefs: WatchfaceData = WatchfaceData()
+        private var ambientprefs: WatchfaceData = WatchfaceData()
 
-        // the following settings only get updated after watchface restarts
-        private var notifState = "hidden"
-        private var showStatusbar = true
-
-        private var foreground: Int = 0
-        private var lighterforeground: Int = 0
-        private var complicationcolor: Int = 0
+        private var complicationColor: Int = Color.WHITE
 
         // MAIN
 
@@ -121,43 +94,18 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         }
 
         private fun loadSettings() {
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this@FuzzyClockWatchface)
+            val manager = PreferenceManager.getDefaultSharedPreferences(this@FuzzyClockWatchface)
+            normalprefs = WatchfaceData.loadFromMap(manager.all)
+            ambientprefs = WatchfaceData.loadFromMap(manager.all)
+            ambientprefs.backgroundColor = Color.BLACK
+            ambientprefs.foregroundColor= Color.WHITE
+            ambientprefs.antialiasing = false
+            ambientprefs.shadowSize = 0
+            prefs = if (mAmbient) ambientprefs else normalprefs
 
-            val pickedLanguage = prefs.getString("language", language)
-            language = (if (pickedLanguage == "default") Locale.getDefault().language else pickedLanguage) ?: language
-            fontSize = prefs.getString("fontSize", fontSize.toString()).toInt()
-            shadowSize = prefs.getString("shadowSize", shadowSize.toString()).toInt()
-            textAlignment = prefs.getString("textAlignment", textAlignment)
-            foregroundColor = prefs.getString("foregroundColor", foregroundColor)
-            backgroundColor = prefs.getString("backgroundColor", backgroundColor)
-            shadowColor = prefs.getString("shadowColor", shadowColor)
-            showDate = prefs.getString("showDate", showDate)
-            notifState = prefs.getString("notifState", notifState)
-            showStatusbar = prefs.getBoolean("showStatusbar", showStatusbar)
-            showDigitalClock = prefs.getString("showDigitalClock", showDigitalClock)
-            simplerDate = prefs.getBoolean("simplerDate", simplerDate)
-            useDateFont = prefs.getBoolean("useDateFont", useDateFont)
-
-            val fontFamily = prefs.getString("fontFamily", "")
-            val emphasis = prefs.getString("emphasis", "")
-            if (fontFamily != "" && emphasis != "") {
-                font = Typeface.create(
-                    when(fontFamily) {
-                        "SERIF" -> Typeface.SERIF
-                        "MONOSPACE" -> Typeface.MONOSPACE
-                        else -> Typeface.SANS_SERIF
-                    },
-                    when(emphasis) {
-                        "BOLD" -> Typeface.BOLD
-                        "ITALIC" -> Typeface.ITALIC
-                        "BOLD_ITALIC" -> Typeface.BOLD_ITALIC
-                        else -> Typeface.NORMAL
-                    })
-            }
-
-            foreground = Color.parseColor(foregroundColor)
-            lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
-            complicationcolor = if (Color.red(foreground)*0.299 + Color.green(foreground)*0.587 + Color.blue(foreground)*0.114 > 186) {
+            // Decide if complications should be light or dark color
+            val foreground = Helpers.convertIntColor(prefs.foregroundColor)
+            complicationColor = if (Color.red(foreground)*0.299 + Color.green(foreground)*0.587 + Color.blue(foreground)*0.114 > 186) {
                 ColorUtils.setAlphaComponent(Color.BLACK, 100)
             } else {
                 ColorUtils.setAlphaComponent(Color.WHITE, 100)
@@ -165,28 +113,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         }
 
         private fun updateSettings() {
-
-            val size = dipToPixels(fontSize)
-
-            mBackgroundPaint = Paint().apply {
-                color = Color.parseColor(backgroundColor)
-            }
-
-            mClockTextPaint = TextPaint().apply {
-                typeface = font
-                color = foreground
-                isAntiAlias = true
-                textSize = size
-                setShadowLayer(shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
-            }
-
-            mDateTextPaint = TextPaint().apply {
-                typeface = if (!useDateFont) { Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL) } else { font }
-                isAntiAlias = true
-                textSize = Math.round(size * 0.65).toFloat()
-                color = lighterforeground
-                setShadowLayer(shadowSize.toFloat(), 0F, 0F, ColorUtils.setAlphaComponent(Color.parseColor(shadowColor), 150))
-            }
 
             for (entry in activeComplicationDrawable.entries) {
                 applyComplicationSettings(entry.key, entry.value)
@@ -196,9 +122,9 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 WatchFaceStyle.Builder(this@FuzzyClockWatchface)
                     .setAcceptsTapEvents(true)
                     .setStatusBarGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP)
-                    .setShowUnreadCountIndicator(notifState == "count")
-                    .setHideNotificationIndicator(notifState == "count" || notifState == "hidden")
-                    .setHideStatusBar(!showStatusbar)
+                    .setShowUnreadCountIndicator(prefs.notifState == "count")
+                    .setHideNotificationIndicator(prefs.notifState == "count" || prefs.notifState == "hidden")
+                    .setHideStatusBar(!prefs.showStatusbar)
                     .build()
             )
 
@@ -208,10 +134,19 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         // DRAWING FACES
 
         override fun onDraw(canvas: Canvas, bounds: Rect) {
+
+            // for some reason these checks don't work in updateSettings()
+            normalprefs.showDate = !prefs.showDateString.contentEquals("never")
+            normalprefs.showDigitalClock = !prefs.showDigitalClockString.contentEquals("never")
+
+            ambientprefs.showDate = prefs.showDateString.contentEquals("always")
+            ambientprefs.showDigitalClock = prefs.showDigitalClockString.contentEquals("always")
+
+            // start drawing
             drawBackground(canvas, bounds)
             when(currentScreen) {
                 1 -> drawComplicationsScreen(canvas, bounds)
-                else -> drawWatchScreen(canvas, bounds)
+                else -> ClockFaceDrawer.draw(canvas, bounds, prefs, applicationContext)
             }
         }
 
@@ -219,72 +154,8 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             if (mAmbient) {
                 canvas.drawColor(Color.BLACK)
             } else {
-                canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), mBackgroundPaint)
+                canvas.drawColor(prefs.backgroundColor)
             }
-        }
-
-
-        // do these static calculations once
-        val preparedPadding = Math.round(dipToPixels(18))
-
-        private fun drawWatchScreen(canvas: Canvas, bounds: Rect) {
-            val calendar = Calendar.getInstance()
-
-            // resize textsize when in ambient
-            if ((showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient)) {
-                mClockTextPaint.textSize = dipToPixels(Math.round(fontSize * 1.75F))
-            } else {
-                mClockTextPaint.textSize = dipToPixels(fontSize)
-            }
-
-            // create clock
-            val clock: String = when {
-                (showDigitalClock == "always") || (showDigitalClock == "interactive" && !mAmbient) -> {
-
-                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                    val min = calendar.get(Calendar.MINUTE)
-                    val hourText = if (hour < 10) "0" + hour.toString() else hour.toString()
-                    val minText = if (min < 10) "0" + min.toString() else min.toString()
-                    "$hourText:$minText"
-                }
-                else ->
-                    FuzzyTextGenerator.create(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), language)
-            }
-
-            val alignment = when (textAlignment) {
-                "left" -> Layout.Alignment.ALIGN_NORMAL
-                "right" -> Layout.Alignment.ALIGN_OPPOSITE
-                else -> Layout.Alignment.ALIGN_CENTER
-            }
-            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - preparedPadding*2, alignment, 1F, 1F, true)
-
-            canvas.save()
-            val textXCoordinate = bounds.left.toFloat() + preparedPadding
-
-            if (showDate == "always" || (showDate == "interactive" && !mAmbient)) {
-
-                // create date
-                val loc = Locale(language)
-                val format = if (simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
-                val date = format.format(calendar.time)
-                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - preparedPadding*2, alignment, 1F, 1F, true)
-
-                // draw date
-                val textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
-                val lineHeight = mClockTextPaint.textSize * clockLayout.lineCount * 1.25F
-                canvas.translate(textXCoordinate, textYCoordinate + lineHeight)
-                dateLayout.draw(canvas)
-
-                // draw clock
-                canvas.translate(0F, -lineHeight)
-
-            } else {
-                val textYCoordinate = bounds.exactCenterY() - (clockLayout.height / 2 )
-                canvas.translate(textXCoordinate, textYCoordinate)
-            }
-
-            clockLayout.draw(canvas)
-            canvas.restore()
         }
 
         private fun drawComplicationsScreen(canvas: Canvas, bounds: Rect) {
@@ -324,6 +195,9 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
         }
 
         private fun applyComplicationSettings(id: Int, drawable: ComplicationDrawable) {
+            val foreground = Helpers.convertIntColor(prefs.foregroundColor)
+            val lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
+
             drawable.setTextColorActive(foreground)
             drawable.setRangedValuePrimaryColorActive(foreground)
             drawable.setTitleColorActive(foreground)
@@ -335,7 +209,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             if (activeComplicationData[id]?.type != ComplicationData.TYPE_RANGED_VALUE)
                 drawable.setBorderColorActive(ColorUtils.setAlphaComponent(foreground, 100))
 
-            drawable.setBackgroundColorActive(complicationcolor)
+            drawable.setBackgroundColorActive(complicationColor)
         }
 
         override fun onComplicationDataUpdate(id: Int, data: ComplicationData) {
@@ -461,22 +335,11 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             super.onAmbientModeChanged(inAmbientMode)
             mAmbient = inAmbientMode
 
-            if (mLowBitAmbient) {
-                mClockTextPaint.isAntiAlias = !inAmbientMode
-                mDateTextPaint.isAntiAlias = !inAmbientMode
-            }
-
-            if (mAmbient) {
-                mBackgroundPaint.color = Color.BLACK
-                mClockTextPaint.color = Color.WHITE
-                mDateTextPaint.color = Color.WHITE
-
+            if (inAmbientMode) {
                 currentScreen = 0
-
+                prefs = ambientprefs
             } else {
-                mBackgroundPaint.color = Color.parseColor(backgroundColor)
-                mClockTextPaint.color = Color.parseColor(foregroundColor)
-                mDateTextPaint.color = Color.parseColor(foregroundColor)
+                prefs = normalprefs
             }
 
             for (entry in activeComplicationDrawable.entries) {
@@ -541,13 +404,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                 val delayMs = INTERACTIVE_UPDATE_RATE_MS - timeMs % INTERACTIVE_UPDATE_RATE_MS
                 mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs)
             }
-        }
-
-        // HELPERS
-
-        private fun dipToPixels(value: Int) : Float {
-            val metrics = this@FuzzyClockWatchface.resources.displayMetrics
-            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), metrics)
         }
     }
 }

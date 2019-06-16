@@ -16,13 +16,11 @@ class ClockFaceDrawer {
 
     companion object {
         fun draw(canvas: Canvas, bounds: Rect, prefs: PossiblePreferences, context: Context): Array<Rect> {
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
             canvas.translate(0F, 0F)
 
             val calendar = Calendar.getInstance()
-            val foregroundColor = "#" + Integer.toHexString(prefs.foregroundColor)
             val lighterForeground = ColorUtils.setAlphaComponent(prefs.foregroundColor, 150)
-            val shadowColor = "#" + Integer.toHexString(prefs.shadowColor)
+            val lighterShadow = ColorUtils.setAlphaComponent(prefs.shadowColor, 150)
 
             val emphasis = when(prefs.emphasis) {
                 "bold" -> Typeface.BOLD
@@ -46,10 +44,11 @@ class ClockFaceDrawer {
 
             val mClockTextPaint = TextPaint().apply {
                 typeface = font
-                color = Color.parseColor(foregroundColor)
+                color = prefs.foregroundColor
                 isAntiAlias = true
-                textSize = prefs.fontSize.toFloat()
-                setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, Color.parseColor(shadowColor))
+                textSize = if (prefs.showDigitalClock) prefs.fontSize * 1.85F else prefs.fontSize.toFloat()
+                isAntiAlias = prefs.antialiasing
+                setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, prefs.shadowColor)
             }
 
             val mDateTextPaint = TextPaint().apply {
@@ -57,7 +56,8 @@ class ClockFaceDrawer {
                 isAntiAlias = true
                 textSize = Math.round(prefs.fontSize * 0.65).toFloat()
                 color = lighterForeground
-                setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, ColorUtils.setAlphaComponent(Color.parseColor(shadowColor), 150))
+                isAntiAlias = prefs.antialiasing
+                setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, lighterShadow)
             }
 
             // update clock
@@ -65,7 +65,10 @@ class ClockFaceDrawer {
             val min = calendar.get(Calendar.MINUTE)
 
             val pickedLanguage = if (prefs.language == "default") Locale.getDefault().language else prefs.language
-            var clock = FuzzyTextGenerator.create(hour, min, pickedLanguage)
+            var clock: String = when {
+                prefs.showDigitalClock -> "${hour.toString().padStart(2, '0')}:${hour.toString().padStart(2, '0')}"
+                else -> FuzzyTextGenerator.create(hour, min, pickedLanguage)
+            }
             if (prefs.removeLineBreak) {
                 clock = clock.replace("\n", " ")
             }

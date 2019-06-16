@@ -39,7 +39,7 @@ class ComplicationSettingsActivity : Activity() {
 
         // set background color
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        background = Color.parseColor(prefs.getString("backgroundColor", "#ff000000"))
+        try { background = Color.parseColor(prefs.getString("backgroundColorString", "#000000")) } catch (e: Exception) {}
 
         // show complications
         defaultAddComplicationDrawable = getDrawable(R.drawable.ic_add_white_24dp)
@@ -83,10 +83,6 @@ class ComplicationSettingsActivity : Activity() {
 
         // couldn't find the proper place for this (oncreate or onviewcreated didn't work)
         setupCanvas()
-
-        canvas.drawRect(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), Paint().apply {
-            color = background
-        })
 
         for (entry in complicationDrawable) {
             val drawable = entry.value

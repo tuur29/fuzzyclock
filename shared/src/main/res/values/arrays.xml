@@ -17,7 +17,7 @@
     <string-array name="pref_list_color_values">
         <item>#000000</item>
         <item>#888888</item>
-        <item>#ffffff</item>
+        <item>#FFFFFF</item>
         <item>#D32F2F</item>
         <item>#C2185B</item>
         <item>#7B1FA2</item>
@@ -40,15 +40,20 @@
     </string-array>
 
     <string-array name="pref_list_fontSize_values">
-        <item>16</item>
-        <item>18</item>
+        <item>10</item>
+        <item>15</item>
         <item>20</item>
-        <item>22</item>
-        <item>24</item>
-        <item>26</item>
-        <item>28</item>
+        <item>25</item>
         <item>30</item>
-        <item>32</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+        <item>60</item>
+        <item>65</item>
+        <item>70</item>
+        <item>75</item>
     </string-array>
 
     <string-array name="pref_list_shadowSize_values">
@@ -120,6 +125,18 @@
         <item>Lobster</item>
         <item>Fredoka one</item>
         <item>Comfortaa</item>
+    </string-array>
+
+    <string-array name="pref_list_fontFamilyLimited_values">
+        <item>sans_serif</item>
+        <item>serif</item>
+        <item>monospace</item>
+    </string-array>
+
+    <string-array name="pref_list_fontFamilyLimited_titles">
+        <item>Sans serif</item>
+        <item>Serif</item>
+        <item>Monospace</item>
     </string-array>
 
     <string-array name="pref_list_emphasis_values">

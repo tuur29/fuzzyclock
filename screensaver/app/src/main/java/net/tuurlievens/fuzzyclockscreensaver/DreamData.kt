@@ -6,7 +6,7 @@ class DreamData(
     override var maxTranslationDisplacement: Double = 0.0,
     override var updateSeconds: Double = 60.0,
     override var language: String = "default",
-    override var fontFamily: String = "",
+    override var fontFamily: String = "sans_serif",
     override var fontSize: Int = 36,
     override var shadowSize: Int = 6,
     override var textAlignment: String = "center",
@@ -21,13 +21,18 @@ class DreamData(
     override var simplerDate: Boolean = true,
     override var useDateFont: Boolean = false,
     override var padding: Int = 32
+    // TODO: add emphasis preference
 ): PossiblePreferences() {
 
     companion object {
         val default = DreamData()
 
+        // TODO: map probably doesn't contain all default keys this needs to be solved like watchface
         fun loadFromMap(map: Map<String, *>): DreamData {
             val prefs = DreamData()
+
+            // TODO: color types were changed from string to int, this needs to stay compatible,
+            // see widgetdata for a solution
 
             try { prefs.maxTranslationDisplacement = map["maxTranslationDisplacement"].toString().toDouble()  } catch(e: Exception) {}
             try { prefs.updateSeconds = map["updateSeconds"].toString().toDouble()                            } catch(e: Exception) {}

@@ -1,6 +1,7 @@
 package net.tuurlievens.fuzzyclock
 
 import android.content.Context
+import android.graphics.Color
 import android.util.TypedValue
 
 // TODO: use helpers in widget and watchface
@@ -13,6 +14,10 @@ class Helpers {
 
         fun pixelsToDip(value: Int, context: Context) : Int {
             return Math.ceil((value * context.resources.displayMetrics.density).toDouble()).toInt()
+        }
+
+        fun convertIntColor(value: Int): Int {
+            return Color.parseColor("#" + Integer.toHexString(value))
         }
 
     }

@@ -163,6 +163,7 @@ class FuzzyClockDream : DreamService() {
 
                     val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                     val canvas = Canvas(image)
+                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
                     val hitRegions = ClockFaceDrawer.draw(canvas, Rect(0, 0, width, height), prefs, applicationContext)
                     findViewById<ImageView>(R.id.canvas).setImageBitmap(image)
 
