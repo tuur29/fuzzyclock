@@ -46,7 +46,6 @@ class DreamData(
             prefs.useDateFont = (map["useDateFont"]?.toString() ?: prefs.useDateFont.toString()).toBoolean()
             prefs.emphasis = (map["emphasis"]?.toString() ?: prefs.emphasis.toString())
 
-            // TODO: color types were changed from string to int, this needs to stay compatible?
             prefs.foregroundColor = (map["foregroundColor"]?.toString() ?: prefs.foregroundColor.toString()).toInt()
             prefs.backgroundColor = (map["backgroundColor"]?.toString() ?: prefs.backgroundColor.toString()).toInt()
             prefs.shadowColor = (map["shadowColor"]?.toString() ?: prefs.shadowColor.toString()).toInt()

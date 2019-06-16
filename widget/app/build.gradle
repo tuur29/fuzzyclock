@@ -5,6 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('../../fuzzyclock-key.jks')
+            keyAlias 'key0'
+            // keyPassword 'password'
+            // storePassword 'password'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "net.tuurlievens.fuzzyclockwidget"
@@ -18,6 +26,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+//            signingConfig signingConfigs.config
         }
     }
 }
