@@ -17,6 +17,7 @@ import android.view.View
 import androidx.core.app.JobIntentService
 import net.tuurlievens.fuzzyclock.ClockFaceDrawer
 import net.tuurlievens.fuzzyclock.Helpers
+import kotlin.math.roundToInt
 
 
 class UpdateWidgetService : JobIntentService() {
@@ -56,12 +57,12 @@ class UpdateWidgetService : JobIntentService() {
                 width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
                 height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
             }
-            val bounds = Rect(0, 0, width, height)
             var hitRegions: Array<Rect> = arrayOf()
 
             // create canvas and draw
             if (width > 0 && height > 0) {
-                val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                val bounds = Rect(0, 0, (width*prefs.scaling).roundToInt(), (height*prefs.scaling).roundToInt())
+                val image = Bitmap.createBitmap((width*prefs.scaling).roundToInt(), (height*prefs.scaling).roundToInt(), Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(image)
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
                 hitRegions = ClockFaceDrawer.draw(canvas, bounds, prefs, context)
@@ -100,7 +101,7 @@ class UpdateWidgetService : JobIntentService() {
 
             // add clock click handler
             val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
-            if (clockPackageName != "") {
+            if (clockPackageName != "" && hitRegions.size > 1) {
                 view.setViewPadding(R.id.clockbuttoncontainer,
                     Helpers.pixelsToDip(hitRegions[0].left, context),
                     Helpers.pixelsToDip(hitRegions[0].top, context),

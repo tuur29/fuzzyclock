@@ -27,6 +27,7 @@ open class PossiblePreferences {
     open var updateSeconds: Double = 60.0
     open var brightScreen: Boolean = false
     open var showStatusbar: Boolean = true
+    open var scaling: Double = 1.0
 
     // defaults, not editable
     open var padding: Int = 16

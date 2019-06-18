@@ -46,18 +46,18 @@ class ClockFaceDrawer {
                 typeface = font
                 color = prefs.foregroundColor
                 isAntiAlias = true
-                textSize = if (prefs.showDigitalClock) prefs.fontSize * 1.85F else prefs.fontSize.toFloat()
+                textSize = if (prefs.showDigitalClock) (prefs.fontSize * prefs.scaling * 1.85F).toFloat() else (prefs.fontSize * prefs.scaling).toFloat()
                 isAntiAlias = prefs.antialiasing
-                setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, prefs.shadowColor)
+                setShadowLayer((prefs.shadowSize * prefs.scaling).toFloat(), 0F, 0F, prefs.shadowColor)
             }
 
             val mDateTextPaint = TextPaint().apply {
                 typeface = if (prefs.useDateFont) { font } else { Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL) }
                 isAntiAlias = true
-                textSize = Math.round(prefs.fontSize * 0.65).toFloat()
+                textSize = Math.round(prefs.fontSize * prefs.scaling * 0.65).toFloat()
                 color = lighterForeground
                 isAntiAlias = prefs.antialiasing
-                setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, lighterShadow)
+                setShadowLayer((prefs.shadowSize * prefs.scaling).toFloat(), 0F, 0F, lighterShadow)
             }
 
             // update clock
@@ -78,12 +78,12 @@ class ClockFaceDrawer {
                 "right" -> Layout.Alignment.ALIGN_OPPOSITE
                 else -> Layout.Alignment.ALIGN_CENTER
             }
-            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - prefs.padding*2, alignment, 1F, 1F, true)
+            val clockLayout = DynamicLayout(clock, mClockTextPaint, bounds.width() - (prefs.padding*prefs.scaling*2).roundToInt(), alignment, 1F, 1F, true)
 
             canvas.save()
             // used for clock and date listeners
             val hitRegions = mutableListOf(Rect(), Rect())
-            val textXCoordinate = bounds.left.toFloat() + prefs.padding
+            val textXCoordinate = (bounds.left + prefs.padding * prefs.scaling).toFloat()
             val textYCoordinate: Float
 
             if (prefs.showDate) {
@@ -91,7 +91,7 @@ class ClockFaceDrawer {
                 val loc = Locale(prefs.language)
                 val format = if (prefs.simplerDate) SimpleDateFormat("EEEE", loc) else SimpleDateFormat("E, d MMM", loc)
                 val date = format.format(calendar.time)
-                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - prefs.padding*2, alignment, 1F, 1F, true)
+                val dateLayout = DynamicLayout(date, mDateTextPaint, bounds.width() - (prefs.padding*prefs.scaling*2).roundToInt(), alignment, 1F, 1F, true)
 
                 // draw date
                 textYCoordinate = bounds.exactCenterY() - (clockLayout.height + dateLayout.height) / 2
@@ -102,10 +102,10 @@ class ClockFaceDrawer {
                 canvas.translate(0F, -clockLayout.height.toFloat())
 
                 hitRegions[1] = Rect(
-                    textXCoordinate.roundToInt(),
-                    textYCoordinate.roundToInt() + clockLayout.height,
-                    (textXCoordinate + dateLayout.width).roundToInt(),
-                    textYCoordinate.roundToInt() + clockLayout.height + dateLayout.height
+                    (textXCoordinate / prefs.scaling).roundToInt(),
+                    ((textYCoordinate + clockLayout.height) / prefs.scaling).roundToInt(),
+                    ((textXCoordinate + dateLayout.width) / prefs.scaling).roundToInt(),
+                    ((textYCoordinate + clockLayout.height + dateLayout.height) / prefs.scaling).roundToInt()
                 )
 
             } else {
@@ -115,10 +115,10 @@ class ClockFaceDrawer {
             clockLayout.draw(canvas)
 
             hitRegions[0] = Rect( // clock bounds
-                textXCoordinate.roundToInt(),
-                textYCoordinate.roundToInt(),
-                (textXCoordinate + clockLayout.width).roundToInt(),
-                textYCoordinate.roundToInt() + clockLayout.height
+                (textXCoordinate / prefs.scaling).roundToInt(),
+                (textYCoordinate / prefs.scaling).roundToInt(),
+                ((textXCoordinate + clockLayout.width) / prefs.scaling).roundToInt(),
+                ((textYCoordinate + clockLayout.height) / prefs.scaling).roundToInt()
             )
 
             return hitRegions.toTypedArray()

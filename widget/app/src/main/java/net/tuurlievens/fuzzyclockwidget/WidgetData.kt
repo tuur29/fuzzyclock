@@ -14,7 +14,8 @@ class WidgetData(
     override var shadowColor: Int = 0xFF000000.toInt(),
     override var fontFamily: String = "sans_serif",
     override var useDateFont: Boolean = false,
-    override var emphasis: String = "normal"
+    override var emphasis: String = "normal",
+    override var scaling: Double = 1.5
 ): PossiblePreferences() {
 
     // Never change the order of these datastring parsers! (compatiblity)
@@ -31,7 +32,8 @@ class WidgetData(
                 shadowColor.toString() + ";" +
                 fontFamily.toString() + ";" +
                 useDateFont.toString() + ";" +
-                emphasis.toString()
+                emphasis.toString() + ";" +
+                scaling.toString()
     }
 
     companion object {
@@ -60,7 +62,8 @@ class WidgetData(
                 arr.elementAtOrElse(8) { defaults.shadowColor.toString() }.toInt(),
                 arr.elementAtOrElse(9) { defaults.fontFamily.toString() }.toString(),
                 arr.elementAtOrElse(10) { defaults.useDateFont.toString() }.toBoolean(),
-                arr.elementAtOrElse(11) { defaults.emphasis.toString() }.toString()
+                arr.elementAtOrElse(11) { defaults.emphasis.toString() }.toString(),
+                arr.elementAtOrElse(12) { defaults.scaling.toString() }.toDouble()
             )
         }
     }

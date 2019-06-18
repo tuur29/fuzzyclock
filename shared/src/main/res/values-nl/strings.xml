@@ -45,6 +45,7 @@
     <string name="pref_title_shadowSize">Schaduwgrootte</string>
     <string name="pref_title_shadowColor">Schaduwkleur</string>
     <string name="pref_title_emphasis">Nadruk</string>
+    <string name="pref_title_scaling">Kwaliteit (hoger betekend minder blur)</string>
 
     <string name="msg_notificationaccess">Voor deze functie moet je deze app toegang tot notificaties verlenen</string>
     <string name="msg_editbtn">Druk op de rechterbovenhoek van de widget om hem aan te passen</string>

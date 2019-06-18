@@ -44,7 +44,8 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
             "shadowColor",
             "fontFamily",
             "useDateFont",
-            "emphasis"
+            "emphasis",
+            "scaling"
         )
 
         for (item in array) {
@@ -56,7 +57,10 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
                 when (pref::class.java) {
                     SwitchPreference::class.java -> prefs.putBoolean(item, readPropery(parent!!.prefs!!, item))
-                    EditTextPreference::class.java -> prefs.putString(item, (readPropery(parent!!.prefs!!, item) as Int).toString())
+                    EditTextPreference::class.java -> when(item) {
+                        "scaling" -> prefs.putString(item, (readPropery(parent!!.prefs!!, item) as Double).toString())
+                        else -> prefs.putString(item, (readPropery(parent!!.prefs!!, item) as Int).toString())
+                    }
                     ListPreference::class.java -> prefs.putString(item, readPropery(parent!!.prefs!!, item))
                     ColorPreferenceCompat::class.java -> prefs.putInt(item, readPropery(parent!!.prefs!!, item))
                 }
@@ -77,6 +81,7 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
         if (property is KMutableProperty<*>) {
             val newValue = when (property.returnType.javaType.toString()) {
                 "int" -> try { value.toString().toInt() } catch (e:IllegalArgumentException) { readPropery<Int>(WidgetData.default, propertyName) }
+                "double" -> try { value.toString().toDouble() } catch (e:IllegalArgumentException) { readPropery<Int>(WidgetData.default, propertyName) }
                 "boolean" -> try { value.toString().toBoolean() } catch (e:IllegalArgumentException) { readPropery<Boolean>(WidgetData.default, propertyName) }
                 else -> value.toString()
             }

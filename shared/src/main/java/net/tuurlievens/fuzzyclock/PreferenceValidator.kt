@@ -16,6 +16,7 @@ class PreferenceValidator {
 
                 when (name) {
                     "maxTranslationDisplacement" -> validated = if (value.toDouble() in 0.0..1.0) { Status.PASSED } else { Status.FAILED }
+                    "scaling" -> validated = if (value.toDouble() in 0.1..5.0) { Status.PASSED } else { Status.FAILED }
                     "updateSeconds" -> validated = if (value.toInt() in 0..86400) { Status.PASSED } else { Status.FAILED }
                     "fontSize" -> validated = if (value.toInt() in 1..500) { Status.PASSED } else { Status.FAILED }
                     "shadowSize" -> validated = if (value.toInt() in 0..500) { Status.PASSED } else { Status.FAILED }
