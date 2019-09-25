@@ -91,7 +91,12 @@ class UpdateWidgetService : JobIntentService() {
                         Helpers.pixelsToDip(width - hitRegions[1].right, context),
                         Helpers.pixelsToDip(height - hitRegions[1].bottom, context)
                     )
-                    view.setOnClickPendingIntent(R.id.datebutton, getPendingIntentByPackageName(context, calendarPackageName))
+                    try {
+                        val intent = getPendingIntentByPackageName(context, calendarPackageName)
+                        view.setOnClickPendingIntent(R.id.datebutton, intent)
+                    } catch (e: NullPointerException) {
+
+                    }
                 } else {
                     view.setViewVisibility(R.id.datebuttoncontainer, View.GONE)
                 }
@@ -101,6 +106,7 @@ class UpdateWidgetService : JobIntentService() {
 
             // add clock click handler
             val clockPackageName = getDefaultPackageName(context, AlarmClock.ACTION_SET_ALARM)
+
             if (clockPackageName != "" && hitRegions.size > 1) {
                 view.setViewPadding(R.id.clockbuttoncontainer,
                     Helpers.pixelsToDip(hitRegions[0].left, context),
@@ -108,7 +114,31 @@ class UpdateWidgetService : JobIntentService() {
                     Helpers.pixelsToDip(width - hitRegions[0].right, context),
                     Helpers.pixelsToDip(height - hitRegions[0].bottom, context)
                 )
-                view.setOnClickPendingIntent(R.id.clockbutton, getPendingIntentByPackageName(context, clockPackageName))
+                // clockPackageName isn't always correct on later Android versions, we are trying a bunch manually if it fails
+                // Source: https://www.apkmirror.com/?post_type=app_release&searchtype=app&s=clock
+                val clockApps = arrayOf(
+                    clockPackageName,
+                    "com.google.android.deskclock",
+                    "com.android.deskclock",
+                    "com.sec.android.app.clockpackage",
+                    "com.oneplus.deskclock",
+                    "com.lge.clock",
+                    "com.lenovo.deskclock",
+                    "com.asus.deskclock",
+                    "com.sonyericsson.organizer",
+                    "com.htc.android.worldclock",
+                    "com.tct.timetool",
+                    "zte.com.cn.alarmclock"
+                )
+                for (app in clockApps) {
+                    try {
+                        val intent = getPendingIntentByPackageName(context, app)
+                        view.setOnClickPendingIntent(R.id.clockbutton, intent)
+                        break
+                    } catch (e: NullPointerException) {
+
+                    }
+                }
             } else {
                 view.setViewVisibility(R.id.clockbuttoncontainer, View.GONE)
             }
@@ -133,10 +163,11 @@ class UpdateWidgetService : JobIntentService() {
         }
 
         private fun getPendingIntentByPackageName(context: Context, packagename: String): PendingIntent {
+            val intent = context.packageManager.getLaunchIntentForPackage(packagename)!!
             return PendingIntent.getActivity(
                 context,
                 0,
-                context.packageManager.getLaunchIntentForPackage(packagename)!!,
+                intent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
