@@ -7,19 +7,13 @@ class FuzzyTextSpanish : FuzzyTextInterface {
 
         // convert from minute count to fuzzy text
         val mintext = when {
-            min in 0..5 -> "y cinco"
-            min in 5..10 -> "y diez"
-            min in 10..15 -> "y cuarto"
-            min in 15..20-> "y veinte"
-            min in 20..25 -> "y veinticinco" // spanish has terms for every five minutes
-            min in 25..30 -> "y media"
-            min in 30..35 -> "menos veinticinco" // hour switches here
-            min in 35..40 -> "menos veinte"
-            min in 40..45 -> "menos cuarto"
-            min in 45..50 -> "menos diez"
-            min in 50..55 -> "menos cinco"
-            else -> ""
-        }
+            min in 0..5 -> ""
+            min in 5..15 -> "y diez"
+            min in 15..25 -> "y veinte"
+            min in 25..35 -> "y media"
+            min in 35..45 -> "menos veinte" // hour switches here
+            min in 45..55 -> "menos diez"
+			else -> ""
 
         // change the displayed hour to the next one (instead of the current one) because spanish uses "<hour+1> menos cuarto"
         var hourtext = if (min < 33) { // see line 14 for switch
@@ -61,7 +55,7 @@ class FuzzyTextSpanish : FuzzyTextInterface {
         }
 
         // linebreak is later removed when the setting is active
-        return "$hourtext$mintext${if(mintext == ""){""}else{"\n"}}" // spanish uses the "hour & x minutes" format
+        return "$hourtext${if(mintext == ""){""}else{"\n"}}$mintext" // spanish uses the "hour & x minutes" format
     }
 
 }

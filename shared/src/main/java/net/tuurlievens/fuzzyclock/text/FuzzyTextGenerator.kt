@@ -8,9 +8,9 @@ class FuzzyTextGenerator {
             return when (locale) {
 
                 // TODO: add more locales
+                "es" -> FuzzyTextSpanish()
                 "nl" -> FuzzyTextDutch()
                 "en-num" -> FuzzyTextEnglishNumbered()
-                "es" -> FuzzyTextSpanish()
                 else -> FuzzyTextEnglish()
 
             }.generate(hour, min)
