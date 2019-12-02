@@ -5,8 +5,8 @@
         <item>default</item>
         <item>en</item>
         <item>en-num</item>
-        <item>es</item>
         <item>nl</item>
+        <item>es</item>
     </string-array>
 
     <string-array name="pref_list_textAlignment_values">
