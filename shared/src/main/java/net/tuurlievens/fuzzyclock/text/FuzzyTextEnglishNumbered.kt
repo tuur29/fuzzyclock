@@ -9,9 +9,11 @@ class FuzzyTextEnglishNumbered : FuzzyTextInterface {
         val mintext = when {
             min in 0..5 -> ""
             min in 5..15 -> "ten past"
-            min in 15..25 -> "twenty past"
+            min in 15..20 -> "quarter past"
+            min in 20..25 -> "twenty past"
             min in 25..35 -> "thirty past"
-            min in 35..45 -> "twenty to" // hour switches here
+            min in 35..40 -> "twenty to" // hour switches here
+            min in 40..45 -> "quarter to"
             min in 45..55 -> "ten to"
             else -> ""
         }
