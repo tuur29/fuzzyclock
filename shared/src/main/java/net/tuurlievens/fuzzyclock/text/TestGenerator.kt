@@ -1,7 +1,8 @@
 package net.tuurlievens.fuzzyclock.text
 
-// With this class you can easily generate a bunch of different fuzzy clock converrsions,
-// Simply use the Android Studio "REPL" console under "Tools" > "Kotlin" > "Kotlin REPL" and paste the following text (change locale):
+/**
+ * With this class you can easily generate a bunch of different fuzzy clock converrsions,
+ * Simply use the Android Studio "REPL" console under "Tools" > "Kotlin" > "Kotlin REPL" and paste the following text (change locale):
 
 import net.tuurlievens.fuzzyclock.text.TestGenerator
 TestGenerator.test("nl")
