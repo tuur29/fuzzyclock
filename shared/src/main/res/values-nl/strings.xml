@@ -104,4 +104,15 @@
         <item>Altijd</item>
     </string-array>
 
+    <string name="title_fontFamily_sans">Sans serif</string>
+    <string name="title_fontFamily_serif">Serif</string>
+    <string name="title_fontFamily_mono">Monospace</string>
+
+    <string-array name="pref_list_emphasis_titles">
+        <item>Normaal</item>
+        <item>Vet</item>
+        <item>Cursief</item>
+        <item>Vet cursief</item>
+    </string-array>
+
 </resources>

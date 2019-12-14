@@ -17,7 +17,7 @@ class FuzzyTextEnglish : FuzzyTextInterface {
         }
 
         // change the displayed hour to the next one (instead of the current one) because english uses "Quarter to <hour+1>"
-        var hourtext = if (min < 40) {
+        val hourtext = if (min < 40) {
             when {
                 hour % 12 == 1 -> "one" // 1:15 -> quarter past one
                 hour % 12 == 2 -> "two" // 2:15 -> quarter past two

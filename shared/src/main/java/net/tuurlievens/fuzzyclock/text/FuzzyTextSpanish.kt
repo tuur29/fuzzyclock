@@ -14,9 +14,10 @@ class FuzzyTextSpanish : FuzzyTextInterface {
             min in 35..45 -> "menos veinte" // hour switches here
             min in 45..55 -> "menos diez"
 			else -> ""
+        }
 
         // change the displayed hour to the next one (instead of the current one) because spanish uses "<hour+1> menos cuarto"
-        var hourtext = if (min < 33) { // see line 14 for switch
+        val hourtext = if (min < 33) { // see line 14 for switch
             when {
                 hour % 12 == 1 -> "una" // 1:15 -> una y cuarto
                 hour % 12 == 2 -> "dos" // 2:15 -> dos y cuarto

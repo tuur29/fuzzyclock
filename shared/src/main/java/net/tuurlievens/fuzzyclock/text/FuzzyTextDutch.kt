@@ -15,7 +15,7 @@ class FuzzyTextDutch : FuzzyTextInterface {
         }
 
         // dutch uses "half <hour+1>"
-        var hourtext = if (min < 20) {
+        val hourtext = if (min < 20) {
             when {
                 hour % 12 == 1 -> "een"
                 hour % 12 == 2 -> "twee"

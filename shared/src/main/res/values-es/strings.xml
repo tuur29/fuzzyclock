@@ -104,4 +104,15 @@
         <item>Siempre</item>
     </string-array>
 
+    <string name="title_fontFamily_sans">Sans serif</string>
+    <string name="title_fontFamily_serif">Serif</string>
+    <string name="title_fontFamily_mono">Monospace</string>
+
+    <string-array name="pref_list_emphasis_titles">
+        <item>Normal</item>
+        <item>Negrita</item>
+        <item>Cursiva</item>
+        <item>Negrita cursiva</item>
+    </string-array>
+
 </resources>

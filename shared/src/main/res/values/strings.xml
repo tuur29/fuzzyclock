@@ -58,7 +58,7 @@
         <item>English</item>
         <item>English (numbers)</item>
         <item>Dutch</item>
-        <item>Español</item>
+        <item>Spanish</item>
     </string-array>
 
     <string-array name="pref_list_textAlignment_titles">
@@ -102,6 +102,17 @@
         <item>Never</item>
         <item>When awake</item>
         <item>Always</item>
+    </string-array>
+
+    <string name="title_fontFamily_sans">Sans serif</string>
+    <string name="title_fontFamily_serif">Serif</string>
+    <string name="title_fontFamily_mono">Monospace</string>
+
+    <string-array name="pref_list_emphasis_titles">
+        <item>Normal</item>
+        <item>Bold</item>
+        <item>Italic</item>
+        <item>Bold italic</item>
     </string-array>
 
 </resources>

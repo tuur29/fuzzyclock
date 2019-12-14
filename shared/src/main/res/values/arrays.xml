@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="pref_list_language_values">
         <item>default</item>
@@ -93,10 +93,19 @@
         <item>always</item>
     </string-array>
 
+    <string tools:ignore="MissingTranslation" name="val_fontFamily_sans">sans_serif</string>
+    <string tools:ignore="MissingTranslation" name="val_fontFamily_serif">serif</string>
+    <string tools:ignore="MissingTranslation" name="val_fontFamily_mono">monospace</string>
+    <string-array name="pref_list_fontFamilyLimited_values">
+        <item>@string/val_fontFamily_sans</item>
+        <item>@string/val_fontFamily_serif</item>
+        <item>@string/val_fontFamily_mono</item>
+    </string-array>
+
     <string-array name="pref_list_fontFamily_values">
-        <item>sans_serif</item>
-        <item>serif</item>
-        <item>monospace</item>
+        <item>@string/val_fontFamily_sans</item>
+        <item>@string/val_fontFamily_serif</item>
+        <item>@string/val_fontFamily_mono</item>
         <item>roboto</item>
         <item>roboto_thin</item>
         <item>roboto_black</item>
@@ -114,10 +123,16 @@
         <item>comfortaa</item>
     </string-array>
 
+    <string-array name="pref_list_fontFamilyLimited_titles">
+        <item>@string/title_fontFamily_sans</item>
+        <item>@string/title_fontFamily_serif</item>
+        <item>@string/title_fontFamily_mono</item>
+    </string-array>
+
     <string-array name="pref_list_fontFamily_titles">
-        <item>Sans serif</item>
-        <item>Serif</item>
-        <item>Monospace</item>
+        <item>@string/title_fontFamily_sans</item>
+        <item>@string/title_fontFamily_serif</item>
+        <item>@string/title_fontFamily_mono</item>
         <item>Roboto</item>
         <item>Roboto Thin</item>
         <item>Roboto Black</item>
@@ -135,30 +150,11 @@
         <item>Comfortaa</item>
     </string-array>
 
-    <string-array name="pref_list_fontFamilyLimited_values">
-        <item>sans_serif</item>
-        <item>serif</item>
-        <item>monospace</item>
-    </string-array>
-
-    <string-array name="pref_list_fontFamilyLimited_titles">
-        <item>Sans serif</item>
-        <item>Serif</item>
-        <item>Monospace</item>
-    </string-array>
-
     <string-array name="pref_list_emphasis_values">
         <item>normal</item>
         <item>bold</item>
         <item>italic</item>
         <item>bold_italic</item>
-    </string-array>
-
-    <string-array name="pref_list_emphasis_titles">
-        <item>Normal</item>
-        <item>Bold</item>
-        <item>Italic</item>
-        <item>Bold italic</item>
     </string-array>
 
 </resources>
