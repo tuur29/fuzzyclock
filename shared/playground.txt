@@ -1,0 +1,112 @@
+// This file is an exact copy of the Kotlin playground (https://pl.kotl.in/v0T4WBNvk), just here in case something happens to the link.
+
+/**
+ * You can use this playground to test your own Translation class
+ * for the Fuzzyclock Android app: https://github.com/tuur29/fuzzyclock/
+ * It is based on the TestGenerator class.
+ * 
+ * How to use:
+ * - Edit the string values inside the generator function below.
+ * - Press "play" icon in top right corner.
+ * - Once output is correct, follow the rest of the guide: https://github.com/tuur29/fuzzyclock/blob/master/shared/README.md
+ * 
+ * The "generate" function will be an exact copy of the one bundled with the app.
+ */
+
+class FuzzyTextCustom {
+
+    // hour is a 24-hour based integer
+    fun generate(hour: Int, min: Int): String {
+
+        // convert from minute count to fuzzy text
+        val mintext = when {
+            min < 2 -> "around"
+            min < 10 -> "just past"
+            min < 20 -> "quarter past"
+            min < 40 -> "half past" // hour switches here
+            min < 50 -> "quarter to"
+            min < 58 -> "almost"
+            else -> "around"
+        }
+
+        // change the displayed hour to the next one (instead of the current one) because english uses "Quarter to <hour+1>"
+        val hourtext = if (min < 40) {
+            when {
+                hour % 12 == 1 -> "one" // 1:15 -> quarter past one
+                hour % 12 == 2 -> "two" // 2:15 -> quarter past two
+                hour % 12 == 3 -> "three"
+                hour % 12 == 4 -> "four"
+                hour % 12 == 5 -> "five"
+                hour % 12 == 6 -> "six"
+                hour % 12 == 7 -> "seven"
+                hour % 12 == 8 -> "eight"
+                hour % 12 == 9 -> "nine"
+                hour % 12 == 10 -> "ten"
+                hour % 12 == 11 -> "eleven"
+                else -> when (hour) {
+                    12 -> "noon" // 12:15 -> quarter past noon
+                    else -> "midnight"
+                }
+            }
+        } else {
+            when {
+                hour % 12 == 1 -> "two" // 1:45 -> quarter to two
+                hour % 12 == 2 -> "three" // 2:45 -> quarter to three
+                hour % 12 == 3 -> "four"
+                hour % 12 == 4 -> "five"
+                hour % 12 == 5 -> "six"
+                hour % 12 == 6 -> "seven"
+                hour % 12 == 7 -> "eight"
+                hour % 12 == 8 -> "nine"
+                hour % 12 == 9 -> "ten"
+                hour % 12 == 10 -> "eleven"
+                else -> when (hour) {
+                    11 -> "noon" // 11:45 -> quarter to noon
+                    23 -> "midnight"
+                    else -> "one"
+                }
+            }
+        }
+
+        // linebreak is later removed when the setting is active
+        return "$mintext\n$hourtext"
+    }
+
+}
+
+// Generate test output (doesn't need editing)
+fun main() {
+    val times = arrayOf( // times are 24-hour based
+        intArrayOf(0,0),
+        intArrayOf(0,1),
+        intArrayOf(1,3),
+        intArrayOf(2,5),
+        intArrayOf(3,7),
+        intArrayOf(4,10),
+        intArrayOf(5,14),
+        intArrayOf(6,15),
+        intArrayOf(7,16),
+        intArrayOf(8,20),
+        intArrayOf(9,29),
+        intArrayOf(9,30),
+        intArrayOf(9,31),
+        intArrayOf(9,35),
+        intArrayOf(9,36),
+        intArrayOf(10,41),
+        intArrayOf(11,50),
+        intArrayOf(12,53),
+        intArrayOf(12,55),
+        intArrayOf(13,57),
+        intArrayOf(14,59),
+        intArrayOf(15,0),
+        intArrayOf(23,50)
+    )
+
+    times.forEach {
+        val (hour, min) = it
+        val generator = FuzzyTextCustom()
+        val text = generator.generate(hour, min)
+            .replace("\n", " ")
+        println("${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')} -> $text\n")
+    }
+}

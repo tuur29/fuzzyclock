@@ -1,13 +1,10 @@
 package net.tuurlievens.fuzzyclock.text
 
-
 // With this class you can easily generate a bunch of different fuzzy clock converrsions,
-// Simply open  Kotlin REPL under Tools > Kotlin in Android studio and call TestGenerator.test() with a locale:
-/* Example:
+// Simply use the Android Studio "REPL" console under "Tools" > "Kotlin" > "Kotlin REPL" and paste the following text (change locale):
 
 import net.tuurlievens.fuzzyclock.text.TestGenerator
-
-TestGenerator.test()
+TestGenerator.test("nl")
 
 */
 class TestGenerator {

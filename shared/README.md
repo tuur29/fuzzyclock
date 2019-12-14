@@ -2,7 +2,7 @@
 
 ## Explanation
 
-Each localization can use their own rules of when to show which text. This means the following explanation might be wrong in  some specific languages. The following example will use English.
+Each localization can use their own rules of when to show which text. This means the following explanation might be wrong in some specific languages. The following example will use English.
 
 The app will show a different text at these minute marks:
 - `:02 - :10` → Just past
@@ -20,7 +20,7 @@ I try to use as much spoken language instead of translation the numbers (like so
 
 ## Adding translations
 
-The code for creating the text was kept fairly amateurish so someone with basic programming knowledge can add their own translations. If you can't program but would still like to help send me a message and I'll figure something out (you'll probably get a list with all the text or something).
+The code for creating the text was kept fairly amateurish so someone with basic programming knowledge can add their own translations. If you can't program but would still like to help send me a message and I'll figure something out (you'll probably get a list with all the text or something). If you don't know how to use Kotlin or run this project, I suggest you create your translation in the [Kotlin Playground](https://pl.kotl.in/v0T4WBNvk) instead, this will give you live feedback without installing anything.
 
 You will need to know the official abbreviation of the language you wish to add. Currently Android uses the [ISO639-2 specification](https://www.loc.gov/standards/iso639-2/php/code_list.php). If possible A `ISO639-1` (2nd column) code is preferred since older Android versions don't support v2.
 
@@ -33,6 +33,8 @@ The files you need are located at [/shared/src/main/java/net/tuurlievens/fuzzycl
 2. Register the new Class in the `create()` function of `FuzzyTextGenerator.kt` (line 7)
 3. Replace the English text in the file you created. 
 4. Edit the minute mark when the hour changes to the next one (around line 15)
+
+Once finished you can test your translation by copying the "generate" function to this [Kotlin Playground](https://pl.kotl.in/v0T4WBNvk) or by using the [`TestGenerator`](https://github.com/tuur29/fuzzyclock/blob/master/shared/src/main/java/net/tuurlievens/fuzzyclock/text/TestGenerator.kt) class.
 
 ### 2. Translating the app itself
 

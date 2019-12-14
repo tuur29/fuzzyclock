@@ -26,4 +26,4 @@ Click on the app names to see more information about each app.
 
 ## Explanation
 
-Go [here](./shared) for more information about how the text is generated or if you'd like to contribute your own translation.
+Go [here](./shared) for more information about how the text is generated or if you'd like to contribute your own translation (only very basic programming skills required, anyone should be able to do it with some help).
