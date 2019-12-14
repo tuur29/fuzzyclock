@@ -13,8 +13,8 @@ class FuzzyTextEnglishNumbered : FuzzyTextInterface {
             min in 25..35 -> "thirty past"
             min in 35..45 -> "twenty to" // hour switches here
             min in 45..55 -> "ten to"
-            else -> ""
-        }
+			else -> ""
+
 
         // change the displayed hour to the next one (instead of the current one) because english uses "Quarter to <hour+1>"
         var hourtext = if (min < 36) { // see line 14 for switch

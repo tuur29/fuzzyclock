@@ -58,6 +58,7 @@
         <item>English</item>
         <item>English (numbers)</item>
         <item>Dutch</item>
+        <item>Español</item>
     </string-array>
 
     <string-array name="pref_list_textAlignment_titles">

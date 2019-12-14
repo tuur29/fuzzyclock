@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="suite_name">Fuzzy Clock</string>
+    <string name="screensaver_name">Fuzzy Clock Screensaver</string>
+    <string name="widget_name">Fuzzy Clock Widget</string>
+    <string name="watchface_name">Fuzzy Clock Watchface</string>
+
+    <string name="notif_service_name">Escucha de Notificaciones</string>
+
+    <!-- General -->
+    <string name="save">Guardar</string>
+    <string name="settings">Ajustes</string>
+    <string name="visible">Visible</string>
+    <string name="hidden">Oculto</string>
+    <string name="error">Error</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_category_display">Visualización</string>
+    <string name="pref_category_style">Estilo de Texto</string>
+    <string name="pref_category_working">Configuraciones</string>
+    <string name="pref_category_elements">Elementos</string>
+    <string name="pref_category_textformat">Formato de Texto</string>
+    <string name="pref_category_system">Sistema</string>
+    <string name="pref_category_complications">Complicaciones</string>
+
+    <string name="pref_title_maxTranslationDisplacement">Desplazamiento percentual para evitar quemaduras (0.0 – 1.0)</string>
+    <string name="pref_title_updateSeconds">Actualizar reloj cada x segundos</string>
+    <string name="pref_title_language">Idioma</string>
+    <string name="pref_title_fontSize">Tamaño de la letra</string>
+    <string name="pref_title_textAlignment">Posición del texto</string>
+    <string name="pref_title_foregroundColor">Color del texto</string>
+    <string name="pref_title_backgroundColor">Color de fondo</string>
+    <string name="pref_title_removeLineBreak">Mostrar hora en única línea por defecto</string>
+    <string name="pref_title_brightScreen">Incrementar brillo de pantalla</string>
+    <string name="pref_title_notifState">Mostrar notificaciones</string>
+    <string name="pref_title_showBattery">Mostrar indicador de batería</string>
+    <string name="pref_title_showDate">Mostrar fecha</string>
+    <string name="pref_title_simplerDate">Fecha simple</string>
+    <string name="pref_title_showStatusbar">Mostrar íconos de estado</string>
+    <string name="pref_title_showDigitalClock">Mostrar reloj digital</string>
+    <string name="pref_title_fontFamily">Tipografía</string>
+    <string name="pref_title_useDateFont">Usar tipografía para la fecha</string>
+    <string name="pref_title_showShadow">Mostrar sombreado</string>
+    <string name="pref_title_shadowSize">Tamaño del sombreado</string>
+    <string name="pref_title_shadowColor">Color del sombreado</string>
+    <string name="pref_title_emphasis">Énfasis</string>
+    <string name="pref_title_scaling">Calidad (más alta reduce el difuminado)</string>
+
+    <string name="msg_notificationaccess">Tiene que habilitar el Acceso a Notificaciones para que esta característica funcione</string>
+    <string name="msg_editbtn">Toque la esquina superior derecha del widget para editarlo</string>
+    <string name="msg_notsupported">No disponible para esta versión de Android</string>
+    <string name="msg_secondscreen">Toca la esfera para ver todas las complicaciones</string>
+    <string name="msg_validationfail">Datos no válidos</string>
+
+    <string-array name="pref_list_language_titles">
+        <item>Según la configuración del dispositivo</item>
+        <item>Inglés</item>
+        <item>Inglés (Números)</item>
+        <item>Holandés</item>
+        <item>Español</item>
+    </string-array>
+
+    <string-array name="pref_list_textAlignment_titles">
+        <item>Izquierda</item>
+        <item>Centrado</item>
+        <item>Derecha</item>
+    </string-array>
+
+    <string-array name="pref_list_color_titles">
+        <item>Negro</item>
+        <item>Gris</item>
+        <item>Blanco</item>
+        <item>Rojo</item>
+        <item>Rosa</item>
+        <item>Púrpura</item>
+        <item>Púrpura Oscuro</item>
+        <item>Índigo</item>
+        <item>Azul</item>
+        <item>Celeste</item>
+        <item>Cian</item>
+        <item>Turquesa</item>
+        <item>Verde</item>
+        <item>Verde Claro</item>
+        <item>Lima</item>
+        <item>Amarillo</item>
+        <item>Ámbar</item>
+        <item>Naranja</item>
+        <item>Naranja Oscuro</item>
+        <item>Marrón</item>
+        <item>Gris Oscuro</item>
+        <item>Gris Azulado</item>
+    </string-array>
+
+    <string-array name="pref_list_notifState_titles">
+        <item>Visible</item>
+        <item>Solo Cuenta</item>
+        <item>Oculto</item>
+    </string-array>
+
+    <string-array name="pref_list_visibility_titles">
+        <item>Nunca</item>
+        <item>Pantalla Encendida</item>
+        <item>Siempre</item>
+    </string-array>
+
+</resources>

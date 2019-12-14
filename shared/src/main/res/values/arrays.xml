@@ -6,6 +6,7 @@
         <item>en</item>
         <item>en-num</item>
         <item>nl</item>
+        <item>es</item>
     </string-array>
 
     <string-array name="pref_list_textAlignment_values">
