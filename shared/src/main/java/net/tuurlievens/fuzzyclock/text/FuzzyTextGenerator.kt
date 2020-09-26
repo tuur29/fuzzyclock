@@ -11,6 +11,7 @@ class FuzzyTextGenerator {
                 "es" -> FuzzyTextSpanish()
                 "nl" -> FuzzyTextDutch()
                 "en-num" -> FuzzyTextEnglishNumbered()
+				"de" -> FuzzyTextGerman()
                 else -> FuzzyTextEnglish()
 
             }.generate(hour, min)
