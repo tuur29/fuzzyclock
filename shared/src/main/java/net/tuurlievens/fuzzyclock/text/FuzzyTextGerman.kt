@@ -54,7 +54,7 @@ class FuzzyTextGerman : FuzzyTextInterface {
                 else -> when (hour) {
                     11 -> "zwölf"
                     else -> when {
-						min > 51 -> "Mitternacht"
+						min > 49 -> "Mitternacht"
 						else -> "zwölf"
 					}
                 }
