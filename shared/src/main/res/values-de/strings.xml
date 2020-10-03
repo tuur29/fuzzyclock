@@ -59,7 +59,7 @@
         <item>Englisch (Zahlen)</item>
         <item>Niederländisch</item>
         <item>Spanisch</item>
-		<item>Deutsch</item>
+        <item>Deutsch</item>
     </string-array>
 
     <string-array name="pref_list_textAlignment_titles">

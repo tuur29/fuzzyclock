@@ -59,6 +59,7 @@
         <item>Engels (getallen)</item>
         <item>Nederlands</item>
         <item>Spaans</item>
+        <item>Duits</item>
     </string-array>
 
     <string-array name="pref_list_textAlignment_titles">

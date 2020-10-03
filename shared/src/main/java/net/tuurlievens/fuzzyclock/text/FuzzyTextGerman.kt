@@ -33,15 +33,15 @@ class FuzzyTextGerman : FuzzyTextInterface {
                 else -> when (hour) {
                     12 -> "zwölf"
                     else -> when {
-						min < 10 -> "Mitternacht"
-						else -> "zwölf"
-					}				
+                        min < 10 -> "Mitternacht"
+                        else -> "zwölf"
+                    }
                 }
             }
         } else {
             when {
                 hour % 12 == 0 -> "eins"
-				hour % 12 == 1 -> "zwei"
+                hour % 12 == 1 -> "zwei"
                 hour % 12 == 2 -> "drei"
                 hour % 12 == 3 -> "vier"
                 hour % 12 == 4 -> "fünf"
@@ -54,9 +54,9 @@ class FuzzyTextGerman : FuzzyTextInterface {
                 else -> when (hour) {
                     11 -> "zwölf"
                     else -> when {
-						min > 49 -> "Mitternacht"
-						else -> "zwölf"
-					}
+                        min > 49 -> "Mitternacht"
+                        else -> "zwölf"
+                    }
                 }
             }
         }
