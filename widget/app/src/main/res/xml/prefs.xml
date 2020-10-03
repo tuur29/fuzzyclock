@@ -111,6 +111,12 @@
                 android:singleLine="true"
                 android:maxLines="1"/>
 
+        <Preference
+                android:key="pref_static_field_key"
+                android:selectable="false"
+                android:persistent="false"
+                android:summary="@string/msg_editbtn"/>
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
