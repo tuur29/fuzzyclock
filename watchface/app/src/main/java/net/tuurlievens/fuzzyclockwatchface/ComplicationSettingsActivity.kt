@@ -166,7 +166,7 @@ class ComplicationSettingsActivity : Activity() {
                     selectedId,
                     *supportedTypes
                 ),
-                ComplicationSettingsActivity.COMPLICATION_CONFIG_REQUEST_CODE
+                COMPLICATION_CONFIG_REQUEST_CODE
             )
 
         } else {

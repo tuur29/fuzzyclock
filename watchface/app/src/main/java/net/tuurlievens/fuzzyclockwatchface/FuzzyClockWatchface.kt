@@ -87,7 +87,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             super.onCreate(holder)
 
             loadSettings()
-            if (complicationsEnabled()) {
+            if (Complications.complicationsEnabled()) {
                 setupComplications()
             }
             updateSettings()
@@ -170,10 +170,6 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         // COMPLICATIONS
 
-        private fun complicationsEnabled(): Boolean {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
-        }
-
         private fun createComplication(id: Int, data: ComplicationData?) {
 
             val drawable = (getDrawable(R.drawable.custom_complication_styles) as ComplicationDrawable).apply{
@@ -241,7 +237,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                     // The user has completed the tap gesture.
 
                     // check if complication tapped
-                    if (complicationsEnabled()) {
+                    if (Complications.complicationsEnabled()) {
                         if (currentScreen == 1) {
                             val tappedComplicationId = getTappedComplicationId(x, y)
                             if (tappedComplicationId != -1) {

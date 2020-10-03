@@ -29,16 +29,16 @@ class WatchfaceSettingsActivity : WearPreferenceActivity() {
     override fun onClick(viewHolder: WearableListView.ViewHolder) {
         super.onClick(viewHolder)
 
-        // TODO: find a way to notify user some settings only update after app restart
         // show toast in case of showStatusbar and notifState that says you need to reboot etc...
-//        if (viewHolder?.position == 3) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-//                val intent = Intent(this, ComplicationSettingsActivity::class.java)
-//                startActivity(intent)
+        if (viewHolder?.position == 3) {
+            if (Complications.complicationsEnabled()) {
+                val intent = Intent(this, ComplicationSettingsActivity::class.java)
+                startActivity(intent)
+                // TODO: find a better way to notify user some settings only update after app restart
 //            } else {
 //                Toast.makeText(this, resources.getText(R.string.msg_notsupported), Toast.LENGTH_SHORT).show()
-//            }
-//        }
+            }
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package net.tuurlievens.fuzzyclockwatchface
 
 import android.graphics.Rect
+import android.os.Build
 import android.support.wearable.complications.ComplicationData
 
 
@@ -52,6 +53,10 @@ class Complications {
                 ComplicationData.TYPE_SHORT_TEXT
             )
         )
+
+        fun complicationsEnabled(): Boolean {
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+        }
 
         fun getPosition(id: Int, bounds: Rect): Rect {
 
