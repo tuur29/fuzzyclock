@@ -28,8 +28,10 @@
     <string name="pref_title_updateSeconds">Aktualisiere Uhr alle x Sekunden</string>
     <string name="pref_title_language">Sprache</string>
     <string name="pref_title_fontSize">Fontgröße</string>
+    <string name="pref_title_dateFontSize">Fontgröße datum</string>
     <string name="pref_title_textAlignment">Textausrichtung</string>
     <string name="pref_title_foregroundColor">Textfarbe</string>
+    <string name="pref_title_dateForegroundColor">Textfarbe datum</string>
     <string name="pref_title_backgroundColor">Hintergrundfarbe</string>
     <string name="pref_title_removeLineBreak">Zeige Stunden in einer Zeile an</string>
     <string name="pref_title_brightScreen">Hellerer Bildschirm</string>

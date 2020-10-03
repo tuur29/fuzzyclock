@@ -35,8 +35,10 @@ class AllPreferencesFragment : PreferenceFragmentCompat() {
         val array = arrayOf(
             "language",
             "fontSize",
+            "dateFontSize",
             "textAlignment",
             "foregroundColor",
+            "dateForegroundColor",
             "removeLineBreak",
             "showDate",
             "simplerDate",

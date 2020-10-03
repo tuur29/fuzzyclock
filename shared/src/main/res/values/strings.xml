@@ -28,8 +28,10 @@
     <string name="pref_title_updateSeconds">Update clock every x seconds</string>
     <string name="pref_title_language">Language</string>
     <string name="pref_title_fontSize">Font size</string>
+    <string name="pref_title_dateFontSize">Date font size</string>
     <string name="pref_title_textAlignment">Text alignment</string>
     <string name="pref_title_foregroundColor">Text color</string>
+    <string name="pref_title_dateForegroundColor">Date text color</string>
     <string name="pref_title_backgroundColor">Background color</string>
     <string name="pref_title_removeLineBreak">Show hour on 1 line by default</string>
     <string name="pref_title_brightScreen">Brighter screen</string>

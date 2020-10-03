@@ -16,7 +16,9 @@ class Helpers {
         }
 
         fun convertIntColor(value: Int): Int {
-            return Color.parseColor("#" + Integer.toHexString(value))
+            val hexColour = Integer.toHexString(value)
+            val rgbColour = if (hexColour.length > 6) hexColour.removeRange(0,2) else hexColour
+            return Color.parseColor("#" + rgbColour)
         }
 
     }

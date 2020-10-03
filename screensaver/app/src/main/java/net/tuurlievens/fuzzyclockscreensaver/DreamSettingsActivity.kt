@@ -47,6 +47,7 @@ class DreamSettingsActivity : FragmentActivity() {
                 "language",
                 "fontFamily",
                 "fontSize",
+                "dateFontSize",
                 "textAlignment",
                 "notifState",
                 "shadowSize",

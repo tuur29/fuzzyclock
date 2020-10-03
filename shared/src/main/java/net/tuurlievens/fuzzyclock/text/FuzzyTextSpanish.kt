@@ -56,7 +56,7 @@ class FuzzyTextSpanish : FuzzyTextInterface {
         }
 
         // linebreak is later removed when the setting is active
-        return "$hourtext${if(mintext == ""){""}else{"\n"}}$mintext" // spanish uses the "hour & x minutes" format
+        return "$hourtext${if (mintext == "") "" else "\n"}$mintext" // spanish uses the "hour & x minutes" format
     }
 
 }

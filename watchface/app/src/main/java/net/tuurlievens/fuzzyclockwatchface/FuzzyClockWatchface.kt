@@ -87,7 +87,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
             super.onCreate(holder)
 
             loadSettings()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            if (complicationsEnabled()) {
                 setupComplications()
             }
             updateSettings()
@@ -170,6 +170,10 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         // COMPLICATIONS
 
+        private fun complicationsEnabled(): Boolean {
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+        }
+
         private fun createComplication(id: Int, data: ComplicationData?) {
 
             val drawable = (getDrawable(R.drawable.custom_complication_styles) as ComplicationDrawable).apply{
@@ -196,15 +200,15 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
 
         private fun applyComplicationSettings(id: Int, drawable: ComplicationDrawable) {
             val foreground = Helpers.convertIntColor(prefs.foregroundColor)
-            val lighterforeground = ColorUtils.setAlphaComponent(foreground, 150)
+            val dateForeground = Helpers.convertIntColor(prefs.dateForegroundColor)
 
             drawable.setTextColorActive(foreground)
             drawable.setRangedValuePrimaryColorActive(foreground)
             drawable.setTitleColorActive(foreground)
             drawable.setIconColorActive(foreground)
 
-            drawable.setRangedValueSecondaryColorActive(lighterforeground)
-            drawable.setHighlightColorActive(lighterforeground)
+            drawable.setRangedValueSecondaryColorActive(dateForeground)
+            drawable.setHighlightColorActive(dateForeground)
 
             if (activeComplicationData[id]?.type != ComplicationData.TYPE_RANGED_VALUE)
                 drawable.setBorderColorActive(ColorUtils.setAlphaComponent(foreground, 100))
@@ -237,8 +241,7 @@ class FuzzyClockWatchface : CanvasWatchFaceService() {
                     // The user has completed the tap gesture.
 
                     // check if complication tapped
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    if (complicationsEnabled()) {
                         if (currentScreen == 1) {
                             val tappedComplicationId = getTappedComplicationId(x, y)
                             if (tappedComplicationId != -1) {

@@ -7,10 +7,12 @@ class DreamData(
     override var updateSeconds: Double = 60.0,
     override var language: String = "default",
     override var fontFamily: String = "sans_serif",
-    override var fontSize: Int = 36,
+    override var fontSize: Int = 35,
+    override var dateFontSize: Int = 20,
     override var shadowSize: Int = 6,
     override var textAlignment: String = "center",
     override var foregroundColor: Int = 0xFFFFFFFF.toInt(),
+    override var dateForegroundColor: Int = 0x57FFFFFF.toInt(),
     override var backgroundColor: Int = 0xFF000000.toInt(),
     override var shadowColor: Int = 0xFF000000.toInt(),
     override var removeLineBreak: Boolean = false,
@@ -25,14 +27,13 @@ class DreamData(
 ): PossiblePreferences() {
 
     companion object {
-        val default = DreamData()
-
         fun loadFromMap(map: Map<String, *>): DreamData {
             val prefs = DreamData()
 
             prefs.maxTranslationDisplacement = (map["maxTranslationDisplacement"]?.toString() ?: prefs.maxTranslationDisplacement.toString()).toDouble()
             prefs.updateSeconds = (map["updateSeconds"]?.toString() ?: prefs.updateSeconds.toString()).toDouble()
             prefs.fontSize = (map["fontSize"]?.toString() ?: prefs.fontSize.toString()).toInt()
+            prefs.dateFontSize = (map["dateFontSize"]?.toString() ?: prefs.dateFontSize.toString()).toInt()
             prefs.shadowSize = (map["shadowSize"]?.toString() ?: prefs.shadowSize.toString()).toInt()
             prefs.language = (map["language"]?.toString() ?: prefs.language.toString())
             prefs.fontFamily = (map["fontFamily"]?.toString() ?: prefs.fontFamily.toString())
@@ -47,6 +48,7 @@ class DreamData(
             prefs.emphasis = (map["emphasis"]?.toString() ?: prefs.emphasis.toString())
 
             prefs.foregroundColor = (map["foregroundColor"]?.toString() ?: prefs.foregroundColor.toString()).toInt()
+            prefs.dateForegroundColor = (map["dateForegroundColor"]?.toString() ?: prefs.dateForegroundColor.toString()).toInt()
             prefs.backgroundColor = (map["backgroundColor"]?.toString() ?: prefs.backgroundColor.toString()).toInt()
             prefs.shadowColor = (map["shadowColor"]?.toString() ?: prefs.shadowColor.toString()).toInt()
 

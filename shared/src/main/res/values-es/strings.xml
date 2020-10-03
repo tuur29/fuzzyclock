@@ -28,8 +28,10 @@
     <string name="pref_title_updateSeconds">Actualizar reloj cada x segundos</string>
     <string name="pref_title_language">Idioma</string>
     <string name="pref_title_fontSize">Tamaño de la letra</string>
+    <string name="pref_title_dateFontSize">Tamaño de la fecha</string>
     <string name="pref_title_textAlignment">Posición del texto</string>
     <string name="pref_title_foregroundColor">Color del texto</string>
+    <string name="pref_title_dateForegroundColor">Color de la fecha</string>
     <string name="pref_title_backgroundColor">Color de fondo</string>
     <string name="pref_title_removeLineBreak">Mostrar hora en única línea por defecto</string>
     <string name="pref_title_brightScreen">Incrementar brillo de pantalla</string>

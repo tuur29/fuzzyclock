@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="@string/pref_category_display">
 
@@ -30,7 +32,17 @@
         <EditTextPreference
                 android:key="fontSize"
                 android:title="@string/pref_title_fontSize"
-                android:defaultValue="36"
+                android:defaultValue="35"
+                android:maxLength="2"
+                android:selectAllOnFocus="true"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLines="1"/>
+
+        <EditTextPreference
+                android:key="dateFontSize"
+                android:title="@string/pref_title_dateFontSize"
+                android:defaultValue="20"
                 android:maxLength="2"
                 android:selectAllOnFocus="true"
                 android:inputType="number"
@@ -72,16 +84,22 @@
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
                 android:key="foregroundColor"
                 android:title="@string/pref_title_foregroundColor"
-                android:defaultValue="@android:color/white"
-                cpv_dialogTitle="@string/pref_title_foregroundColor"
-                cpv_showAlphaSlider="true"/>
+                android:defaultValue="0xFFFFFFFF"
+                app:cpv_dialogTitle="@string/pref_title_foregroundColor"
+                app:cpv_showAlphaSlider="true"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+                android:key="dateForegroundColor"
+                android:title="@string/pref_title_dateForegroundColor"
+                android:defaultValue="0x57FFFFFF"
+                app:cpv_dialogTitle="@string/pref_title_dateForegroundColor"
+                app:cpv_showAlphaSlider="true"/>
 
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
                 android:key="backgroundColor"
                 android:title="@string/pref_title_backgroundColor"
-                android:defaultValue="@android:color/black"
-                cpv_dialogTitle="@string/pref_title_backgroundColor"
-                cpv_showAlphaSlider="true"/>
+                android:defaultValue="0xFF000000"
+                app:cpv_dialogTitle="@string/pref_title_backgroundColor"/>
 
         <EditTextPreference
                 android:key="shadowSize"
@@ -96,9 +114,8 @@
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
                 android:key="shadowColor"
                 android:title="@string/pref_title_shadowColor"
-                android:defaultValue="@android:color/black"
-                cpv_dialogTitle="@string/pref_title_shadowColor"
-                cpv_showAlphaSlider="false"/>
+                android:defaultValue="0xFF000000"
+                app:cpv_dialogTitle="@string/pref_title_shadowColor"/>
 
     </PreferenceCategory>
 

@@ -40,7 +40,6 @@ class FuzzyClockDream : DreamService() {
     var lastNotificationRefreshTime = 0L
 
     private var prefs = DreamData()
-    private var normalFontSize = prefs.fontSize
 
     // LIFECYCLE
 
@@ -49,8 +48,10 @@ class FuzzyClockDream : DreamService() {
 
         val manager = PreferenceManager.getDefaultSharedPreferences(this)
         prefs = DreamData.loadFromMap(manager.all)
-        normalFontSize = prefs.fontSize
-        prefs.fontSize = Math.round(prefs.fontSize * getDisplayParams().scaledDensity) // manually scale up fontSize
+
+        val density = getDisplayParams().scaledDensity
+        prefs.fontSize = Math.round(prefs.fontSize * density) // manually scale up fontSize
+        prefs.dateFontSize = Math.round(prefs.dateFontSize * density)
 
         createTask()
 
@@ -106,8 +107,9 @@ class FuzzyClockDream : DreamService() {
         // apply settings to ui
         findViewById<RelativeLayout>(R.id.root).setBackgroundColor(Helpers.convertIntColor(prefs.backgroundColor))
         findViewById<TextView>(R.id.notificationcount).setTextColor(Helpers.convertIntColor(prefs.foregroundColor))
+        Log.i("col", prefs.shadowColor.toString())
         findViewById<TextView>(R.id.notificationcount).setShadowLayer(prefs.shadowSize.toFloat(), 0F, 0F, Helpers.convertIntColor(prefs.shadowColor))
-        findViewById<TextView>(R.id.notificationcount).textSize = (normalFontSize * 0.65).toFloat()
+        findViewById<TextView>(R.id.notificationcount).textSize = prefs.dateFontSize.toFloat()
 
         val alignment = when(prefs.textAlignment) {
             "center" -> TextView.TEXT_ALIGNMENT_CENTER

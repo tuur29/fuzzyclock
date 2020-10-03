@@ -19,8 +19,6 @@ class ClockFaceDrawer {
             canvas.translate(0F, 0F)
 
             val calendar = Calendar.getInstance()
-            val lighterForeground = ColorUtils.setAlphaComponent(prefs.foregroundColor, 150)
-            val lighterShadow = ColorUtils.setAlphaComponent(prefs.shadowColor, 150)
 
             val emphasis = when(prefs.emphasis) {
                 "bold" -> Typeface.BOLD
@@ -46,18 +44,19 @@ class ClockFaceDrawer {
                 typeface = font
                 color = prefs.foregroundColor
                 isAntiAlias = true
-                textSize = if (prefs.showDigitalClock) (prefs.fontSize * prefs.scaling * 1.85F).toFloat() else (prefs.fontSize * prefs.scaling).toFloat()
+                textSize = if (prefs.showDigitalClock) (prefs.fontSize * prefs.scaling * prefs.digitalClockScaling).toFloat() else (prefs.fontSize * prefs.scaling).toFloat()
                 isAntiAlias = prefs.antialiasing
                 setShadowLayer((prefs.shadowSize * prefs.scaling).toFloat(), 0F, 0F, prefs.shadowColor)
             }
 
+            val scaledDateShadowSize = ((prefs.shadowSize * prefs.scaling) * prefs.dateFontSize / prefs.fontSize).toFloat()
             val mDateTextPaint = TextPaint().apply {
                 typeface = if (prefs.useDateFont) { font } else { Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL) }
+                color = prefs.dateForegroundColor
                 isAntiAlias = true
-                textSize = Math.round(prefs.fontSize * prefs.scaling * 0.65).toFloat()
-                color = lighterForeground
+                textSize = (prefs.dateFontSize * prefs.scaling).toFloat()
                 isAntiAlias = prefs.antialiasing
-                setShadowLayer((prefs.shadowSize * prefs.scaling).toFloat(), 0F, 0F, lighterShadow)
+                setShadowLayer(scaledDateShadowSize, 0F, 0F, prefs.shadowColor)
             }
 
             // update clock

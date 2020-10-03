@@ -45,6 +45,14 @@
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
 
         <ListPreference
+                android:key="dateFontSize"
+                android:title="@string/pref_title_dateFontSize"
+                android:defaultValue="20"
+                android:entries="@array/pref_list_fontSize_values"
+                android:entryValues="@array/pref_list_fontSize_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
+        <ListPreference
                 android:key="textAlignment"
                 android:title="@string/pref_title_textAlignment"
                 android:defaultValue="center"
@@ -56,6 +64,14 @@
                 android:key="foregroundColorString"
                 android:title="@string/pref_title_foregroundColor"
                 android:defaultValue="#FFFFFF"
+                android:entries="@array/pref_list_color_titles"
+                android:entryValues="@array/pref_list_color_values"
+                android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
+
+        <ListPreference
+                android:key="dateForegroundColorString"
+                android:title="@string/pref_title_dateForegroundColor"
+                android:defaultValue="#616161"
                 android:entries="@array/pref_list_color_titles"
                 android:entryValues="@array/pref_list_color_values"
                 android:icon="@drawable/ic_playlist_add_check_white_24dp"/>
