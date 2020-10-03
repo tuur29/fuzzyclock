@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -18,8 +16,8 @@ android {
         applicationId "net.tuurlievens.fuzzyclockwidget"
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 100300
-        versionName "1.3"
+        versionCode 100400
+        versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

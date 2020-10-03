@@ -31,3 +31,4 @@ Go [here](./shared) for more information about how the text is generated or if y
 ## Contributors
 
 - [@FluffyHyena](https://github.com/FluffyHyena): Spanish translations ([#80](https://github.com/tuur29/fuzzyclock/pull/80))
+- [@vjaritz](https://github.com/vjaritz): German translations ([#88](https://github.com/tuur29/fuzzyclock/pull/88))
