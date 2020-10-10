@@ -5,8 +5,8 @@ apply plugin: 'kotlin-android-extensions'
 android {
     signingConfigs {
         config {
-            storeFile file('../../fuzzyclock-key.jks')
-            keyAlias 'key0'
+            storeFile file('../../fuzzyclock-watchface.jks')
+            keyAlias 'fuzzyclock-watchface'
             // keyPassword 'password'
             // storePassword 'password'
         }
