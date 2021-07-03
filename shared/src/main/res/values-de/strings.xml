@@ -50,7 +50,7 @@
     <string name="pref_title_scaling">Qualität (höher bedeutet weniger Verschwommenheit)</string>
 
     <string name="msg_notificationaccess">Für diese Funktion muss die Berechtigung für Benachrichtigungen erteilt werden</string>
-    <string name="msg_editbtn">Tipp die rechte obere Ecke an, um das Widget zu editieren</string>
+    <string name="msg_editbtn">Tipp die rechte obere Ecke an,\num das Widget zu editieren.</string>
     <string name="msg_notsupported">Nicht in dieser Android-Version unterstützt</string>
     <string name="msg_secondscreen">Tipp das Watchface um alle Probleme zu sehen</string>
     <string name="msg_validationfail">Diese Daten sind nicht gültig</string>

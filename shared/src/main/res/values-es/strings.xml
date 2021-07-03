@@ -50,7 +50,7 @@
     <string name="pref_title_scaling">Calidad (más alta reduce el difuminado)</string>
 
     <string name="msg_notificationaccess">Tiene que habilitar el Acceso a Notificaciones para que esta característica funcione</string>
-    <string name="msg_editbtn">Toque la esquina superior derecha del widget para editarlo</string>
+    <string name="msg_editbtn">Toque la esquina superior derecha\ndel widget para editarlo.</string>
     <string name="msg_notsupported">No disponible para esta versión de Android</string>
     <string name="msg_secondscreen">Toca la esfera para ver todas las complicaciones</string>
     <string name="msg_validationfail">Datos no válidos</string>

@@ -4,10 +4,16 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import java.util.*
+import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.RemoteViews
+import java.util.*
+
 
 class FuzzyClockWidget : AppWidgetProvider() {
 
@@ -60,12 +66,29 @@ class FuzzyClockWidget : AppWidgetProvider() {
             return
         }
 
-        // launcher updates widget
+        // rerender widget
         if (extras != null && context != null) {
             val appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
             val manager = AppWidgetManager.getInstance(context)
             if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 UpdateWidgetService.updateWidget(context, manager, appWidgetId)
+            }
+
+            // Highlight config button when interacting with widget
+            // manual flag differentiates between the launcher updating the widget
+            if (extras.getBoolean("manual")){
+                val view = RemoteViews(context.packageName, R.layout.fuzzy_clock_widget)
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, FuzzyClockWidget::class.java))
+                view.setInt(R.id.configbtn, "setBackgroundColor", 0x44888888)
+                appWidgetManager.updateAppWidget(appWidgetIds, view)
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        view.setInt(R.id.configbtn, "setBackgroundColor", Color.TRANSPARENT)
+                        appWidgetManager.updateAppWidget(appWidgetIds, view)
+                    },
+                    300
+                )
             }
         }
     }

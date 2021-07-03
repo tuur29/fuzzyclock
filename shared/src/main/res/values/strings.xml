@@ -50,7 +50,7 @@
     <string name="pref_title_scaling">Quality (higher means less blur)</string>
 
     <string name="msg_notificationaccess">You have to enable Notification Access for this feature to work</string>
-    <string name="msg_editbtn">Press the top-right corner of the widget to edit it</string>
+    <string name="msg_editbtn">Press the top-right corner \nof the widget to edit it.</string>
     <string name="msg_notsupported">Not supported on this Android version</string>
     <string name="msg_secondscreen">Tap the watchface to see all the complications</string>
     <string name="msg_validationfail">This data is not valid</string>

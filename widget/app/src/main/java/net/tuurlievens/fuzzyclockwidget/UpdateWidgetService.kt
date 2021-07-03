@@ -70,16 +70,19 @@ class UpdateWidgetService : JobIntentService() {
             }
 
             // add config click handler
+            view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
+
+            // add canvas click handler
             val updateIntent = Intent(context, FuzzyClockWidget::class.java)
             updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+            updateIntent.putExtra("manual", true) // to differ from the launchers intent
             view.setOnClickPendingIntent(R.id.canvas, PendingIntent.getBroadcast(
                 context,
                 id,
                 updateIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             ))
-            view.setOnClickPendingIntent(R.id.configbtn, getPendingSelfIntent(context, FuzzyClockWidget.ConfigTag, id))
 
              // add calendar click handlers
             if (prefs.showDate && hitRegions.size > 1) {
